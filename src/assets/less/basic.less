@@ -1,17 +1,17 @@
-@line : 1px solid black;
-.reset {
+// ()可以避免作为css类显示
+.reset() {
     margin: 0;
     padding: 0;
     border: 0;
 }
 
-.full {
+.full() {
     .reset;
     height: 100%;
     width: 100%;
 }
 
-.border-box {
+.border-box() {
     box-sizing: border-box;
 }
 
@@ -23,6 +23,15 @@
 // 背景色
 .bcolor(@param) {
     background-color: @param;
+}
+
+// border颜色
+.border(@color) when (iscolor(@color)) and (default()) {
+    border: 1px solid @color;
+}
+
+.border(@base, @color) when (iscolor(@color)) {
+    border-@{base}: 1px solid @color;
 }
 
 // flex布局 row column

@@ -1,38 +1,30 @@
 <template>
-  <div id="rightmap">
-      <!-- 头部 -->
-      <div class="head"></div>
-      <!-- 内容 -->
-      <div class="content">
-        <!-- 左边模板图标 -->
-        <aside class="modules">
-          <ul><li
-            v-for="(item, index) in modules"
-            :key="index"
-            :title="item.title"
-            @click="switchmf(index)">
-          </li></ul>
-        </aside>
-        <!-- 地图部分 -->
-        <div id="map"></div>
-        <!-- form对话框 -->
-        <transition name="fade">
-          <div class="mform" v-show="aIndex != -1">
-            <component
-              v-for="(item, index) in modules"
-              :key="index"
-              :is="item.module"
-              v-show="aIndex == index"
-              class="module">
-            </component>
-          </div>
-        </transition>
-      </div>
-      <!-- 底部 -->
-      <div class="foot">
-          所属权为个人所有
-      </div>
-  </div>
+  <section id="rightmap">
+    <!-- 头部 -->
+    <header></header>
+    <!-- 内容 -->
+    <article>
+      <!-- 左边模板图标 -->
+      <aside>
+        <ul>
+          <li v-for="(item, index) in modules" :key="index" :title="item.title" @click="switchmf(index)"></li>
+        </ul>
+      </aside>
+      <!-- 地图部分 -->
+      <main id="map"></main>
+      <!-- form对话框 -->
+      <transition name="fade">
+        <div class="mform" v-show="aIndex != -1">
+          <component v-for="(item, index) in modules" :key="index" :is="item.module" v-show="aIndex == index" class="module"></component>
+        </div>
+      </transition>
+    </article>
+    <!-- 底部 -->
+    <footer>
+      <div></div>
+      <p>所属权为个人所有</p>
+    </footer>
+  </section>
 </template>
 
 <script>
@@ -73,83 +65,102 @@ export default {
 <style lang="less" scoped>
 @import "basic.less";
 
-div {
+div,
+aside {
   .border-box;
 }
 
 #rightmap {
-  .full;
-
-  .abs {
+  .abs() {
     position: absolute;
   }
 
-  div {
+  .full;
+  * {
     width: 100%;
-    @blue: blue;
-    @head-color: @blue;
-    @foot-color: @blue + 150;
-    @aside-color: @blue + 100;
+  }
+  @top: 34px;
+  @left: 45px;
+  @bottom: 25px;
 
-    @top: 30px;
-    @left: 40px;
-    @bottom: 20px;
-    // 头
-    &.head {
-      .abs;
-      top: 0;
-      height: @top;
-      .bcolor(@head-color);
+  // 头
+  header {
+    .abs;
+    top: 0;
+    height: @top;
+    background: #add2fe data-uri("static/img/logo-right.png") repeat-x;
+    z-index: -1;
+  }
+  // 尾
+  footer {
+    .topline() {
+      .border(top, #8db2e3);
     }
-    // 尾
-    &.foot {
-      .abs;
-      bottom: 0;
-      height: @bottom;
-      .align(center);
-      .bcolor(@foot-color);
+
+    .abs;
+    .align(center);
+    .bcolor(white);
+    height: @bottom;
+    bottom: 0;
+
+    div {
+      .topline;
+      .bcolor(#D2E0F2);
+      height: 5px;
     }
-    // 内容部分
-    &.content {
+    p {
+      .reset;
+      .topline;
+      color: #0c5eac;
+      font-size: 12px;
+    }
+  }
+  // 内容部分
+  article {
+    .full;
+    padding-top: @top;
+    // 左侧功能点击部分
+    aside {
       .full;
-      padding-top: @top;
-      // 左侧功能点击部分
-      aside.modules {
+      .bcolor(#77b3f2);
+      width: @left;
+      float: left;
+      box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
+      border-right: 0.6px solid #d7d7d7;
+      // 图标大小和样式
+      ul {
         .full;
-        .bcolor(@aside-color);
-        width: @left;
-        float: left;
-        // 图标大小和样式
-        ul {
-          .full;
-          list-style-type: none;
-          li {
-            height: @left;
-            width: @left;
-            cursor: pointer;
-            margin-bottom: 3px;
-            .bcolor(color("black"));
+        list-style-type: none;
+        li {
+          .bcolor(color("black"));
+          height: @left;
+          width: @left;
+          cursor: pointer;
+          margin-bottom: 6px;
+
+          &:first-child {
+            margin-top: 10px;
           }
         }
       }
-      // 地图部分
-      div#map {
+    }
+    // 地图部分
+    main#map {
+      .full;
+      float: left;
+      width: calc(~"100% - @{left}");
+    }
+    // 功能操作窗口部分
+    div.mform {
+      .abs;
+      .bcolor(white);
+      left: @left;
+      top: @top;
+      width: 300px;
+      height: calc(~"100% - @{top}");
+      padding: 10px;
+      .module {
         .full;
-        float: left;
-        width: calc(~"100% - @{left}");
-      }
-      // 功能操作窗口部分
-      div.mform {
-        .abs;
-        .bcolor(white);
-        left: @left;
-        top: @top;
-        width: 300px;
-        height: calc(~"100% - @{top}");
-        padding: 10px;
-        .module {
-          .full;
-        }
       }
     }
   }
