@@ -1,3 +1,67 @@
 // 修改动画默认的速度
 @import "vue2-animate/src/vue2-animate.less";
 @animationDuration: 0.3s;
+// element-ui 动画(zoom fade)
+.el-fade-in-linear-enter-active, .el-fade-in-linear-leave-active, .fade-in-linear-enter-active, .fade-in-linear-leave-active {
+    transition: opacity .2s linear
+}
+
+.el-fade-in-enter, .el-fade-in-leave-active, .el-fade-in-linear-enter, .el-fade-in-linear-leave, .el-fade-in-linear-leave-active, .fade-in-linear-enter, .fade-in-linear-leave, .fade-in-linear-leave-active {
+    opacity: 0
+}
+
+.el-fade-in-enter-active, .el-fade-in-leave-active, .el-zoom-in-center-enter-active, .el-zoom-in-center-leave-active {
+    transition: all .3s cubic-bezier(.55, 0, .1, 1)
+}
+
+.el-zoom-in-bottom-enter-active, .el-zoom-in-bottom-leave-active, .el-zoom-in-left-enter-active, .el-zoom-in-left-leave-active, .el-zoom-in-top-enter-active, .el-zoom-in-top-leave-active {
+    transition: transform .3s cubic-bezier(.23, 1, .32, 1) .1s, opacity .3s cubic-bezier(.23, 1, .32, 1) .1s
+}
+
+.el-zoom-in-center-enter, .el-zoom-in-center-leave-active {
+    opacity: 0;
+    -ms-transform: scaleX(0);
+    transform: scaleX(0)
+}
+
+.el-zoom-in-top-enter-active, .el-zoom-in-top-leave-active {
+    opacity: 1;
+    -ms-transform: scaleY(1);
+    transform: scaleY(1);
+    -ms-transform-origin: center top;
+    transform-origin: center top
+}
+
+.el-zoom-in-top-enter, .el-zoom-in-top-leave-active {
+    opacity: 0;
+    -ms-transform: scaleY(0);
+    transform: scaleY(0)
+}
+
+.el-zoom-in-bottom-enter-active, .el-zoom-in-bottom-leave-active {
+    opacity: 1;
+    -ms-transform: scaleY(1);
+    transform: scaleY(1);
+    -ms-transform-origin: center bottom;
+    transform-origin: center bottom
+}
+
+.el-zoom-in-bottom-enter, .el-zoom-in-bottom-leave-active {
+    opacity: 0;
+    -ms-transform: scaleY(0);
+    transform: scaleY(0)
+}
+
+.el-zoom-in-left-enter-active, .el-zoom-in-left-leave-active {
+    opacity: 1;
+    -ms-transform: scale(1, 1);
+    transform: scale(1, 1);
+    -ms-transform-origin: top left;
+    transform-origin: top left
+}
+
+.el-zoom-in-left-enter, .el-zoom-in-left-leave-active {
+    opacity: 0;
+    -ms-transform: scale(.45, .45);
+    transform: scale(.45, .45)
+}
