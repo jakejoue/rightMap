@@ -65,18 +65,13 @@ export default {
 <style lang="less" scoped>
 @import "basic.less";
 
-div,
-aside {
-  .border-box;
-}
-
 #rightmap {
   .abs() {
     position: absolute;
   }
 
   .full;
-  * {
+  & > * {
     width: 100%;
   }
   @top: 34px;
@@ -109,10 +104,8 @@ aside {
       height: 5px;
     }
     p {
-      .reset;
       .topline;
       color: #0c5eac;
-      font-size: 12px;
     }
   }
   // 内容部分
@@ -129,18 +122,13 @@ aside {
       border-right: 0.6px solid #d7d7d7;
       // 图标大小和样式
       ul {
-        .full;
-        list-style-type: none;
+        margin-top: 10px;
         li {
           .bcolor(color("black"));
           height: @left;
           width: @left;
           cursor: pointer;
           margin-bottom: 6px;
-
-          &:first-child {
-            margin-top: 10px;
-          }
         }
       }
     }

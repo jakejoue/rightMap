@@ -11,12 +11,8 @@
     width: 100%;
 }
 
-.border-box() {
-    box-sizing: border-box;
-}
-
 // 对齐
-.align(@param) {
+.align(@param: none) {
     text-align: @param
 }
 
@@ -35,7 +31,7 @@
 }
 
 // flex布局 row column
-.flex(@direction) {
+.flex(@direction: row) {
     display: flex;
     flex-direction: @direction;
 }
