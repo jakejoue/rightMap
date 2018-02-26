@@ -7,15 +7,23 @@
       <!-- 左边模板图标 -->
       <aside>
         <ul>
-          <li v-for="(item, index) in modules" :key="index" :title="item.title" @click="switchmf(index)"></li>
+          <li v-for="(item, index) in modules" :key="index" :title="item.title" @click="aIndex = aIndex == index ? -1 : index" :class="[aIndex==index?'select':'']">
+            <img :src="item.img" :alt="item.title">
+          </li>
         </ul>
       </aside>
       <!-- 地图部分 -->
       <main id="map"></main>
       <!-- form对话框 -->
       <transition name="fade">
-        <div class="mform" v-show="aIndex != -1">
-          <component v-for="(item, index) in modules" :key="index" :is="item.module" v-show="aIndex == index" class="module"></component>
+        <div id="mform" v-show="aIndex != -1">
+          <section v-for="(item, index) in modules" :key="index" v-show="aIndex == index">
+            <h2>
+              <span>{{item.title}}</span>
+              <Icon type="android-arrow-dropleft" class="close" @click.native="aIndex=-1"></Icon>
+            </h2>
+            <component :is="item.module" class="module" ref="modules"></component>
+          </section>
         </div>
       </transition>
     </article>
@@ -33,14 +41,16 @@ import config from "./modules/";
 export default {
   data() {
     return {
-      modules: config.modules,
-      mform: false,
-      aIndex: -1
+      aIndex: -1,
+      modules: config.modules
     };
   },
-  methods: {
-    switchmf(index) {
-      this.aIndex = this.aIndex == index ? -1 : index;
+  watch: {
+    // 监听显示的模板，触发show和close事件
+    aIndex(newV, oldV) {
+      const modules = this.$refs.modules;
+      oldV != -1 && modules[oldV].$emit("close");
+      newV != -1 && modules[newV].$emit("show");
     }
   },
   mounted() {
@@ -78,6 +88,9 @@ export default {
   @left: 45px;
   @bottom: 25px;
 
+  @title-height: 40px;
+  @close-size: 25px;
+
   // 头
   header {
     .abs;
@@ -112,23 +125,26 @@ export default {
   article {
     .full;
     padding-top: @top;
+
     // 左侧功能点击部分
     aside {
       .full;
       .bcolor(#77b3f2);
       width: @left;
       float: left;
-      box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
-      border-right: 0.6px solid #d7d7d7;
       // 图标大小和样式
       ul {
         margin-top: 10px;
         li {
-          .bcolor(color("black"));
-          height: @left;
-          width: @left;
           cursor: pointer;
+          height: 46px;
+          border-radius: 2px;
           margin-bottom: 6px;
+          &:hover,
+          &.select {
+            .border(#dedede);
+            .bcolor(#8ec2fe);
+          }
         }
       }
     }
@@ -139,17 +155,38 @@ export default {
       width: calc(~"100% - @{left}");
     }
     // 功能操作窗口部分
-    div.mform {
+    div#mform {
       .abs;
       .bcolor(white);
       left: @left;
       top: @top;
-      width: 300px;
+      width: 340px;
       height: calc(~"100% - @{top}");
-      padding: 10px;
-      .module {
+      padding: 15px 20px;
+      section {
         .full;
+        h2 {
+          height: @title-height;
+          span {
+            color: #309bcd;
+          }
+          .close {
+            cursor: pointer;
+            float: right;
+            font-size: @close-size;
+          }
+        }
+        .module {
+          .full;
+          height: calc(~"100% - (@{bottom} + @{title-height})");
+        }
       }
+    }
+    // 共同部分
+    aside,
+    div#mform {
+      .border(right, #D7D7D7, 0.6px);
+      box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
     }
   }
 }

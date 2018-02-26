@@ -22,12 +22,12 @@
 }
 
 // border颜色
-.border(@color) when (iscolor(@color)) and (default()) {
-    border: 1px solid @color;
+.border(@color, @size: 1px) when (iscolor(@color)) and (default()) {
+    border: @size solid @color;
 }
 
-.border(@base, @color) when (iscolor(@color)) {
-    border-@{base}: 1px solid @color;
+.border(@base, @color, @size: 1px) when (iscolor(@color)) {
+    border-@{base}: @size solid @color;
 }
 
 // flex布局 row column
