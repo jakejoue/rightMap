@@ -1,7 +1,7 @@
 @import "./config.less";
 
 // ()可以避免作为css类显示
-.reset() {
+.reset {
     margin: 0;
     padding: 0;
     border: 0;
@@ -17,6 +17,14 @@
     position: absolute;
 }
 
+.loading {
+    animation: ani-demo-spin 1s linear infinite;
+    @keyframes ani-demo-spin {
+        from { transform: rotate(0deg);}
+        50%  { transform: rotate(180deg);}
+        to   { transform: rotate(360deg);}
+    }
+}
 // 对齐
 .align(@param: none) {
     text-align: @param
