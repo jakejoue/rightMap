@@ -2,7 +2,7 @@
   <div>
     <input type="text">
     <button>提交</button>
-    <result :data="lists" @select="select" :page="true" :server="true" :get-data="getData">
+    <result :data="lists" @select="select" :page="false" :server="true" :get-data="getData">
       <template slot-scope="{ data }">
         <header class="head" @click="cc">{{ data.name }}</header>
         <article>{{ data.description }}</article>

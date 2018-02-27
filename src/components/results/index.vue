@@ -121,8 +121,9 @@ export default {
       if (!this.page && this.server) {
         let b =
           this.ul[0].scrollHeight - this.ul.height() - this.ul.scrollTop();
-        // if(Math.abs(b))
-        console.log(Math.abs(b));
+        this.indata.length < this.total &&
+          Math.abs(b) <= 1 &&
+          this.currentPage++;
       }
     },
     selectItem(item, index) {
