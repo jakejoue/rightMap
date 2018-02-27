@@ -2,8 +2,10 @@
 import Vue from 'vue'
 import Axios from 'axios'
 import iView from 'iview'
+import { Pagination } from 'element-ui'
 import 'iview/dist/styles/iview.css'
 import 'assets/less/animate.less'
 
 Vue.use(iView)
+Vue.use(Pagination)
 Vue.prototype.axios = Axios
