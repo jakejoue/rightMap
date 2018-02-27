@@ -76,28 +76,19 @@ export default {
 @import "basic.less";
 
 #rightmap {
-  .abs() {
-    position: absolute;
-  }
-
   .full;
-  & > * {
+
+  > * {
     width: 100%;
   }
-  @top: 34px;
-  @left: 45px;
-  @bottom: 25px;
-
-  @title-height: 40px;
-  @close-size: 25px;
 
   // 头
   header {
     .abs;
+    height: @header;
     top: 0;
-    height: @top;
-    background: #add2fe data-uri("static/img/logo-right.png") repeat-x;
     z-index: -1;
+    background: #add2fe data-uri("static/img/logo-right.png") repeat-x;
   }
   // 尾
   footer {
@@ -108,7 +99,7 @@ export default {
     .abs;
     .align(center);
     .bcolor(white);
-    height: @bottom;
+    height: @footer;
     bottom: 0;
 
     div {
@@ -124,13 +115,13 @@ export default {
   // 内容部分
   article {
     .full;
-    padding-top: @top;
+    padding-top: @header;
 
     // 左侧功能点击部分
     aside {
       .full;
       .bcolor(#77b3f2);
-      width: @left;
+      width: @aside;
       float: left;
       // 图标大小和样式
       ul {
@@ -152,33 +143,33 @@ export default {
     main#map {
       .full;
       float: left;
-      width: calc(~"100% - @{left}");
+      width: calc(~"100% - @{aside}");
     }
     // 功能操作窗口部分
     div#mform {
       .abs;
       .bcolor(white);
-      left: @left;
-      top: @top;
-      width: 340px;
-      height: calc(~"100% - @{top}");
+      left: @aside;
+      top: @header;
+      width: @m-width;
+      height: calc(~"100% - @{header}");
       padding: 15px 20px;
       section {
         .full;
         h2 {
-          height: @title-height;
+          height: @m-title;
           span {
             color: #309bcd;
           }
           .close {
             cursor: pointer;
             float: right;
-            font-size: @close-size;
+            font-size: @m-close-fontSize;
           }
         }
         .module {
           .full;
-          height: calc(~"100% - (@{bottom} + @{title-height})");
+          height: calc(~"100% - (@{footer} + @{m-title})");
         }
       }
     }
