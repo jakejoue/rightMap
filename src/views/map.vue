@@ -18,7 +18,7 @@
       <transition name="fade">
         <div id="mform" v-show="aIndex != -1">
           <section v-for="(item, index) in modules" :key="index" v-show="aIndex == index">
-            <h2>
+            <h2 class="title">
               <span>{{item.title}}</span>
               <Icon type="android-arrow-dropleft" class="close" @click.native="aIndex=-1"></Icon>
             </h2>
@@ -153,10 +153,11 @@ export default {
       top: @header;
       width: @m-width;
       height: calc(~"100% - @{header}");
-      padding: 15px 20px;
+      padding: @m-padding;
       section {
         .full;
-        h2 {
+        // 菜单栏
+        h2.title {
           height: @m-title;
           span {
             color: #309bcd;
@@ -167,6 +168,7 @@ export default {
             font-size: @m-close-fontSize;
           }
         }
+        // 具体的组件操作部分
         .module {
           .full;
           height: calc(~"100% - (@{footer} + @{m-title})");
