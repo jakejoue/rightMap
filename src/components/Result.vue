@@ -2,16 +2,21 @@
   <section class="sr" v-show="indata.length > 0" :style="{'height':height}">
     <c-load :loading="loading"></c-load>
     <ul class="sr-ul" @scroll.passive="scrollPage" ref="list">
-      <li v-for="(item, index) in indata" :key="index" @click="selectItem(item)" :class="[selectIndex==item.index?'select':'']">
-        <section class="sr-ul-c">
-          <aside v-if="showIndex">{{item.index+1}}</aside>
-          <article>
-            <slot :data="item.target"></slot>
-          </article>
-        </section>
+      <li v-for="(item, index) in indata"
+        :key="index"
+        :class="[selectIndex==item.index?'select':'']"
+        @click="selectItem(item)">
+        <slot :data="item.target"></slot>
       </li>
     </ul>
-    <el-pagination v-if="page" class="page" layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page.sync="currentPage"></el-pagination>
+    <el-pagination
+      v-if="page"
+      class="page"
+      layout="prev, pager, next"
+      :total="total"
+      :page-size="pageSize"
+      :current-page.sync="currentPage">
+    </el-pagination>
   </section>
 </template>
 
@@ -38,8 +43,6 @@ export default {
     height: { type: String, default: "300px" },
     // 数据
     data: { type: Array, default: [] },
-    // 是否显示左侧数标
-    showIndex: { type: Boolean, default: true },
     // 每页大小
     pageSize: { type: Number, default: 10 },
     // 是否启动分页标签，为false变成滚动分页（不影响服务器分页）
@@ -151,13 +154,9 @@ export default {
 
 <style lang="less" scoped>
 @import "basic.less";
+@import "config.less";
 
 section.sr {
-  @li-hover: #f6f6f6;
-
-  @index-color: red;
-  @basic-color: #3385ff;
-
   .flex(column);
   > * {
     width: 100%;
@@ -168,40 +167,16 @@ section.sr {
 
   ul.sr-ul {
     flex: 1;
+    min-height: 250px;
     overflow-y: scroll;
     list-style-type: none;
 
     li {
-      @label: 30px;
       cursor: pointer;
-      padding: 6px 0;
-
-      section.sr-ul-c {
-        > aside {
-          .align(center);
-          color: @index-color;
-        }
-        > article {
-          header {
-            color: @basic-color;
-          }
-        }
-      }
-
-      &:hover,
-      &.select {
-        .bcolor(@li-hover);
-        section {
-          aside {
-            color: @basic-color;
-          }
-        }
-      }
-      &.select {
-        .bcolor(@basic-color);
-      }
+      .result;
     }
   }
+
   .page {
     .reset;
     padding-top: 10px;

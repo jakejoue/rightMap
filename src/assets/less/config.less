@@ -6,3 +6,18 @@
 @m-padding: 15px 20px;
 @m-title: 50px; // 模组名称占用高度
 @m-close-fontSize: 25px; // 窗口关闭icon的字体大小
+// Result(搜索结果集合样式)，可在vue文件中进行二次覆盖
+.result() {
+    font-size: 13px;
+    padding: 7px 16px;
+    margin: 0 1px 1px 0;
+    border: 1px solid #E5E5E5;
+    background: linear-gradient(top, #f7f7f7 0%, #e0e0e0 100%);
+    &:hover, &.select {
+        background: #B9E0F7;
+    }
+    &.select {
+        color: #fff;
+        background: #35AC46;
+    }
+}
