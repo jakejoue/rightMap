@@ -1,5 +1,6 @@
 <template>
   <section class="sr" v-show="indata.length > 0" :style="{'height':height}">
+    <big v-show="page&&showTotal">共{{total}}条，共{{pageCount}}页</big>
     <c-load :loading="loading"></c-load>
     <ul class="sr-ul" @scroll.passive="scrollPage" ref="list">
       <li v-for="(item, index) in indata"
@@ -42,11 +43,13 @@ export default {
   props: {
     height: { type: String, default: "300px" },
     // 数据
-    data: { type: Array, default: [] },
+    data: { type: Array, default: () => [] },
     // 每页大小
     pageSize: { type: Number, default: 10 },
     // 是否启动分页标签，为false变成滚动分页（不影响服务器分页）
     page: { type: Boolean, default: true },
+    // 分页模式下是否显示头部总数
+    showTotal: { type: Boolean, default: false },
     // 是否是服务器分页
     server: { type: Boolean, default: false },
     // 服务器分页获取数据的方法
@@ -63,8 +66,8 @@ export default {
     };
   },
   computed: {
-    truePageCount() {
-      return Math.ceil(this.indata.length / this.pageSize);
+    pageCount() {
+      return Math.ceil(this.total / this.pageSize);
     },
     ul() {
       return this.$(this.$refs.list);
