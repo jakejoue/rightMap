@@ -7,6 +7,7 @@
 
 <script>
 export default {
+  name: "cLoad",
   props: {
     loading: { type: Boolean, default: false },
     iconSize: { type: Number, default: 30 },

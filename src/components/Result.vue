@@ -1,6 +1,6 @@
 <template>
   <section class="sr" v-show="indata.length > 0" :style="{'height':height}">
-    <Load :loading="loading"></Load>
+    <c-load :loading="loading"></c-load>
     <ul class="sr-ul" @scroll.passive="scrollPage" ref="list">
       <li v-for="(item, index) in indata" :key="index" @click="selectItem(item, index)" :class="[selectIndex==(page?item.index:index)?'select':'']">
         <section class="sr-ul-c">
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import Load from "../Loading";
+import cLoad from "./Loading";
 
 function addIndex(start = 0, data = []) {
   let data_ = [];
@@ -28,11 +28,12 @@ function addIndex(start = 0, data = []) {
 }
 
 export default {
+  name: "cResult",
   components: {
-    Load
+    cLoad
   },
   props: {
-    height: { type: String, default: "500px" },
+    height: { type: String, default: "300px" },
     // 数据
     data: { type: Array, default: [] },
     // 是否显示左侧数标
