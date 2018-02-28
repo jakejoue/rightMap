@@ -19,8 +19,8 @@ export default {
     reset: Function
   },
   data() {
-    !this.search && (this._search = () => true);
-    !this.reset && (this._reset = () => true);
+    this._search = this.search ? this.search : () => true;
+    this._reset = this.reset ? this.reset : () => true;
     return {
       clear: false,
       value: ""
@@ -36,13 +36,17 @@ export default {
   },
   methods: {
     async h() {
-      if (this.clear && (await this._reset())) {
-        this.value = "";
-        this.clear = false;
+      if (this.clear) {
+        const flag = await this._reset();
+        if (flag === true || flag === undefined) {
+          this.value = "";
+          this.clear = false;
+        }
       } else {
         this.input.blur();
         if (this.value.trim()) {
-          this.clear = await this._search();
+          const flag = await this._search(this.value);
+          this.clear = flag === true || flag === undefined;
         } else {
           alert("请输入关键字");
         }
