@@ -2,11 +2,11 @@
   <section class="sr" v-show="indata.length > 0" :style="{'height':height}">
     <c-load :loading="loading"></c-load>
     <ul class="sr-ul" @scroll.passive="scrollPage" ref="list">
-      <li v-for="(item, index) in indata" :key="index" @click="selectItem(item, index)" :class="[selectIndex==(page?item.index:index)?'select':'']">
+      <li v-for="(item, index) in indata" :key="index" @click="selectItem(item)" :class="[selectIndex==item.index?'select':'']">
         <section class="sr-ul-c">
-          <aside v-if="showIndex">{{page?item.index+1:index+1}}</aside>
+          <aside v-if="showIndex">{{item.index+1}}</aside>
           <article>
-            <slot :data="item"></slot>
+            <slot :data="item.target"></slot>
           </article>
         </section>
       </li>
@@ -21,8 +21,10 @@ import cLoad from "./Loading";
 function addIndex(start = 0, data = []) {
   let data_ = [];
   for (let i = 0; i < data.length; i++) {
-    data_[i] = data[i];
-    data_[i].index = start + i;
+    data_.push({
+      index: start + i,
+      target: data[i]
+    });
   }
   return data_;
 }
@@ -49,10 +51,10 @@ export default {
   },
   data() {
     return {
-      indata: this.server ? [] : this.page ? [] : this.data,
+      indata: [],
       selectIndex: -1, //选中的元素编号
       currentPage: 1,
-      total: this.server ? 0 : this.page ? 0 : this.data.length,
+      total: 0,
       pages: new Map(),
       loading: false
     };
@@ -67,53 +69,16 @@ export default {
   },
   watch: {
     currentPage: {
-      async handler(newV, oldV) {
-        this.loading = true;
-        // 如果是动态获取数据
-        if (this.server && this.getData) {
-          // 如果该页未被请求
-          if (!this.pages.has(newV) || !this.page) {
-            // 请求数据
-            const { data = [], total = 0 } = await this.getData({
-              pageIndex: newV,
-              pageSize: this.pageSize
-            });
-            // 如果需要分页
-            if (this.page) {
-              // 生成数据index
-              let start = (newV - 1) * this.pageSize;
-              let data_ = addIndex(start, data);
-              this.pages.set(newV, data_);
-              this.indata = this.pages.get(newV);
-            } else {
-              // 如果不需要分页
-              this.indata.push(...data);
-            }
-            this.total == 0 && total > 0 && (this.total = total);
-          } else {
-            // 如果该页已被请求
-            this.page && (this.indata = this.pages.get(newV));
-          }
-        } else {
-          if (this.page) {
-            this.total == 0 && (this.total = this.data.length);
-            if (this.pages.size == 0) {
-              let i = 1;
-              while (this.data.length) {
-                let start = (i - 1) * this.pageSize;
-                let data = this.data.splice(0, this.pageSize);
-                let data_ = addIndex(start, data);
-                this.pages.set(i, data_);
-                i++;
-              }
-            }
-            this.indata = this.pages.get(newV);
-          }
-        }
-        this.page && this.ul.scrollTop(0);
-        this.loading = false;
+      handler(newV, oldV) {
+        this.refresh(newV);
       },
       immediate: true
+    },
+    getData() {
+      this.refresh(1);
+    },
+    data() {
+      this.refresh(1);
     }
   },
   methods: {
@@ -127,9 +92,58 @@ export default {
           this.currentPage++;
       }
     },
-    selectItem(item, index) {
+    selectItem(item) {
       this.$emit("select", item);
-      this.selectIndex = this.page ? item.index : index;
+      this.selectIndex = item.index;
+    },
+    async refresh(newV) {
+      this.loading = true;
+      // 如果是动态获取数据
+      if (this.server && this.getData) {
+        // 如果该页未被请求
+        if (!this.pages.has(newV) || !this.page) {
+          // 请求数据
+          const { data = [], total = 0 } =
+            (await this.getData({
+              pageIndex: newV,
+              pageSize: this.pageSize
+            })) || {};
+          // 如果需要分页
+          if (this.page) {
+            // 生成数据index
+            let start = (newV - 1) * this.pageSize;
+            let data_ = addIndex(start, data);
+            this.pages.set(newV, data_);
+            this.indata = this.pages.get(newV);
+          } else {
+            // 如果不需要分页(滚动请求的肯定是下一页)
+            this.indata.push(...addIndex(this.indata.length, data));
+          }
+          this.total == 0 && total > 0 && (this.total = total);
+        } else {
+          // 如果该页已被请求
+          this.page && (this.indata = this.pages.get(newV));
+        }
+      } else {
+        if (this.page && this.data.length > 0) {
+          this.total == 0 && (this.total = this.data.length);
+          if (this.pages.size == 0) {
+            let i = 1;
+            const _data = [...this.data];
+            while (_data.length) {
+              let start = (i - 1) * this.pageSize;
+              let data = _data.splice(0, this.pageSize);
+              this.pages.set(i, addIndex(start, data));
+              i++;
+            }
+          }
+          this.indata = this.pages.get(newV);
+        } else {
+          this.indata = addIndex(0, this.data);
+        }
+      }
+      this.page && this.ul.scrollTop(0);
+      this.loading = false;
     }
   }
 };
