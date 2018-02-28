@@ -41,7 +41,7 @@ export default {
     cLoad
   },
   props: {
-    height: { type: String, default: "300px" },
+    height: { type: String, default: "100%" },
     // 数据
     data: { type: Array, default: () => [] },
     // 每页大小
@@ -170,7 +170,6 @@ section.sr {
 
   ul.sr-ul {
     flex: 1;
-    min-height: 250px;
     overflow-y: scroll;
     list-style-type: none;
 
