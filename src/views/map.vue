@@ -74,6 +74,7 @@ export default {
 
 <style lang="less" scoped>
 @import "basic.less";
+@import "config.less";
 
 #rightmap {
   .full;
