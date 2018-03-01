@@ -1,12 +1,14 @@
 // 通用部分（查询相关）
 import cResult from "@/components/Result";
 import cSearch from "@/components/Search";
+import cTree from "@/components/Tree";
 import { Select, Option } from 'iview';
 
 export default {
   components: {
     cResult,
-    cSearch
+    cSearch,
+    cTree
   },
   data() {
     return {
@@ -21,6 +23,9 @@ export default {
       this.data = [];
     },
     select(data) {
+      console.log(data);
+    },
+    treeClick(data) {
       console.log(data);
     }
   },
@@ -55,7 +60,14 @@ export default {
                   }
                 }}>
               </c-result>
-              { this.buildTree ? <div v-show={!this.data.length}>{this.buildTree()}</div> : '' }
+              {
+                this.treeData ?
+                  <c-tree
+                    v-show={!this.data.length}
+                    data={this.treeData}
+                    onOn-click={this.treeClick}>
+                  </c-tree> : ''
+              }
           </div>
       </div>
     );

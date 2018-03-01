@@ -1,8 +1,8 @@
 <template>
-  <section class="sr" v-show="indata.length > 0" :style="{'height':height}">
+  <section class="c-result" v-show="indata.length > 0" :style="{'height':height}">
     <big v-show="page&&showTotal">共{{total}}条，共{{pageCount}}页</big>
     <c-load :loading="loading"></c-load>
-    <ul class="sr-ul" @scroll.passive="scrollPage" ref="list">
+    <ul class="c-result-ul" @scroll.passive="scrollPage" ref="list">
       <li v-for="(item, index) in indata"
         :key="index"
         :class="[selectIndex==item.index?'select':'']"
@@ -154,34 +154,3 @@ export default {
   }
 };
 </script>
-
-<style lang="less" scoped>
-@import "basic.less";
-@import "config.less";
-
-section.sr {
-  .flex(column);
-  > * {
-    width: 100%;
-  }
-
-  padding-top: 10px;
-  position: relative;
-
-  ul.sr-ul {
-    flex: 1;
-    overflow-y: scroll;
-    list-style-type: none;
-
-    li {
-      cursor: pointer;
-      .result;
-    }
-  }
-
-  .page {
-    .reset;
-    padding-top: 10px;
-  }
-}
-</style>
