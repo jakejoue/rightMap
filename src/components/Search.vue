@@ -48,7 +48,7 @@ export default {
           const flag = await this._search(this.value);
           this.clear = flag === true || flag === undefined;
         } else {
-          alert("请输入关键字");
+          this.$Message.warning("请输入关键字");
         }
       }
     }

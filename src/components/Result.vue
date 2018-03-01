@@ -47,7 +47,7 @@ export default {
     // 每页大小
     pageSize: { type: Number, default: 10 },
     // 是否启动分页标签，为false变成滚动分页（不影响服务器分页）
-    page: { type: Boolean, default: true },
+    page: { type: Boolean, default: false },
     // 分页模式下是否显示头部总数
     showTotal: { type: Boolean, default: false },
     // 是否是服务器分页
