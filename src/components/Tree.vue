@@ -28,7 +28,6 @@ export default {
             this.selectIndex = data.nodeKey;
             this.$emit("on-click", data);
           }}
-          style={{ display: "inline-block", width: "100%", cursor: "pointer" }}
           class={
             this.selectIndex == data.nodeKey
               ? "c-tree-node select"

@@ -13,6 +13,49 @@ export default {
         { value: "15", label: "15秒" },
         { value: "60", label: "60秒" },
         { value: "300", label: "300秒" }
+      ],
+      treeData: [
+        {
+          title: "root",
+          children: [{ title: "node1" }, { title: "node2" }]
+        },
+        {
+          title: "root",
+          children: [{ title: "node1" }, { title: "node2" }]
+        },
+        {
+          title: "root",
+          children: [{ title: "node1" }, { title: "node2" }]
+        },
+        {
+          title: "root",
+          children: [{ title: "node1" }, { title: "node2" }]
+        },
+        {
+          title: "root",
+          children: [{ title: "node1" }, { title: "node2" }]
+        },
+        {
+          title: "root",
+          children: [{ title: "node1" }, { title: "node2" }]
+        },
+        {
+          title: "root",
+          children: [{ title: "node1" }, { title: "node2" }]
+        },
+        {
+          title: "root",
+          children: [{ title: "node1" }, { title: "node2" }]
+        },
+        {
+          title: "root",
+          children: [{ title: "node1" }, { title: "node2" }]
+        },
+        {
+          title: "root",
+          children: [{ title: "node1" }, { title: "node2",
+          children: [{ title: "node1" }, { title: "node2" }] }]
+        }
       ]
     };
   },
@@ -73,7 +116,7 @@ export default {
         </div>
       );
     },
-    typeChange(value){
+    typeChange(value) {
       console.log(value);
     }
   }

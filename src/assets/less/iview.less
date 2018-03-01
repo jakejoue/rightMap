@@ -28,8 +28,12 @@
         font-size: 15px
     }
     overflow-y: scroll;
+
     span.c-tree-node {
+        cursor: pointer;
         padding: 3px 5px;
+        display: inline-block;
+        width: ~"calc(100% - 30px)";
         &:hover, &.select {
             border: 1px solid #FFB951;
         }
@@ -38,7 +42,6 @@
         }
         .ivu-icon {
             margin-right: 7px;
-            &ivu-icon-folder {}
         }
     }
 }
