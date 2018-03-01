@@ -72,6 +72,9 @@ export default {
           <p>{data.description}</p>
         </div>
       );
+    },
+    typeChange(value){
+      console.log(value);
     }
   }
 };

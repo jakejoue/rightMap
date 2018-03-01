@@ -32,7 +32,7 @@ export default {
             (this.typeList && this.typeList.length) ? 
             <div class="typeSelect">
                 { this.typeLabel ? <label>{this.typeLabel}：</label> : '' }
-                <Select v-model={this.type} size="small" style="width:100px;">
+                <Select v-model={this.type} onOn-change={this.typeChange} size="small" style="width:100px;">
                 {
                   this.typeList.map(item => {
                     return <Option value={item.value} key={item.value}>{ item.label }</Option>
