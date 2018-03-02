@@ -19,7 +19,6 @@ export default {
   },
   methods: {
     search(value) {
-      this.data = [];
     },
     reset() {
       this.data = [];

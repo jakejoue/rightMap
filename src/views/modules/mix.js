@@ -12,7 +12,22 @@ export default {
   },
   data() {
     return {
-      data: []
+      data: [],
+      splitLine: true,
+      selectAppendHeight : 0,
+      placeholder: ''
+    }
+  },
+  computed: {
+    height() {
+      const height = `calc(100% - ${
+        36 + 
+        (this.typeList ? 32 : 0) + 
+        (this.splitLine ? 8 : 0) + 
+        8 + 
+        (this.selectAppend ? this.selectAppendHeight : 0)
+      }px)`;
+      return height;
     }
   },
   methods: {
@@ -32,7 +47,7 @@ export default {
   render(h) {
     return (
       <div>
-          <c-search size="large" search={this.search} reset={this.reset}></c-search>
+          <c-search size="large" search={this.search} reset={this.reset} placeholder={this.placeholder}></c-search>
           {
             (this.typeList && this.typeList.length) ? 
             <div class="typeSelect">
@@ -48,7 +63,8 @@ export default {
             </div> : ''
           }
           { this.tip ? <p class="tip" v-show={!this.data.length}>{this.tip}</p> : '' }
-          <div class="full" style="height:calc(100% - 60px)">
+          <hr v-show={this.splitLine} style={{marginTop:"8px"}}/>
+          <div class="full" style={ Object.assign({marginTop:"8px"}, {height:this.height}) }>
               <c-result
                 data={this.data}
                 page={this.page}

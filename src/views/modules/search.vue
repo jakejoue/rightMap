@@ -6,6 +6,7 @@ export default {
   data() {
     return {
       tip: '使用上面的查询框，根据名称来查询要素。',
+      splitLine: false,
       type: "兴趣点",
       typeList: [
         { value: "兴趣点", label: "兴趣点" },
