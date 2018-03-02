@@ -4,9 +4,45 @@ import mix from "./mix";
 export default {
   mixins: [mix],
   data() {
+    setTimeout(() => {
+      this.treeData = [
+        {
+          title: "parent 1",
+          expand: true,
+          children: [
+            {
+              title: "parent 1-1",
+              expand: true,
+              children: [
+                {
+                  title: "leaf 1-1-1",
+                  attr: "d"
+                },
+                {
+                  title: "leaf 1-1-2"
+                }
+              ]
+            },
+            {
+              title: "parent 1-2",
+              expand: true,
+              children: [
+                {
+                  title: "leaf 1-2-1"
+                },
+                {
+                  title: "leaf 1-2-1"
+                }
+              ]
+            }
+          ]
+        }
+      ];
+    }, 2000);
     return {
       placeholder: "请输入部件编码",
-      treeData: []
+      treeData: [],
+      treeCheckable: true
     };
   },
   methods: {

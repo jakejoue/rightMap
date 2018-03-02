@@ -3,7 +3,10 @@
       :data="data"
       :load-data="loadData"
       :render="renderContent"
-      :style="{'height': height}">
+      :style="{'height': height}"
+      :show-checkbox="showCheckbox"
+      :class="[showCheckbox?'checkable':'']"
+      @on-check-change="checkChange">
     </Tree>
 </template>
 
@@ -15,10 +18,11 @@ export default {
     height: { type: String, default: "100%" },
     data: { type: Array, default: () => [] },
     loadData: Function,
-    getIcon: { type: Function, default: () => "document" }
+    getIcon: { type: Function, default: () => "document" },
+    showCheckbox: { type: Boolean, default: false }
   },
   data() {
-    return { selectIndex: -1 };
+    return { selectIndex: -1, deepArr: [], checkedData: [] };
   },
   methods: {
     renderContent(h, { root, node, data }) {
@@ -28,16 +32,53 @@ export default {
             this.selectIndex = data.nodeKey;
             this.$emit("on-click", data);
           }}
-          class={
-            this.selectIndex == data.nodeKey
-              ? "c-tree-node select"
-              : "c-tree-node"
-          }
+          class={`c-tree-node ${
+            this.selectIndex == data.nodeKey ? "select" : ""
+          }`}
         >
           <Icon type={data.children ? "folder" : this.getIcon(data)} />
           <span>{data.title}</span>
         </span>
       );
+    },
+    checkChange(data) {
+      this.checkedData = data;
+      this.$emit("on-check-change", data, this.filterData);
+    },
+    filterData(deep, key) {
+      if (!deep && !key) return this.checkedData;
+      deep = Number.isInteger(deep) ? deep : this.deepArr.length - 1;
+      const deepNodekey = this.deepArr[deep];
+      if (!deepNodekey) {
+        return [];
+      } else {
+        console.log(deepNodekey);
+        return this.checkedData.filter(e => {
+          let flag = deepNodekey.includes(e.nodeKey);
+          let flag2 = true;
+          key && (flag2 = !!e[key]);
+          return flag && flag2;
+        });
+      }
+    }
+  },
+  watch: {
+    data: {
+      immediate: true,
+      handler(...rest) {
+        let deepArr = [],
+          nodeKey = 0;
+        function buildDeepMap(nodeData, deep = 0) {
+          !deepArr[deep] && (deepArr[deep] = []);
+          deepArr[deep].push(nodeKey);
+          nodeKey++;
+          if (Array.isArray(nodeData.children)) {
+            nodeData.children.forEach(data => buildDeepMap(data, deep + 1));
+          }
+        }
+        this.data.forEach(data => buildDeepMap(data));
+        this.deepArr = deepArr;
+      }
     }
   }
 };

@@ -54,7 +54,7 @@
         cursor: pointer;
         padding: 3px 5px;
         display: inline-block;
-        width: ~"calc(100% - 30px)";
+        width: ~"calc(100% - 26px)";
         &:hover, &.select {
             border: 1px solid #FFB951;
         }
@@ -63,6 +63,16 @@
         }
         .ivu-icon {
             margin-right: 7px;
+        }
+    }
+
+    // 存在复选框时候样式
+    &.checkable {
+        .ivu-checkbox-wrapper {
+            margin: 0;
+        }
+        span.c-tree-node {
+            width: ~"calc(100% - 44.5px)";
         }
     }
 }

@@ -14,21 +14,21 @@ export default {
     return {
       data: [],
       splitLine: true,
-      formAppendHeight : 0,
-      formPrependHeight : 0,
+      formAppendHeight: 0,
+      formPrependHeight: 0,
       placeholder: ''
     }
   },
   computed: {
     height() {
       const height = `calc(100% - ${
-        36 + 
-        (this.typeList ? 32.8 : 0) + 
-        (this.splitLine ? 10 : 0) + 
-        8 + 
+        36 +
+        (this.typeList ? 32.8 : 0) +
+        (this.splitLine ? 10 : 0) +
+        8 +
         (this.formPrepend ? this.formPrependHeight : 0) +
         (this.formAppend ? this.formAppendHeight : 0)
-      }px)`;
+        }px)`;
       return height;
     }
   },
@@ -39,12 +39,9 @@ export default {
     reset() {
       this.data = [];
     },
-    select(data) {
-      console.log(data);
-    },
-    treeClick(data) {
-      console.log(data);
-    }
+    select(data) { },
+    treeClick(data) { },
+    treeCheck(data, filter) { }
   },
   render(h) {
     return (
@@ -84,7 +81,10 @@ export default {
                   <c-tree
                     v-show={!this.data.length}
                     data={this.treeData}
-                    onOn-click={this.treeClick}>
+                    onOn-click={this.treeClick}
+                    getIcon={this.getIcon}
+                    show-checkbox={this.treeCheckable}
+                    onOn-check-change={this.treeCheck}>
                   </c-tree> : ''
               }
           </div>
