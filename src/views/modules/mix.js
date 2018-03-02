@@ -14,7 +14,8 @@ export default {
     return {
       data: [],
       splitLine: true,
-      selectAppendHeight : 0,
+      formAppendHeight : 0,
+      formPrependHeight : 0,
       placeholder: ''
     }
   },
@@ -25,7 +26,8 @@ export default {
         (this.typeList ? 32 : 0) + 
         (this.splitLine ? 8 : 0) + 
         8 + 
-        (this.selectAppend ? this.selectAppendHeight : 0)
+        (this.formPrepend ? this.formPrependHeight : 0) +
+        (this.formAppend ? this.formAppendHeight : 0)
       }px)`;
       return height;
     }
@@ -47,6 +49,7 @@ export default {
   render(h) {
     return (
       <div>
+          { this.formPrepend ? this.formPrepend : '' }
           <c-search size="large" search={this.search} reset={this.reset} placeholder={this.placeholder}></c-search>
           {
             (this.typeList && this.typeList.length) ? 
@@ -59,9 +62,9 @@ export default {
                   })
                 }
                 </Select>
-                { this.selectAppend ? this.selectAppend : '' }
             </div> : ''
           }
+          { this.formAppend ? this.formAppend : '' }
           { this.tip ? <p class="tip" v-show={!this.data.length}>{this.tip}</p> : '' }
           <hr v-show={this.splitLine} style={{marginTop:"8px"}}/>
           <div class="full" style={ Object.assign({marginTop:"8px"}, {height:this.height}) }>
