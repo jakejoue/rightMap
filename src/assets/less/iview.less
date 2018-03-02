@@ -12,6 +12,27 @@
 }
 .input-icon;
 
+// switch样式
+.switch(@height: 24px, @width: 48px, @afterWidth: 20px) {
+    .ivu-switch {
+        width: @width;
+        height: @height;
+        line-height: @height - 2px;
+        border-radius: @height;
+        &:after {
+            width: @afterWidth;
+            height: @height - 4px;
+            border-radius: @height - 4px;
+        }
+    }
+    .ivu-switch-checked {
+        &:after {
+            left: @width - @afterWidth - 4px;
+        }
+    }
+}
+.switch(22px, 44px);
+
 // 一些其他相关的全局样式
 .module {
     .typeSelect {

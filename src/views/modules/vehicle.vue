@@ -1,4 +1,5 @@
 <script>
+import { Switch } from "iview";
 import mix from "./mix";
 
 export default {
@@ -14,12 +15,26 @@ export default {
         { value: "60", label: "60秒" },
         { value: "300", label: "300秒" }
       ],
-      treeData: []
+      treeData: [],
+      formAppend: (
+        <div class="carSwitch">
+          <Switch onOn-change={this.carNum} />
+          <label>显示车牌号</label>
+          <Switch onOn-change={this.offLineCar} />
+          <label>显示离线车辆</label>
+        </div>
+      ),
+      formAppendHeight: 26
     };
   },
   methods: {
-    search(value) {
+    carNum(value) {
+      console.log("carNum", value);
     },
+    offLineCar(value) {
+      console.log("carNum", value);
+    },
+    search(value) {},
     reset() {
       this.data = [];
     },
@@ -39,5 +54,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+div.carSwitch {
+  margin: 2px 0;
+  > * {
+    vertical-align: middle;
+  }
+  label {
+    margin: 0 10px 0 3px;
+  }
+}
 </style>

@@ -5,7 +5,7 @@ export default {
   mixins: [mix],
   data() {
     return {
-      placeholder: "请输入部件编号",
+      placeholder: "请输入部件编码",
       treeData: []
     };
   },

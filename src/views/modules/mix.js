@@ -23,8 +23,8 @@ export default {
     height() {
       const height = `calc(100% - ${
         36 + 
-        (this.typeList ? 32 : 0) + 
-        (this.splitLine ? 8 : 0) + 
+        (this.typeList ? 32.8 : 0) + 
+        (this.splitLine ? 10 : 0) + 
         8 + 
         (this.formPrepend ? this.formPrependHeight : 0) +
         (this.formAppend ? this.formAppendHeight : 0)
