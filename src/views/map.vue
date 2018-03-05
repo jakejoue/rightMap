@@ -13,7 +13,10 @@
         </ul>
       </aside>
       <!-- 地图部分 -->
-      <main id="map"></main>
+      <main id="map">
+        <!-- <div style="">123</div> -->
+        <m-tools></m-tools>
+      </main>
       <!-- form对话框 -->
       <transition name="fade">
         <div id="mform" v-show="aIndex != -1">
@@ -36,9 +39,11 @@
 </template>
 
 <script>
+import mTools from "./mapTools/tools";
 import config from "./modules/";
 
 export default {
+  components: { mTools },
   data() {
     return {
       aIndex: -1,
@@ -145,6 +150,9 @@ export default {
       .full;
       float: left;
       width: calc(~"100% - @{aside}");
+      > div {
+        z-index: 1;
+      }
     }
     // 功能操作窗口部分
     div#mform {
