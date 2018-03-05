@@ -79,7 +79,7 @@ export default {
               {
                 this.treeData ?
                   <c-tree
-                    v-show={!this.data.length}
+                    v-show={!this.data.length && this.treeData.length}
                     data={this.treeData}
                     onOn-click={this.treeClick}
                     getIcon={this.getIcon}
