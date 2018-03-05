@@ -1,4 +1,5 @@
 import layer from './layers';
+import mapBase from './mapBase';
 
 function resolve(filename, filetype = 'png') {
   return `static/img/${filename}.${filetype}`;
@@ -37,7 +38,8 @@ const config = [{
   {
     select: true,
     title: '设置底图',
-    img: resolve('mapBase_16')
+    img: resolve('mapBase_16'),
+    component: mapBase
   }
 ];
 

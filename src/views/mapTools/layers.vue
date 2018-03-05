@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section id="layres">
         <header>图层控制</header>
         <CheckboxGroup v-model="layers">
             <ul>
@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-section {
+section#layres {
   width: 130px;
   header {
     text-align: center;

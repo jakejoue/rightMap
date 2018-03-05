@@ -7,7 +7,7 @@
             :title="item.title">
             <img :src="item.img">
           </li>
-      </ul>
+      </ul><br>
       <section v-show="content">
         <component v-for="(item, i) in config"
           :key="i"
@@ -69,6 +69,7 @@ div#tools {
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
     border-bottom-left-radius: 10px;
     font-size: 0;
+    float: right;
     li {
       .border(left, @overcolor);
       cursor: pointer;
@@ -76,10 +77,6 @@ div#tools {
       display: inline-block;
       line-height: 100%;
 
-      &:first-child {
-        border-left: none;
-        border-bottom-left-radius: 10px;
-      }
       &:hover,
       &.select {
         .bcolor(@overcolor);
@@ -88,6 +85,13 @@ div#tools {
         border-right: solid;
         border-color: @lcolor;
         border-width: 1.2px;
+      }
+      &:first-child {
+        border-left: none;
+        border-bottom-left-radius: 10px;
+      }
+      &:last-child {
+        border-right: none;
       }
       img {
         size: 16px 16px;
