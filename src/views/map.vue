@@ -14,8 +14,10 @@
       </aside>
       <!-- 地图部分 -->
       <main id="map">
-        <!-- <div style="">123</div> -->
-        <m-tools></m-tools>
+        <street-map ref="streetMap"></street-map>
+        <div id="mapTarget">
+          <m-tools></m-tools>
+        </div>
       </main>
       <!-- form对话框 -->
       <transition name="fade">
@@ -40,10 +42,11 @@
 
 <script>
 import mTools from "./mapTools/tools";
+import streetMap from "./mapTools/streetMap";
 import config from "./modules/";
 
 export default {
-  components: { mTools },
+  components: { mTools, streetMap },
   data() {
     return {
       aIndex: -1,
@@ -65,7 +68,7 @@ export default {
           source: new ol.source.OSM()
         })
       ],
-      target: "map",
+      target: "mapTarget",
       controls: [],
       view: new ol.View({
         center: [0, 0],
@@ -150,8 +153,11 @@ export default {
       .full;
       float: left;
       width: calc(~"100% - @{aside}");
-      > div {
-        z-index: 1;
+      div#mapTarget {
+        .full;
+        > div {
+          z-index: 1;
+        }
       }
     }
     // 功能操作窗口部分

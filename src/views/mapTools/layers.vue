@@ -29,7 +29,7 @@ export default {
 
 <style lang="less" scoped>
 section#layres {
-  width: 130px;
+  width: 140px;
   header {
     text-align: center;
   }

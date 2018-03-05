@@ -7,15 +7,17 @@
             :title="item.title">
             <img :src="item.img">
           </li>
-      </ul><br>
-      <section v-show="content">
-        <component v-for="(item, i) in config"
-          :key="i"
-          :is="item.component"
-          :ref="item.title"
-          v-show="active == i">
-        </component>
-      </section>
+      </ul>
+      <transition name="fade">
+        <section v-show="content">
+          <component v-for="(item, i) in config"
+            :key="i"
+            :is="item.component"
+            :ref="item.title"
+            v-show="active == i">
+          </component>
+        </section>
+      </transition>
   </div>
 </template>
 
@@ -60,7 +62,6 @@ div#tools {
   @lcolor: #35ac46;
 
   .abs;
-  top: @header;
   right: 0;
   > ul {
     .border(bottom, @bdcolor);
@@ -69,7 +70,6 @@ div#tools {
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.4);
     border-bottom-left-radius: 10px;
     font-size: 0;
-    float: right;
     li {
       .border(left, @overcolor);
       cursor: pointer;
