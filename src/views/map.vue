@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import mTools from "./mapTools/tools";
+import mTools from "./mapTools/";
 import streetMap from "./mapTools/streetMap";
 import config from "./modules/";
 
