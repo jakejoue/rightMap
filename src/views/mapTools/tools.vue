@@ -8,7 +8,7 @@
             <img :src="item.img">
           </li>
       </ul>
-      <transition name="fade">
+      <transition name="el-zoom-in-top">
         <section v-show="content">
           <component v-for="(item, i) in config"
             :key="i"
@@ -101,9 +101,11 @@ div#tools {
     .bcolor(@bcolor);
     .border(@lcolor);
     float: right;
-    padding: 5px;
     font-size: 15px;
     border-radius: 10px 0 0 10px;
+    > *{
+      padding: 5px;
+    }
   }
 }
 </style>

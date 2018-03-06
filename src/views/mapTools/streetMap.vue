@@ -1,15 +1,17 @@
 <template>
+  <transition name="el-fade-in-linear">
     <div id="streetMap" v-show="show_" :class="expand?'full':''">
         <ul>
             <li @click="expand = !expand" :title="expand?'最小化':'全屏'">
                 <Icon :type="expand?'android-contract':'android-expand'"></Icon>
             </li>
-            <li title="关闭" @click="show_ = false">
+            <li title="关闭" @click="close">
                 <Icon type="android-close"></Icon>
             </li>
         </ul>
         <iframe class="full" src="https://www.baidu.com" frameborder="0"></iframe>
     </div>
+  </transition>
 </template>
 
 <script>
@@ -26,6 +28,7 @@ export default {
     },
     close() {
       this.show_ = false;
+      this.expand = false;
     }
   }
 };
