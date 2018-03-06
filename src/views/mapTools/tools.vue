@@ -53,7 +53,6 @@ export default {
 
 <style lang="less" scoped>
 @import "basic.less";
-@import "config.less";
 
 div#tools {
   @bcolor: #f5f6f7;

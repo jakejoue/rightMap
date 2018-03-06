@@ -16,6 +16,7 @@
       <main id="map">
         <street-map ref="streetMap"></street-map>
         <div id="mapTarget">
+          <m-ctrl :class="aIndex==-1?'':'expand'"></m-ctrl>
           <m-tools></m-tools>
         </div>
       </main>
@@ -42,11 +43,12 @@
 
 <script>
 import mTools from "./mapTools/";
+import mCtrl from "./mapCtrl";
 import streetMap from "./mapTools/streetMap";
 import config from "./modules/";
 
 export default {
-  components: { mTools, streetMap },
+  components: { mTools, mCtrl, streetMap },
   data() {
     return {
       aIndex: -1,
@@ -155,6 +157,7 @@ export default {
       width: calc(~"100% - @{aside}");
       div#mapTarget {
         .full;
+        position: relative;
         > div {
           z-index: 1;
         }
