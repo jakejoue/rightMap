@@ -1,5 +1,5 @@
 <template>
-  <div id="tools">
+  <div id="tools" class="unselectable">
       <ul>
           <li v-for="(item, i) in config" :key="i"
             @click="select(i)"
