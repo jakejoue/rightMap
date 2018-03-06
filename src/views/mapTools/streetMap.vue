@@ -8,7 +8,7 @@
               <Icon type="android-close"></Icon>
           </li>
       </ul>
-      <iframe class="full" src="https://www.baidu.com" frameborder="0"></iframe>
+      <iframe class="full" src="" frameborder="0"></iframe>
   </div>
 </template>
 

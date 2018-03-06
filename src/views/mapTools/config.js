@@ -8,8 +8,8 @@ function resolve(filename, filetype = 'png') {
 const config = [{
     title: '清除图形',
     img: resolve('clearAll_16'),
-    handler({type}) {
-        type && alert('清除图形');
+    handler({target}) {
+      target.active = -1;
     }
   },
   {
