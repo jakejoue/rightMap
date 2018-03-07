@@ -1,4 +1,5 @@
 import layer from './layers';
+import legend from './legend';
 import mapBase from './mapBase';
 
 function resolve(filename, filetype = 'png') {
@@ -32,7 +33,8 @@ const config = [{
   },
   {
     title: '车辆图例',
-    img: resolve('legend_16')
+    img: resolve('legend_16'),
+    component: legend
   },
   {
     title: '显示街景',
