@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+ <configuration>
+    <!-- 根据部署客户端项目的服务器IP，来配置后台服务和地图服务 --> 
+    <!-- 郴州现场内网服务器-->
+    <when clientIP="172.20.1.7">
+         <WebService>http://172.20.1.7:9090/KDDCESBServer</WebService>
+         <GPSService>http://172.20.1.41:9099/KDUMGpsServer</GPSService>
+         <MapService>http://172.20.1.9:8081/arcgis/rest/services</MapService>
+         <GeoService>http://192.168.10.14:8080/geoserver</GeoService>
+         <GeometryService>http://172.20.1.9:8081/ArcGIS/rest/services/Geometry/GeometryServer</GeometryService>        
+    </when>
+    <when clientIP="172.20.1.43">
+         <WebService>http://172.20.1.43:9090/KDDCESBServer</WebService>
+         <GPSService>http://172.20.1.43:9099/KDUMGpsServer</GPSService>
+         <MapService>http://172.20.1.9:8081/arcgis/rest/services</MapService> 
+         <GeoService>http://192.168.10.14:8080/geoserver</GeoService>            
+         <GeometryService>http://172.20.1.9:8081/ArcGIS/rest/services/Geometry/GeometryServer</GeometryService>    
+    </when>  
+
+    <!-- 公司内网服务器-->
+    <when  clientIP="10.201.61.19">
+         <WebService>http://10.201.61.19:8082/KDDCESBServer</WebService>
+         <GPSService>http://10.201.61.19:8086/KDUMGpsServer</GPSService>
+         <MapService>http://192.168.10.14:8399/arcgis/rest/services/chenzhou</MapService>     
+         <GeoService>http://192.168.10.14:8080/geoserver</GeoService>    
+         <GeometryService>http://192.168.10.14:8399/arcgis/rest/services/Geometry/GeometryServer</GeometryService>
+    </when>
+    
+    
+    <when  clientIP="10.201.61.10">
+         <WebService>http://10.201.61.19:8082/KDDCESBServer</WebService>
+         <GPSService>http://10.201.61.19:8086/KDUMGpsServer</GPSService>
+         <MapService>http://192.168.10.14:8399/arcgis/rest/services/chenzhou</MapService>     
+         <GeoService>http://192.168.10.14:8080/geoserver</GeoService>    
+         <GeometryService>http://192.168.10.14:8399/arcgis/rest/services/Geometry/GeometryServer</GeometryService>
+    </when>
+    <!-- 如果部署客户端项目的服务器IP，不和上面任意一项匹配，则匹配下面的选项，本机调试时请修改配置-->
+    <!-- 开发人员电脑-->
+    <when  clientIP="localhost">
+         <WebService>http://10.201.61.19:8082/KDDCESBServer</WebService>
+         <GPSService>http://10.201.61.19:8086/KDUMGpsServer</GPSService>
+         <MapService>http://192.168.10.14:8399/arcgis/rest/services/chenzhou</MapService>     
+         <GeoService>http://192.168.10.14:8080/geoserver</GeoService>    
+         <GeometryService>http://192.168.10.14:8399/arcgis/rest/services/Geometry/GeometryServer</GeometryService>
+    </when>
+</configuration>

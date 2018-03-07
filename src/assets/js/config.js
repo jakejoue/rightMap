@@ -7,6 +7,9 @@ import { Pagination } from 'element-ui'
 import '../less/iview.less'
 import '../less/animate.less'
 
+// 引入全局方法
+import './golbal'
+
 Vue.use(iView)
 Vue.use(Pagination)
 Vue.prototype.axios = Axios
