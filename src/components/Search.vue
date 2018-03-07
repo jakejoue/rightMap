@@ -28,10 +28,10 @@ export default {
   },
   computed: {
     input() {
-      return this.$(this.$el).children("input");
+      return $(this.$el).children("input");
     },
     icon() {
-      return this.$(this.$el).children("i");
+      return $(this.$el).children("i");
     }
   },
   methods: {

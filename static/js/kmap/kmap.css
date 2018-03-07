@@ -1,3 +1,8 @@
+.tooltip {
+    color: black;
+    font-size: 16px;
+}
+
 .esriPopup {
     position: relative;
     z-index: 40;

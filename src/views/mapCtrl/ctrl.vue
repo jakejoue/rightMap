@@ -1,7 +1,7 @@
 <template>
   <div id="tools">
     <ul>
-      <li v-for="(item, i) in config" :key="i" @click="select" :title="item.title">
+      <li v-for="(item, i) in config" :key="i" @click="select(item)" :title="item.title">
         <div class="full" :class="item.class"></div>
       </li>
     </ul>
@@ -14,7 +14,9 @@ import config from "./config";
 export default {
   data: () => ({ active: -1, config, content: false }),
   methods: {
-    select() {}
+    select(item) {
+      item.handler && item.handler();
+    }
   }
 };
 </script>

@@ -70,7 +70,7 @@ export default {
       return Math.ceil(this.total / this.pageSize);
     },
     ul() {
-      return this.$(this.$refs.list);
+      return $(this.$refs.list);
     }
   },
   watch: {

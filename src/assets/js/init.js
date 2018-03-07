@@ -1,6 +1,5 @@
 // 地图初始化
 import axios from 'axios';
-import $ from 'jquery';
 
 // 解析xml配置文件
 function parseUrlConfig(xml) {
