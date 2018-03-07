@@ -8,16 +8,15 @@
             <img :src="item.img">
           </li>
       </ul>
-      <transition name="el-zoom-in-top">
-        <section v-show="content">
-          <component v-for="(item, i) in config"
-            :key="i"
-            :is="item.component"
-            :ref="item.title"
-            v-show="active == i">
-          </component>
-        </section>
-      </transition>
+      <section>
+        <component v-for="(item, i) in config"
+          class="content"
+          :key="i"
+          :is="item.component"
+          :ref="item.title"
+          v-show="i == content">
+        </component>
+      </section>
   </div>
 </template>
 
@@ -25,14 +24,13 @@
 import config from "./config";
 
 export default {
-  data: () => ({ active: -1, config, content: false }),
+  data: () => ({ active: -1, config, content: -1 }),
   methods: {
     select(newV, oldV = this.active) {
       const newItem = this.config[newV];
       const oldItem = this.config[oldV];
 
       this.active = -1;
-      this.content = false;
       oldItem && oldItem.handler && oldItem.handler({
         type: false,
         target: this
@@ -40,11 +38,13 @@ export default {
 
       if (newV != oldV) {
         this.active = newV;
-        this.$refs[newItem.title] && (this.content = true);
+        this.$refs[newItem.title] && (this.content = this.content == newV ? -1 : newV);
         newItem.handler && newItem.handler({
           type: true,
           target: this
         });
+      }else {
+        this.$refs[newItem.title] && (this.content = -1);
       }
     }
   }
@@ -103,7 +103,7 @@ div#tools {
     float: right;
     font-size: 15px;
     border-radius: 10px 0 0 10px;
-    > *{
+    > .content {
       padding: 5px;
     }
   }
