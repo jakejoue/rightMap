@@ -22,6 +22,8 @@ export default {
     switchBaseMap(i) {
       if (this.active != i) {
         this.active = i;
+        baseMap.setVisible(this.active == 0);
+        imageMap.setVisible(this.active == 1);
       }
     }
   }

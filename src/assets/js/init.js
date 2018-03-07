@@ -79,10 +79,11 @@ axios.all([
   const map = new KMap.Map('mapTarget', config);
   map.setFullExtent(configData.extent);
   // 矢量地图
-  map.addBaseLayer(creatBaseLayer('矢量', configData.baseMap));
-  // 卫星地图
-  map.addBaseLayer(creatBaseLayer('影像', configData.imageMap, false));
-  // 全局赋值
+  global.baseMap = creatBaseLayer('矢量', configData.baseMap);
+  // 影像地图
+  global.imageMap = creatBaseLayer('影像', configData.imageMap, false);
+  map.addBaseLayer(baseMap);
+  map.addBaseLayer(imageMap);
   global.map = map;
   return map;
 });
