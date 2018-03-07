@@ -34,8 +34,8 @@ const config = [{
   {
     title: '显示街景',
     img: resolve('street_view_16'),
-    handler({target}) {
-      target.$parent.$refs['streetMap'].show();
+    handler({type, target}) {
+      type && target.$parent.$refs['streetMap'].show();
     }
   },
   {

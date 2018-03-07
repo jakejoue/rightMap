@@ -1,10 +1,10 @@
 <template>
-    <div id="mapBase">
-        <span v-for="(item, i) in config" :key="i" :class="[active==i?'select':'']">
-            <img :src="item.img" @click="active = i">
-            <p>{{item.title}}</p>
-        </span>
-    </div>
+  <div id="mapBase">
+    <span v-for="(item, i) in config" :key="i" :class="[active==i?'select':'']">
+      <img :src="item.img" @click="switchBaseMap(i)">
+      <p>{{item.title}}</p>
+    </span>
+  </div>
 </template>
 
 <script>
@@ -17,6 +17,13 @@ export default {
       ],
       active: 0
     };
+  },
+  methods: {
+    switchBaseMap(i) {
+      if (this.active != i) {
+        this.active = i;
+      }
+    }
   }
 };
 </script>

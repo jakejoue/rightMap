@@ -1,28 +1,36 @@
 <template>
-    <section id="layres">
-        <header>图层控制</header>
-        <CheckboxGroup v-model="layers">
-            <ul>
-                <li>
-                    <Checkbox label="采集员"></Checkbox>
-                </li>
-                <li>
-                    <Checkbox label="车辆"></Checkbox>
-                </li>
-                <li>
-                    <Checkbox label="视频监控"></Checkbox>
-                </li>
-            </ul>
-        </CheckboxGroup>
-    </section>
+  <section id="layres">
+    <header>图层控制</header>
+    <CheckboxGroup v-model="selectedLayers" @on-change="change">
+      <ul>
+        <li v-for="(layer, i) in layers" :key="i">
+          <Checkbox :label="layer.name"></Checkbox>
+        </li>
+      </ul>
+    </CheckboxGroup>
+  </section>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      layers: ['采集员', '车辆', '视频监控']
+      layers: [
+        {
+          name: "采集员"
+        },
+        {
+          name: "车辆"
+        },
+        {
+          name: "视频监控"
+        }
+      ],
+      selectedLayers: ["采集员", "车辆", "视频监控"]
     };
+  },
+  methods: {
+    change(layers) {}
   }
 };
 </script>
