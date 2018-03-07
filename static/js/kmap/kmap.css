@@ -207,6 +207,7 @@ ul.track {
 
 .mapTip {
     color: white;
+    font-size: 14px;
 }
 
 .mapTip>* {
