@@ -119,7 +119,7 @@ section.c-result {
 }
 
 .sprite() {
-    background-image: data-uri('static/img/sprite.png');
+    background-image: url('@{path}/sprite.png');
     background-repeat: no-repeat;
 }
 .plus {
@@ -146,16 +146,16 @@ section.c-result {
 .streetView {
     background-position: center;
     background-repeat: no-repeat;
-    background-image: data-uri('static/img/streetView_30.png');
+    background-image: url('@{path}/streetView_30.png');
     &:hover {
-        background-image: data-uri('static/img/streetView_select_30.png');
+        background-image: url('@{path}/streetView_select_30.png');
     }
 }
 .location {
     background-position: center;
     background-repeat: no-repeat;
-    background-image: data-uri('static/img/locate_30.png');
+    background-image: url('@{path}/locate_30.png');
     &:hover {
-        background-image: data-uri('static/img/locate_select_30.png');
+        background-image: url('@{path}/locate_select_30');
     }
 }

@@ -85,7 +85,7 @@ export default {
     height: @header;
     top: 0;
     z-index: -1;
-    background: #add2fe data-uri("static/img/logo-right.png") repeat-x;
+    background: #add2fe url("@{path}/logo-right.png") repeat-x;
   }
   // 尾
   footer {
