@@ -43,12 +43,14 @@
 
 <script>
 import mTools from "./mapTools/";
-import mCtrl from "./mapCtrl";
 import streetMap from "./mapTools/streetMap";
+import mCtrl from "./mapCtrl";
 import config from "./modules/";
+import init from "assets/js/init";
 
 export default {
   components: { mTools, mCtrl, streetMap },
+  mixins: [init],
   data() {
     return {
       aIndex: -1,
@@ -62,22 +64,6 @@ export default {
       oldV != -1 && modules[oldV].$emit("close");
       newV != -1 && modules[newV].$emit("show");
     }
-  },
-  mounted() {
-    var map = new ol.Map({
-      layers: [
-        new ol.layer.Tile({
-          source: new ol.source.OSM()
-        })
-      ],
-      target: "mapTarget",
-      controls: [],
-      view: new ol.View({
-        center: [0, 0],
-        zoom: 3,
-        minZoom: 3
-      })
-    });
   }
 };
 </script>
