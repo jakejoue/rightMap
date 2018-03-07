@@ -15,7 +15,10 @@ const config = [{
   {
     select: true,
     title: '测量长度',
-    img: resolve('Measure_Distance16')
+    img: resolve('Measure_Distance16'),
+    handler({type, target}) {
+      console.log("Measure_Distance", type);
+    }
   },
   {
     select: true,
@@ -34,12 +37,12 @@ const config = [{
   {
     title: '显示街景',
     img: resolve('street_view_16'),
-    handler({type, target}) {
-      type && target.$parent.$refs['streetMap'].show();
+    handler({target}) {
+      target.$parent.$refs['streetMap'].show();
+      target.active = -1;
     }
   },
   {
-    select: true,
     title: '设置底图',
     img: resolve('mapBase_16'),
     component: mapBase
