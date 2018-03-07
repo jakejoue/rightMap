@@ -45,72 +45,61 @@ function creatBaseLayer(id, layers, visible = true) {
   return layerGroup;
 };
 
-// 请求配置文件
-axios.all([
-  axios.get("static/config.json"),
-  axios.get("static/config.xml")
-]).then(axios.spread(({ data: mapConfig }, { data: webConfig }) => {
-  webConfig = parseUrlConfig(webConfig);
-  // 合并配置项
-  const configData = Object.assign({}, mapConfig, webConfig);
-  // 代理地址
-  configData.proxyUrl = path + "/mapProxy.do";
-  // 赋值到全局
-  global.configData = configData;
-  // 进入下初始化阶段
-  return configData;
-})).then(configData => {
-  // 初始化kmap的配置项
-  const config = {
-    projection: configData.projection,
-    geodesic: configData.geodesic,
-    center: configData.centerPoint,
-    resolutions: (!configData.resolutions) ? undefined : configData.resolutions,
-    minResolution: configData.minResolution,
-    maxResolution: configData.maxResolution,
-    resolution: configData.resolution,
-    minZoom: configData.minZoom,
-    maxZoom: configData.maxZoom,
-    zoom: configData.zoom
-  };
-  global.mapConfig = config;
-  // 初始化地图对象和底图
-  const map = new KMap.Map('mapTarget', config);
-  map.setFullExtent(configData.extent);
-  // 矢量地图
-  global.baseMap = creatBaseLayer('矢量', configData.baseMap);
-  // 影像地图
-  global.imageMap = creatBaseLayer('影像', configData.imageMap, false);
-  map.addBaseLayer(baseMap);
-  map.addBaseLayer(imageMap);
-  global.map = map;
-  return map;
-});
+async function init() {
+  // 请求配置文件
+  return axios.all([
+    axios.get("static/config.json"),
+    axios.get("static/config.xml")
+  ]).then(axios.spread(({ data: mapConfig }, { data: webConfig }) => {
+    webConfig = parseUrlConfig(webConfig);
+    // 合并配置项
+    const configData = Object.assign({}, mapConfig, webConfig);
+    // 代理地址
+    configData.proxyUrl = path + "/mapProxy.do";
+    // 赋值到全局
+    global.configData = configData;
+    // 进入下初始化阶段
+    return configData;
+  })).then(configData => {
+    // 初始化kmap的配置项
+    const config = {
+      projection: configData.projection,
+      geodesic: configData.geodesic,
+      center: configData.centerPoint,
+      resolutions: (!configData.resolutions) ? undefined : configData.resolutions,
+      minResolution: configData.minResolution,
+      maxResolution: configData.maxResolution,
+      resolution: configData.resolution,
+      minZoom: configData.minZoom,
+      maxZoom: configData.maxZoom,
+      zoom: configData.zoom
+    };
+    global.mapConfig = config;
+    // 初始化地图对象和底图
+    const map = new KMap.Map('mapTarget', config);
+    map.setFullExtent(configData.extent);
+    // 矢量地图
+    global.baseMap = creatBaseLayer('矢量', configData.baseMap);
+    // 影像地图
+    global.imageMap = creatBaseLayer('影像', configData.imageMap, false);
+    map.addBaseLayer(baseMap);
+    map.addBaseLayer(imageMap);
+    global.map = map;
+    return map;
+  });
+}
 
 let map = null;
 
 export default {
-  beforeCreate() {
-    // map = new ol.Map({
-    //   layers: [],
-    //   controls: [],
-    //   view: new ol.View({
-    //     center: [0, 0],
-    //     zoom: 3,
-    //     minZoom: 3
-    //   })
-    // });
+  computed: {
+    map() {
+      return this.$store.state.map;
+    }
   },
-  mounted() {
-    // map.setTarget("mapTarget");
-    // const layer = new ol.layer.Tile({
-    //   source: new ol.source.OSM()
-    // });
-    // this.$store.commit("setMap", map);
-    // this.$store.dispatch("addLayer", {
-    //   name: "baseLayer",
-    //   layer
-    // });
-    console.log(global.mapConfig);
+  beforeCreate() {
+    init().then(map => {
+      this.$store.commit('setMap', map);
+    });
   }
 }

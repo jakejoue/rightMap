@@ -6,7 +6,7 @@
     <article>
       <!-- 左边模板图标 -->
       <aside>
-        <ul>
+        <ul v-if="map">
           <li v-for="(item, index) in modules" :key="index" :title="item.title" @click="aIndex = aIndex == index ? -1 : index" :class="[aIndex==index?'select':'']">
             <img :src="item.img" :alt="item.title">
           </li>
@@ -16,8 +16,8 @@
       <main id="map">
         <street-map ref="streetMap"></street-map>
         <div id="mapTarget">
-          <m-ctrl :class="aIndex==-1?'':'expand'"></m-ctrl>
-          <m-tools></m-tools>
+          <m-ctrl v-if="map" :class="aIndex==-1?'':'expand'"></m-ctrl>
+          <m-tools v-if="map"></m-tools>
         </div>
       </main>
       <!-- form对话框 -->
