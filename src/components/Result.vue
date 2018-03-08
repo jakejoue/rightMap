@@ -87,9 +87,13 @@ export default {
       immediate: true
     },
     getData() {
+      this.pages = new Map();
+      this.total = 0;
       this.refresh(1);
     },
     data() {
+      this.pages = new Map();
+      this.total = 0;
       this.refresh(1);
     }
   },
