@@ -48,7 +48,7 @@ export default {
       // 存在label，表示需要被图层管理控件控制
       if (label) {
         this.$store.commit('addCtrlLayer', {
-          label: moduleName, layer: this.layer
+          label, layer: this.layer
         });
       }
     }

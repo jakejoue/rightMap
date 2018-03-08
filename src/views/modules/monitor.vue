@@ -2,7 +2,8 @@
 import mix from "./mix";
 
 export default {
-  moduleName: 'monitor',
+  moduleName: "monitor",
+  label: "视频监控",
   mixins: [mix],
   data() {
     return {
@@ -10,8 +11,7 @@ export default {
     };
   },
   methods: {
-    search(value) {
-    },
+    search(value) {},
     reset() {
       this.data = [];
     },

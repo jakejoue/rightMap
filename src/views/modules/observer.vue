@@ -2,7 +2,8 @@
 import mix from "./mix";
 
 export default {
-  moduleName: 'observer',
+  moduleName: "observer",
+  label: "巡查员",
   mixins: [mix],
   data() {
     return {

@@ -2,7 +2,7 @@
 import mix from "./mix";
 
 export default {
-  moduleName: 'zone',
+  moduleName: "zone",
   mixins: [mix],
   data() {
     return {

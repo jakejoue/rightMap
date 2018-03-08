@@ -2,11 +2,11 @@
 import mix from "./mix";
 
 export default {
-  moduleName: 'search',
+  moduleName: "search",
   mixins: [mix],
   data() {
     return {
-      tip: '使用上面的查询框，根据名称来查询要素。',
+      tip: "使用上面的查询框，根据名称来查询要素。",
       splitLine: false,
       type: "兴趣点",
       typeList: [
@@ -18,7 +18,7 @@ export default {
         { value: "单元网格", label: "单元网格" }
       ],
       page: true,
-      showTotal: true,
+      showTotal: true
     };
   },
   methods: {
@@ -73,8 +73,8 @@ export default {
     getResT(data) {
       return (
         <div>
-          <p>{ data.name }</p>
-          <p>{ data.description }</p>
+          <p>{data.name}</p>
+          <p>{data.description}</p>
         </div>
       );
     }
