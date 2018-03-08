@@ -4,7 +4,7 @@
     <CheckboxGroup v-model="selectedLayers" @on-change="change">
       <ul>
         <li v-for="(layer, i) in layers" :key="i">
-          <Checkbox :label="layer.name"></Checkbox>
+          <Checkbox :label="layer.label"></Checkbox>
         </li>
       </ul>
     </CheckboxGroup>
@@ -15,22 +15,25 @@
 export default {
   data() {
     return {
-      layers: [
-        {
-          name: "采集员"
-        },
-        {
-          name: "车辆"
-        },
-        {
-          name: "视频监控"
-        }
-      ],
-      selectedLayers: ["采集员", "车辆", "视频监控"]
+      selectedLayers: []
     };
+  },
+  computed: {
+    layers() {
+      return this.$store.getters.ctrlLayer;
+    }
   },
   methods: {
     change(layers) {}
+  },
+  watch: {
+    // 监听layers，当其改变的时候默认选中所有图层
+    layers: {
+      handler(v) {
+        this.selectedLayers = v.map(e => e.name);
+      },
+      immediate: true
+    }
   }
 };
 </script>
