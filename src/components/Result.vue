@@ -70,7 +70,8 @@ export default {
       currentPage: 1,
       total: 0,
       pages: new Map(),
-      loading: false
+      loading: false,
+      ul: $(this.$refs.list)
     };
   },
   computed: {
@@ -95,7 +96,7 @@ export default {
   methods: {
     // 滚动分页
     scrollPage() {
-      const ul = $(this.$refs.list);
+      const ul = this.ul;
       let b = ul[0].scrollHeight - ul.height() - ul.scrollTop();
       this.indata.length < this.total && Math.abs(b) <= 1 && this.currentPage++;
     },
@@ -104,7 +105,6 @@ export default {
       this.selectIndex = item.index;
     },
     async refresh(newV) {
-      const ul = $(this.$refs.list);
       this.loading = true;
       // 如果是动态获取数据
       if (this.server && this.getData) {
@@ -150,9 +150,12 @@ export default {
           this.indata = addIndex(0, this.data);
         }
       }
-      this.page && ul.scrollTop(0);
+      this.page && this.ul.scrollTop(0);
       this.loading = false;
     }
+  },
+  mounted() {
+    this.ul = $(this.$refs.list);
   }
 };
 </script>
