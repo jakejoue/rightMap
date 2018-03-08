@@ -42,7 +42,6 @@ export default {
     }, 2000);
     return {
       placeholder: "请输入部件编码",
-      treeData: [],
       treeCheckable: true
     };
   },

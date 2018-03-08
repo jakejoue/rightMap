@@ -15,8 +15,7 @@ export default {
         { value: "15", label: "15秒" },
         { value: "60", label: "60秒" },
         { value: "300", label: "300秒" }
-      ],
-      treeData: []
+      ]
     };
   },
   methods: {

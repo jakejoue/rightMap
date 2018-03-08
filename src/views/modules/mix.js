@@ -13,6 +13,8 @@ export default {
   data() {
     return {
       data: [],
+      treeData: [],
+      hasTree: true,
       splitLine: true,
       formAppendHeight: 0,
       formPrependHeight: 0,
@@ -98,7 +100,7 @@ export default {
                 }}>
               </c-result>
               {
-                this.treeData ?
+                this.hasTree ?
                   <c-tree
                     v-show={!this.data.length && this.treeData.length}
                     data={this.treeData}

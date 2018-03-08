@@ -17,7 +17,6 @@ export default {
         { value: "60", label: "60秒" },
         { value: "300", label: "300秒" }
       ],
-      treeData: [],
       formAppend: (
         <div class="carSwitch">
           <Switch onOn-change={this.carNum} />

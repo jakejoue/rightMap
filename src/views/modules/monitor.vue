@@ -5,11 +5,6 @@ export default {
   moduleName: "monitor",
   label: "视频监控",
   mixins: [mix],
-  data() {
-    return {
-      treeData: []
-    };
-  },
   methods: {
     search(value) {},
     reset() {
