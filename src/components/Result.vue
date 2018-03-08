@@ -2,7 +2,15 @@
   <section class="c-result" v-show="indata.length > 0" :style="{'height':height}">
     <big v-show="page&&showTotal">共{{total}}条，共{{pageCount}}页</big>
     <c-load :loading="loading"></c-load>
-    <ul class="c-result-ul" @scroll.passive="scrollPage" ref="list">
+    <ul v-if="!page && server" class="c-result-ul" @scroll.passive="scrollPage" ref="list">
+      <li v-for="(item, index) in indata"
+        :key="index"
+        :class="[selectIndex==item.index?'select':'']"
+        @click="selectItem(item)">
+        <slot :data="item.target"></slot>
+      </li>
+    </ul>
+    <ul v-else class="c-result-ul" ref="list">
       <li v-for="(item, index) in indata"
         :key="index"
         :class="[selectIndex==item.index?'select':'']"
@@ -68,9 +76,6 @@ export default {
   computed: {
     pageCount() {
       return Math.ceil(this.total / this.pageSize);
-    },
-    ul() {
-      return $(this.$refs.list);
     }
   },
   watch: {
@@ -89,20 +94,17 @@ export default {
   },
   methods: {
     // 滚动分页
-    scrollPage(...rest) {
-      if (!this.page && this.server) {
-        let b =
-          this.ul[0].scrollHeight - this.ul.height() - this.ul.scrollTop();
-        this.indata.length < this.total &&
-          Math.abs(b) <= 1 &&
-          this.currentPage++;
-      }
+    scrollPage() {
+      const ul = $(this.$refs.list);
+      let b = ul[0].scrollHeight - ul.height() - ul.scrollTop();
+      this.indata.length < this.total && Math.abs(b) <= 1 && this.currentPage++;
     },
     selectItem(item) {
       this.$emit("select", item);
       this.selectIndex = item.index;
     },
     async refresh(newV) {
+      const ul = $(this.$refs.list);
       this.loading = true;
       // 如果是动态获取数据
       if (this.server && this.getData) {
@@ -148,7 +150,7 @@ export default {
           this.indata = addIndex(0, this.data);
         }
       }
-      this.page && this.ul.scrollTop(0);
+      this.page && ul.scrollTop(0);
       this.loading = false;
     }
   }
