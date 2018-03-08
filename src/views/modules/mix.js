@@ -16,7 +16,9 @@ export default {
       splitLine: true,
       formAppendHeight: 0,
       formPrependHeight: 0,
-      placeholder: ''
+      placeholder: '',
+      layer: null,
+      visible: true
     }
   },
   computed: {
@@ -30,6 +32,25 @@ export default {
         (this.formAppend ? this.formAppendHeight : 0)
         }px)`;
       return height;
+    }
+  },
+  // 初始化地图图层
+  created() {
+    // moduleName是layer的id，必须的
+    const { moduleName, label } = this.$options;
+    if (moduleName) {
+      // 如果存在图层，不创建，否则默认创建一个矢量图层
+      if (!this.layer) {
+        this.layer = new KMap.GraphicsLayer(moduleName);
+      }
+      // 可见性
+      this.layer.setVisible(this.visible);
+      // 存在label，表示需要被图层管理控件控制
+      if (label) {
+        this.$store.commit('addCtrlLayer', {
+          label: moduleName, layer: this.layer
+        });
+      }
     }
   },
   methods: {

@@ -2,6 +2,7 @@
 import mix from "./mix";
 
 export default {
+  moduleName: 'monitor',
   mixins: [mix],
   data() {
     return {

@@ -7,23 +7,15 @@ const store = new Vuex.Store({
     // 地图对象
     map: null,
     // 右上角可管理图层
-    ctrlLayer: new Map()
+    ctrlLayers: []
   },
-  getters: {
-    ctrlLayer({ ctrlLayer }) {
-      const layers = [];
-      ctrlLayer.forEach(({ key, value }) => {
-        layers.push({ label: key, layer: value });
-      });
-      return layers;
-    }
-  },
+  getters: {},
   mutations: {
     setMap(state, map) {
       (!state.map && map instanceof KMap.Map) && (state.map = map);
     },
-    addCtrlLayer({ ctrlLayer }, { label, layer }) {
-      ctrlLayer.set(label, layer);
+    addCtrlLayer({ ctrlLayers }, { label, layer }) {
+      ctrlLayers.push({ label, layer });
     }
   },
   actions: {},

@@ -3,6 +3,7 @@ import { Switch } from "iview";
 import mix from "./mix";
 
 export default {
+  moduleName: 'vehicle',
   mixins: [mix],
   data() {
     return {

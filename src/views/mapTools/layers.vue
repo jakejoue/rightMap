@@ -20,19 +20,18 @@ export default {
   },
   computed: {
     layers() {
-      return this.$store.getters.ctrlLayer;
+      return this.$store.state.ctrlLayers;
     }
   },
   methods: {
     change(layers) {}
   },
   watch: {
-    // 监听layers，当其改变的时候默认选中所有图层
-    layers: {
-      handler(v) {
-        this.selectedLayers = v.map(e => e.name);
-      },
-      immediate: true
+    layers(layers) {
+      this.selectedLayers = [];
+      layers.forEach(({ label, layer }) => {
+        layer.getVisible() && this.selectedLayers.push(label);
+      });
     }
   }
 };

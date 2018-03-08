@@ -2,6 +2,7 @@
 import mix from "./mix";
 
 export default {
+  moduleName: 'search',
   mixins: [mix],
   data() {
     return {

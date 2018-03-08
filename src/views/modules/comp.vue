@@ -2,6 +2,7 @@
 import mix from "./mix";
 
 export default {
+  moduleName: 'comp',
   mixins: [mix],
   data() {
     setTimeout(() => {
