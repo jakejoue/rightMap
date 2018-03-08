@@ -10,7 +10,7 @@ import '../less/animate.less'
 // 引入全局方法
 import './golbal'
 global.$ = $
+global.axios = Axios
 
 Vue.use(iView)
 Vue.use(Pagination)
-Vue.prototype.axios = Axios

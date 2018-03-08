@@ -1,6 +1,3 @@
-// 初始化
-import axios from 'axios';
-
 // 解析xml配置文件
 function parseUrlConfig(xml) {
   const webConfig = {};
