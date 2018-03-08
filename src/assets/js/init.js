@@ -1,4 +1,4 @@
-// 地图初始化
+// 初始化
 import axios from 'axios';
 
 // 解析xml配置文件
@@ -45,6 +45,7 @@ function creatBaseLayer(id, layers, visible = true) {
   return layerGroup;
 };
 
+// 配置项请求，地图初始化
 async function init() {
   // 请求配置文件
   return axios.all([
@@ -89,15 +90,13 @@ async function init() {
   });
 }
 
-let map = null;
-
 export default {
   computed: {
     map() {
       return this.$store.state.map;
     }
   },
-  beforeCreate() {
+  mounted() {
     init().then(map => {
       this.$store.commit('setMap', map);
     });
