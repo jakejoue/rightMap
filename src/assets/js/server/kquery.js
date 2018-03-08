@@ -272,7 +272,7 @@ KQuery.prototype.buildData = function(args) {
  */
 KQuery.prototype.getData = function(args) {
   var url = this.buildUrl(args);
-  return this.axios.get(encodeURI(url));
+  return this.axios.get(encodeURI(url)).then(({ data }) => data);;
 };
 
 /**
@@ -283,7 +283,7 @@ KQuery.prototype.getData = function(args) {
 KQuery.prototype.postData = function(args) {
   var url = this.server + '/query';
   var content = this.buildData(args);
-  return this.axios.post(encodeURI(url), content);
+  return this.axios.post(encodeURI(url), content).then(({ data }) => data);
 };
 
 export default KQuery;
