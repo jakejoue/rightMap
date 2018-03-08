@@ -1,3 +1,5 @@
+import KQuery from './server/kquery';
+
 // 解析xml配置文件
 function parseUrlConfig(xml) {
   const webConfig = {};

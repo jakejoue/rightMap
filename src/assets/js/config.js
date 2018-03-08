@@ -7,10 +7,12 @@ import { Pagination } from 'element-ui'
 import '../less/iview.less'
 import '../less/animate.less'
 
-// 引入全局方法
-import './golbal'
+// 挂载全局变量
 global.$ = $
 global.axios = Axios
+
+// 引入全局方法
+import './golbal'
 
 Vue.use(iView)
 Vue.use(Pagination)
