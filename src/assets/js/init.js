@@ -43,24 +43,20 @@ function creatBaseLayer(id, layers, visible = true) {
   layerGroup.setVisible(visible);
   return layerGroup;
 };
-
-// 配置项请求，地图初始化
-async function init() {
-  // 请求配置文件
-  return axios.all([
-    axios.get("static/config.json"),
-    axios.get("static/config.xml")
-  ]).then(axios.spread(({ data: mapConfig }, { data: webConfig }) => {
-    webConfig = parseUrlConfig(webConfig);
-    // 合并配置项
-    const configData = Object.assign({}, mapConfig, webConfig);
-    // 代理地址
-    configData.proxyUrl = path + "/mapProxy.do";
-    // 赋值到全局
-    global.configData = configData;
-    // 进入下初始化阶段
-    return configData;
-  })).then(configData => {
+// 初始化查询相关方法
+async function initServer(configData) {
+  return new Promise((resolve, reject) => {
+    const query = new KQuery({
+      server: configData.geoServerUrl,
+      appKey: configData.appKey
+    });
+    global.query = query;
+    resolve(query)
+  });
+};
+// 初始化地图
+async function initMap(configData) {
+  return new Promise((resolve, reject) => {
     // 初始化kmap的配置项
     const config = {
       projection: configData.projection,
@@ -85,8 +81,27 @@ async function init() {
     map.addBaseLayer(baseMap);
     map.addBaseLayer(imageMap);
     global.map = map;
-    return map;
+    resolve(map);
   });
+};
+
+// 配置项请求，地图初始化
+async function init() {
+  // 请求配置文件
+  return axios.all([
+    axios.get("static/config.json"),
+    axios.get("static/config.xml")
+  ]).then(axios.spread(({ data: mapConfig }, { data: webConfig }) => {
+    webConfig = parseUrlConfig(webConfig);
+    // 合并配置项
+    const configData = Object.assign({}, mapConfig, webConfig);
+    // 代理地址
+    configData.proxyUrl = path + "/mapProxy.do";
+    // 赋值到全局
+    global.configData = configData;
+    // 进入下初始化阶段
+    return configData;
+  })).then(configData => Promise.all([initMap(configData), initServer(configData)]));
 }
 
 export default {
@@ -96,7 +111,7 @@ export default {
     }
   },
   mounted() {
-    init().then(map => {
+    init().then(([map, server]) => {
       this.$store.commit('setMap', map);
     });
   }

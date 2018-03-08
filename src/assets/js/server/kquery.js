@@ -12,7 +12,7 @@ function KQuery({ server, appKey }) {
     timeout: 10000
   });
   this.axios.defaults.headers.post['Content-Type'] = 'text/plain;charset=UTF-8';
-}
+};
 
 
 /**
@@ -242,7 +242,7 @@ KQuery.prototype.buildUrl = function(args) {
     }
   }
   return url;
-}
+};
 
 /**
  * 生成POST的XML数据
