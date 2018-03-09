@@ -13,7 +13,7 @@
         </ul>
       </aside>
       <!-- 地图部分 -->
-      <main id="map">
+      <main id="kmap">
         <street-map ref="streetMap"></street-map>
         <div id="mapTarget">
           <m-ctrl v-if="map" :class="aIndex==-1?'':'expand'"></m-ctrl>
@@ -159,7 +159,7 @@ export default {
       }
     }
     // 地图部分
-    main#map {
+    main#kmap {
       .full;
       float: left;
       width: calc(~"100% - @{aside}");

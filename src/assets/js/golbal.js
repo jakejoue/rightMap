@@ -43,14 +43,13 @@ global.createLayer = createLayer;
 
 /**
  * 地图缩放到目标并打开infowindow
- * @param {KMap.Graphic} graphic 
- * @param {number} zoom
  */
-function zoomShow({
+function centerShow({
   graphic,
   layer,
   zoom = 14,
-  show = true
+  show = true,
+  center = true
 }) {
   map.infoWindow.hide();
   const geom = graphic.getGeometry();
@@ -67,7 +66,7 @@ function zoomShow({
     ];
     config = {};
   }
-  map.zoomByExtent(extent, config);
+  center && map.zoomByExtent(extent, config);
   if (show) {
     //避免动画冲突造成的bug
     setTimeout(() => {
@@ -83,4 +82,4 @@ function zoomShow({
     }, 500);
   }
 };
-global.zoomShow = zoomShow;
+global.centerShow = centerShow;

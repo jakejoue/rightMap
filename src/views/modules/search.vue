@@ -3,7 +3,7 @@ import mix from "./mix";
 //样式(兴趣点，线，面样式)
 const POINT = new KMap.PictureMarkerSymbol({
   anchor: [0.5, 1],
-  src: "/static/img/point_32.png"
+  src: "static/img/point_32.png"
 });
 const MULTILINESTRING = new KMap.SimpleLineSymbol({
   stroke: [160, 0, 66, 0.8],

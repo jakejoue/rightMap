@@ -80,13 +80,13 @@ async function initMap(configData) {
     global.imageMap = creatBaseLayer('影像', configData.imageMap, false);
     map.addBaseLayer(baseMap);
     map.addBaseLayer(imageMap);
-    initInfoWindow(map);
+    initMapEvent(map);
     global.map = map;
     resolve(map);
   });
 };
 //初始化地图对话框
-function initInfoWindow(map) {
+function initMapEvent(map) {
   const mapPopup = new KMap.Popup({
     "offset": [0, 0],
     "container": 'kmap-popup',
@@ -116,26 +116,16 @@ function initInfoWindow(map) {
   });
   map.infoWindow = mapPopup;
   map.addOverlay(mapPopup);
+  // 地图点击绑定
   map.on('singleclick', onMapSingleClick, map);
 };
 //地图单击事件
 function onMapSingleClick(e) {
   const map = this;
-  let coordinate = e.coordinate;
   const pixel = e.pixel;
-  const selectGraphic = map.forEachFeatureAtPixel(pixel, function(graphic, layer) {
+  map.forEachFeatureAtPixel(pixel, function(graphic, layer) {
     if (graphic.getVisible() && layer) {
-      map.infoWindow.hide();
-      const template = graphic.getInfoTemplate() || layer.getInfoTemplate();
-      if (template) {
-        map.infoWindow.setSelectedFeature(graphic);
-        var geometry = graphic.getGeometry();
-        if (geometry.getType() === 'point') {
-          coordinate = geometry.getCoordinates();
-        }
-        map.infoWindow.show(coordinate);
-        return graphic;
-      }
+      centerShow({ graphic, layer, center: false });
     }
   });
 };
