@@ -87,13 +87,17 @@ export default {
       immediate: true
     },
     getData() {
+      this.selectIndex = -1;
       this.pages = new Map();
       this.total = 0;
+      this.currentPage = 1;
       this.refresh(1);
     },
     data() {
+      this.selectIndex = -1;
       this.pages = new Map();
       this.total = 0;
+      this.currentPage = 1;
       this.refresh(1);
     }
   },
