@@ -69,7 +69,7 @@ export default {
     select({ target }) {
       const graphic = target.graphic;
       if (graphic) {
-        zoomShow({ graphic });
+        centerShow({ graphic });
       }
     },
     // 空方法，避免报错

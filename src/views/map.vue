@@ -44,7 +44,7 @@
       </main>
       <!-- form对话框 -->
       <transition name="fade">
-        <div id="mform" v-show="aIndex != -1">
+        <div id="mform" v-show="aIndex != -1" v-if="map">
           <section v-for="(item, index) in modules" :key="index" v-show="aIndex == index">
             <h2 class="title">
               <big>{{item.title}}</big>
