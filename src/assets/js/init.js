@@ -80,11 +80,65 @@ async function initMap(configData) {
     global.imageMap = creatBaseLayer('影像', configData.imageMap, false);
     map.addBaseLayer(baseMap);
     map.addBaseLayer(imageMap);
+    initInfoWindow(map);
     global.map = map;
     resolve(map);
   });
 };
-
+//初始化地图对话框
+function initInfoWindow(map) {
+  const mapPopup = new KMap.Popup({
+    "offset": [0, 0],
+    "container": 'kmap-popup',
+    "closer": 'kmap-popup-closer',
+    "title": 'kmap-popup-title',
+    "content": 'kmap-popup-content'
+  });
+  mapPopup.on("show", (event) => {
+    // 窗体切换事件
+    const tab = $('#kmap-popup-title div.titleBar [InfoTag]');
+    if (tab.length > 0) {
+      const items = $('#kmap-popup-content [InfoTag]');
+      if (items.length == tab.length) {
+        tab.each(e => {
+          $(tab[e]).click(() => {
+            items.hide();
+            $(items[e]).show()
+          })
+        });
+        tab[0].click();
+      }
+    }
+    // 事件选择器初始化
+    // initTime();
+    // 设置窗体偏移
+    /** 略 **/
+  });
+  map.infoWindow = mapPopup;
+  map.addOverlay(mapPopup);
+  map.on('singleclick', onMapSingleClick, map);
+};
+//地图单击事件
+function onMapSingleClick(e) {
+  const map = this;
+  let coordinate = e.coordinate;
+  const pixel = e.pixel;
+  const selectGraphic = map.forEachFeatureAtPixel(pixel, function(graphic, layer) {
+    if (graphic.getVisible() && layer) {
+      map.infoWindow.hide();
+      const template = graphic.getInfoTemplate() || layer.getInfoTemplate();
+      if (template) {
+        map.infoWindow.setSelectedFeature(graphic);
+        var geometry = graphic.getGeometry();
+        if (geometry.getType() === 'point') {
+          coordinate = geometry.getCoordinates();
+        }
+        map.infoWindow.show(coordinate);
+        return graphic;
+      }
+    }
+  });
+};
 // 配置项请求，地图初始化
 async function init() {
   // 请求配置文件

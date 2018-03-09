@@ -18,6 +18,28 @@
         <div id="mapTarget">
           <m-ctrl v-if="map" :class="aIndex==-1?'':'expand'"></m-ctrl>
           <m-tools v-if="map"></m-tools>
+          <!-- 地图信息弹窗 -->
+          <div id="kmap-popup" class="esriPopup">
+              <div class="esriPopupWrapper">
+                  <div class="sizer">
+                      <div class="titlePane" unselectable="on">
+                          <div id="kmap-popup-title" class="title" unselectable="on">
+                              <!-- 标题 -->
+                          </div>
+                          <div id="kmap-popup-closer" title="关闭" class="titleButton close" unselectable="on">
+                          <!-- 关闭按钮 -->
+                          </div>
+                      </div>
+                  </div>
+                  <div class="sizer content">
+                      <div id="kmap-popup-content" class="contentPane">
+                          <!-- 内容 -->
+                      </div>
+                  </div>
+                  <div class="pointer bottom">
+                  </div>
+              </div>
+          </div>
         </div>
       </main>
       <!-- form对话框 -->

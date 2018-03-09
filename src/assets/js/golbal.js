@@ -52,7 +52,7 @@ function zoomShow({
   zoom = 14,
   show = true
 }) {
-  // map.infoWindow.hide();
+  map.infoWindow.hide();
   const geom = graphic.getGeometry();
   let extent, centerPoint, config;
   if (geom.getType() == "point") {
@@ -68,7 +68,6 @@ function zoomShow({
     config = {};
   }
   map.zoomByExtent(extent, config);
-  return;
   if (show) {
     //避免动画冲突造成的bug
     setTimeout(() => {
