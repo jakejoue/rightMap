@@ -57,6 +57,9 @@ export default {
     };
   },
   methods: {
+    typeChange() {
+      this.$refs.cSearch.focus();
+    },
     search(value) {
       switch (this.type) {
         case "兴趣点":

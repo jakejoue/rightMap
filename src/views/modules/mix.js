@@ -70,7 +70,7 @@ export default {
     return (
       <div>
           { this.formPrepend ? this.formPrepend : '' }
-          <c-search size="large" search={this.search} reset={this.reset} placeholder={this.placeholder}></c-search>
+          <c-search ref="cSearch" size="large" search={this.search} reset={this.reset} placeholder={this.placeholder}></c-search>
           {
             (this.typeList && this.typeList.length) ? 
             <div class="typeSelect">
@@ -89,6 +89,7 @@ export default {
           <hr v-show={this.splitLine} style={{marginTop:"8px"}}/>
           <div class="full" style={ Object.assign({marginTop:"8px"}, {height:this.height}) }>
               <c-result
+                ref="cResult"
                 data={this.data}
                 page={this.page}
                 onSelect={this.select}

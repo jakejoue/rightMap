@@ -1,7 +1,7 @@
 <template>
   <section class="c-result" v-show="indata.length > 0" :style="{'height':height}">
     <big v-show="page&&showTotal">共{{total}}条，共{{pageCount}}页</big>
-    <c-load :loading="loading"></c-load>
+    <c-load :loading="loading_"></c-load>
     <ul v-if="!page && server" class="c-result-ul" @scroll.passive="scrollPage" ref="list">
       <li v-for="(item, index) in indata"
         :key="index"
@@ -70,7 +70,7 @@ export default {
       currentPage: 1,
       total: 0,
       pages: new Map(),
-      loading: false,
+      loading_: false,
       ul: $(this.$refs.list)
     };
   },
@@ -98,18 +98,24 @@ export default {
     }
   },
   methods: {
+    // loading控制
+    loading(flag = false) {
+      this.loading_ = flag;
+    },
     // 滚动分页
     scrollPage() {
       const ul = this.ul;
       let b = ul[0].scrollHeight - ul.height() - ul.scrollTop();
       this.indata.length < this.total && Math.abs(b) <= 1 && this.currentPage++;
     },
+    // 选中事件
     selectItem(item) {
       this.$emit("select", item);
       this.selectIndex = item.index;
     },
+    // 分页刷新
     async refresh(newV) {
-      this.loading = true;
+      this.loading_ = true;
       // 如果是动态获取数据
       if (this.server && this.getData) {
         // 如果该页未被请求
@@ -155,7 +161,7 @@ export default {
         }
       }
       this.page && this.ul.scrollTop(0);
-      this.loading = false;
+      this.loading_ = false;
     }
   },
   mounted() {

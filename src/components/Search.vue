@@ -51,6 +51,9 @@ export default {
           this.$Message.warning("请输入关键字");
         }
       }
+    },
+    focus() {
+      this.input.focus();
     }
   }
 };
