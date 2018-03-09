@@ -53,6 +53,7 @@ export default {
           label, layer: this.layer
         });
       }
+      map.addGraphicsLayer(this.layer);
     }
   },
   methods: {

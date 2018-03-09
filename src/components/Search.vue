@@ -6,6 +6,7 @@
         @on-click="h"
         @on-enter="h"
         @on-focus="clear=false"
+        @on-blur="clear=value.trim()"
     >
     </i-Input>
 </template>
