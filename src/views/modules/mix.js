@@ -66,8 +66,9 @@ export default {
       this.data = [];
       this.reset && this.reset();
     },
-    pageChange() { },
     select(data) { },
+    // 空方法，避免报错
+    pageChange(data) { },
     treeClick(data) { },
     treeCheck(data, filter) { }
   },

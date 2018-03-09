@@ -1,35 +1,70 @@
 <script>
 import mix from "./mix";
+//样式(兴趣点，线，面样式)
+const POINT = new KMap.PictureMarkerSymbol({
+  anchor: [0.5, 1],
+  src: "/static/img/point_32.png"
+});
+const MULTILINESTRING = new KMap.SimpleLineSymbol({
+  stroke: [160, 0, 66, 0.8],
+  width: 3
+});
+const MULTIPOLYGON = new KMap.SimpleFillSymbol({
+  stroke: MULTILINESTRING,
+  fill: [98, 194, 204, 0.5]
+});
+// 查询结果字段和字段名称
 const configs = {
   兴趣点: {
-    名称: "name",
-    地址: "address"
+    type: POINT,
+    field: {
+      名称: "name",
+      地址: "address"
+    }
   },
   道路: {
-    名称: "name"
+    type: MULTILINESTRING,
+    field: {
+      名称: "name"
+    }
   },
   社区: {
-    名称: "name",
-    编码: "code",
-    面积: "area"
+    type: MULTIPOLYGON,
+    field: {
+      名称: "name",
+      编码: "code",
+      面积: "area"
+    }
   },
   街道办: {
-    名称: "name",
-    编码: "code",
-    面积: "area"
+    type: MULTIPOLYGON,
+    field: {
+      名称: "name",
+      编码: "code",
+      面积: "area"
+    }
   },
   行政区: {
-    名称: "name",
-    编码: "code",
-    面积: "area"
+    type: MULTIPOLYGON,
+    field: {
+      名称: "name",
+      编码: "code",
+      面积: "area"
+    }
   },
   工作网格: {
-    名称: "name",
-    面积: "area"
+    type: MULTIPOLYGON,
+    field: {
+      名称: "name",
+      面积: "area"
+    }
   },
   单元网格: {
-    编码: "code",
-    面积: "area"
+    type: MULTIPOLYGON,
+    field: {
+      编码: "code",
+      面积: "area"
+    }
   }
 };
 
@@ -59,6 +94,16 @@ export default {
   methods: {
     typeChange() {
       this.$refs.cSearch.focus();
+    },
+    pageChange({ pageData }) {
+      this.layer.clear();
+      pageData.forEach(e => {
+        const graphic = new KMap.Graphic();
+        const g = KMap.Geometry.fromWKT(e.geo);
+        graphic.setGeometry(g);
+        graphic.setAttributes(e);
+        this.layer.add(graphic);
+      });
     },
     search(value) {
       switch (this.type) {
@@ -120,14 +165,16 @@ export default {
           return false;
       }
     },
-    reset() {},
+    reset() {
+      this.layer.clear();
+    },
     getResT(data) {
       return (
         <div style={{ minHeight: "50px", fontSize: "14px" }}>
-          {Object.keys(this.config).map(e => {
+          {Object.keys(this.config.field).map(e => {
             return (
               <p>
-                {e}：{data[this.config[e]]}
+                {e}：{data[this.config.field[e]]}
               </p>
             );
           })}
@@ -135,8 +182,10 @@ export default {
       );
     },
     showQueryTaskResults(results) {
-      this.data = results.items;
       this.config = configs[this.type];
+      const render = new KMap.SimpleRenderer(this.config.type);
+      this.layer.setRenderer(render);
+      this.data = results.items;
       if (!results.total) {
         this.$Message.info("没有查询到任何结果");
       }
