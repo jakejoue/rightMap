@@ -67,19 +67,23 @@ function centerShow({
     config = {};
   }
   center && map.zoomByExtent(extent, config);
-  if (show) {
+
+  function showInfo() {
+    let template = graphic.getInfoTemplate();
+    if (layer && !template) {
+      template = layer.getInfoTemplate();
+      graphic.setLayer(layer);
+    }
+    if (template) {
+      map.infoWindow.setSelectedFeature(graphic);
+      map.infoWindow.show(centerPoint);
+    }
+  };
+  if (center && show) {
     //避免动画冲突造成的bug
-    setTimeout(() => {
-      let template = graphic.getInfoTemplate();
-      if (layer && !template) {
-        template = layer.getInfoTemplate();
-        graphic.setLayer(layer);
-      }
-      if (template) {
-        map.infoWindow.setSelectedFeature(graphic);
-        map.infoWindow.show(centerPoint);
-      }
-    }, 500);
+    setTimeout(showInfo(), 500);
+  } else if (show) {
+    showInfo();
   }
 };
 global.centerShow = centerShow;
