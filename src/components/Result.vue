@@ -168,7 +168,7 @@ export default {
         this.ul.scrollTop(0);
         this.$emit("page-change", {
           currentPage: this.currentPage,
-          pageData: this.indata.map(e => e.target)
+          pageData: this.indata
         });
       }
       this.loading_ = false;
