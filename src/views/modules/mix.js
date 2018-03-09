@@ -56,11 +56,14 @@ export default {
     }
   },
   methods: {
-    search(data) {
-      return false;
+    async search_(value) {
+      this.$refs.cResult.loading(true);
+      this.search && await this.search(value);
+      this.$refs.cResult.loading(false);
     },
-    reset() {
+    async reset_() {
       this.data = [];
+      this.reset && this.reset();
     },
     select(data) { },
     treeClick(data) { },
@@ -70,7 +73,7 @@ export default {
     return (
       <div>
           { this.formPrepend ? this.formPrepend : '' }
-          <c-search ref="cSearch" size="large" search={this.search} reset={this.reset} placeholder={this.placeholder}></c-search>
+          <c-search ref="cSearch" size="large" search={this.search_} reset={this.reset_} placeholder={this.placeholder}></c-search>
           {
             (this.typeList && this.typeList.length) ? 
             <div class="typeSelect">

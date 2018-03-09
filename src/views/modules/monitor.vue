@@ -7,9 +7,7 @@ export default {
   mixins: [mix],
   methods: {
     search(value) {},
-    reset() {
-      this.data = [];
-    },
+    reset() {},
     getResT(data) {
       return (
         <div>

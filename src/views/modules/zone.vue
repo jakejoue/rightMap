@@ -43,9 +43,7 @@ export default {
   },
   methods: {
     search(value) {},
-    reset() {
-      this.data = [];
-    },
+    reset() {},
     getResT(data) {
       return (
         <div>

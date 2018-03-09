@@ -22,9 +22,7 @@ export default {
     search(value) {
       this.data = [];
     },
-    reset() {
-      this.data = [];
-    },
+    reset() {},
     getResT(data) {
       return (
         <div>

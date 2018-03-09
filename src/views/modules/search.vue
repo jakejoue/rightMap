@@ -120,9 +120,7 @@ export default {
           return false;
       }
     },
-    reset() {
-      this.data = [];
-    },
+    reset() {},
     getResT(data) {
       return (
         <div style={{ minHeight: "50px", fontSize: "14px" }}>

@@ -36,9 +36,7 @@ export default {
       console.log("carNum", value);
     },
     search(value) {},
-    reset() {
-      this.data = [];
-    },
+    reset() {},
     getResT(data) {
       return (
         <div>
