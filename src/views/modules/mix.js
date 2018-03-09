@@ -60,7 +60,6 @@ export default {
     async search_(value) {
       this.$refs.cResult.loading(true);
       this.search && await this.search(value);
-      this.$refs.cResult.loading(false);
     },
     async reset_() {
       this.data = [];
