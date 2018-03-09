@@ -66,7 +66,12 @@ export default {
       this.data = [];
       this.reset && this.reset();
     },
-    select(data) { },
+    select({ target }) {
+      const graphic = target.graphic;
+      if (graphic) {
+        zoomShow({ graphic });
+      }
+    },
     // 空方法，避免报错
     pageChange(data) { },
     treeClick(data) { },

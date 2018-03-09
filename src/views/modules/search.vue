@@ -98,11 +98,7 @@ export default {
     pageChange({ pageData }) {
       this.layer.clear();
       pageData.forEach(e => {
-        const graphic = new KMap.Graphic();
-        const g = KMap.Geometry.fromWKT(e.geo);
-        graphic.setGeometry(g);
-        graphic.setAttributes(e);
-        this.layer.add(graphic);
+        this.layer.add(e.target.graphic);
       });
     },
     search(value) {
@@ -185,7 +181,14 @@ export default {
       this.config = configs[this.type];
       const render = new KMap.SimpleRenderer(this.config.type);
       this.layer.setRenderer(render);
-      this.data = results.items;
+      this.data = results.items.map(e => {
+        const graphic = new KMap.Graphic();
+        const g = KMap.Geometry.fromWKT(e.geo);
+        graphic.setGeometry(g);
+        graphic.setAttributes(e);
+        e.graphic = graphic;
+        return e;
+      });
       if (!results.total) {
         this.$Message.info("没有查询到任何结果");
       }

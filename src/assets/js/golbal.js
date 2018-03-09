@@ -40,3 +40,48 @@ function createLayer(layerProps) {
   throw "unknow layer type:" + layerProps.type;
 };
 global.createLayer = createLayer;
+
+/**
+ * 地图缩放到目标并打开infowindow
+ * @param {KMap.Graphic} graphic 
+ * @param {number} zoom
+ */
+function zoomShow({
+  graphic,
+  layer,
+  zoom = 14,
+  show = true
+}) {
+  // map.infoWindow.hide();
+  const geom = graphic.getGeometry();
+  let extent, centerPoint, config;
+  if (geom.getType() == "point") {
+    extent = geom.getExtent();
+    centerPoint = geom.getCoordinates();
+    config = { maxZoom: zoom };
+  } else {
+    extent = geom.getExtent();
+    centerPoint = [
+      (extent[0] + extent[2]) / 2,
+      (extent[1] + extent[3]) / 2
+    ];
+    config = {};
+  }
+  map.zoomByExtent(extent, config);
+  return;
+  if (show) {
+    //避免动画冲突造成的bug
+    setTimeout(() => {
+      let template = graphic.getInfoTemplate();
+      if (layer && !template) {
+        template = layer.getInfoTemplate();
+        graphic.setLayer(layer);
+      }
+      if (template) {
+        map.infoWindow.setSelectedFeature(graphic);
+        map.infoWindow.show(centerPoint);
+      }
+    }, 500);
+  }
+};
+global.zoomShow = zoomShow;
