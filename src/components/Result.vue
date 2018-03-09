@@ -164,7 +164,13 @@ export default {
           this.indata = addIndex(0, this.data);
         }
       }
-      this.page && this.ul.scrollTop(0);
+      if (this.page) {
+        this.ul.scrollTop(0);
+        this.$emit("page-change", {
+          currentPage: this.currentPage,
+          pageData: this.indata.map(e => e.target)
+        });
+      }
       this.loading_ = false;
     }
   },

@@ -65,6 +65,7 @@ export default {
       this.data = [];
       this.reset && this.reset();
     },
+    pageChange() { },
     select(data) { },
     treeClick(data) { },
     treeCheck(data, filter) { }
@@ -96,6 +97,7 @@ export default {
                 data={this.data}
                 page={this.page}
                 onSelect={this.select}
+                onPage-change={this.pageChange}
                 show-total={this.showTotal}
                 scopedSlots={{
                   default: ({data})=> {
