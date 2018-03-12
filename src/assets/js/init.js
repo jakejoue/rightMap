@@ -56,7 +56,6 @@ async function initServer(configData) {
       configData.proxyUrl,
       configData.localWebserviceUrl
     );
-    umservice.findAllOnLineObserverJson();
     global.umservice = umservice;
     resolve(query, umservice);
   });
