@@ -58,6 +58,7 @@ export default {
   },
   methods: {
     async search_(value) {
+      map.infoWindow.hide();
       this.$refs.cResult.loading(true);
       this.search && await this.search(value);
     },

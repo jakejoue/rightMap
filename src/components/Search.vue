@@ -6,7 +6,6 @@
       @on-click="h"
       @on-enter="h"
       @on-focus="clear=false"
-      @on-blur="onblur"
     >
     </i-Input>
 </template>
@@ -55,11 +54,6 @@ export default {
     },
     focus() {
       this.input.focus();
-    },
-    onblur() {
-      setTimeout(() => {
-        this.clear = this.value.trim();
-      }, 100);
     }
   }
 };

@@ -53,21 +53,24 @@ function centerShow({
 }) {
   map.infoWindow.hide();
   const geom = graphic.getGeometry();
-  let extent, centerPoint, config;
+  const extent = geom.getExtent();
+  let centerPoint, config = {};
   if (geom.getType() == "point") {
-    extent = geom.getExtent();
     centerPoint = geom.getCoordinates();
     config = { maxZoom: zoom };
   } else {
-    extent = geom.getExtent();
-    centerPoint = [
-      (extent[0] + extent[2]) / 2,
-      (extent[1] + extent[3]) / 2
-    ];
-    config = {};
+    centerPoint = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
   }
-  center && map.zoomByExtent(extent, config);
-
+  config = Object.assign({}, config, {
+    easing(n) {
+      if (n == 1 && show) {
+        showInfo();
+      }
+      return n;
+    }
+  });
+  center && map.zoomByExtent(extent, config) || showInfo();
+  // 显示infowindow
   function showInfo() {
     let template = graphic.getInfoTemplate();
     if (layer && !template) {
@@ -79,11 +82,5 @@ function centerShow({
       map.infoWindow.show(centerPoint);
     }
   };
-  if (center && show) {
-    //避免动画冲突造成的bug
-    setTimeout(showInfo(), 500);
-  } else if (show) {
-    showInfo();
-  }
 };
 global.centerShow = centerShow;
