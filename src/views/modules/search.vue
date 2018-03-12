@@ -119,6 +119,7 @@ export default {
       });
     },
     search(value) {
+      this.loading(true, "正在查询...");
       switch (this.type) {
         case "兴趣点":
           query
@@ -207,6 +208,7 @@ export default {
         e.graphic = graphic;
         return e;
       });
+      this.loading(false);
       if (!results.total) {
         this.$Message.info("没有查询到任何结果");
       }

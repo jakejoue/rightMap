@@ -16,3 +16,32 @@ import './golbal'
 
 Vue.use(iView)
 Vue.use(Pagination)
+
+// 全局loading模态框
+Vue.prototype.loading = function(flag = false, html = 'Loading') {
+  if (flag) {
+    this.$Spin.show({
+      render: (h) => {
+        return h('div', [
+          h('Icon', {
+            'class': 'loading',
+            props: {
+              type: 'load-c',
+              size: 50
+            }
+          }),
+          h('div', {
+            domProps: {
+              innerHTML: html
+            },
+            style: {
+              fontSize: '20px'
+            }
+          })
+        ])
+      }
+    });
+  } else {
+    this.$Spin.hide();
+  }
+}
