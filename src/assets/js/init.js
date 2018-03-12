@@ -1,4 +1,5 @@
 import KQuery from './server/kquery';
+import WebService from './server/WebService';
 
 // 解析xml配置文件
 function parseUrlConfig(xml) {
@@ -51,7 +52,13 @@ async function initServer(configData) {
       appKey: configData.appKey
     });
     global.query = query;
-    resolve(query)
+    const umservice = new WebService(
+      configData.proxyUrl,
+      configData.localWebserviceUrl
+    );
+    umservice.findAllOnLineObserverJson();
+    global.umservice = umservice;
+    resolve(query, umservice);
   });
 };
 // 初始化地图
