@@ -31,8 +31,26 @@ export default {
         </div>
       );
     },
-    typeChange(value) {
-      console.log(value);
+    // 后台请求进行数据刷新
+    refresh() {
+      umservice.findAllOnLineObserverJson().then(data => {
+        const online = [];
+        const offline = [];
+        data.forEach(e => {
+          e.title = e.realName;
+          e.status ? online.push(e) : offline.push(e);
+        });
+        this.treeData = [
+          {
+            title: `在线(${online.length})`,
+            children: online
+          },
+          {
+            title: `离线(${offline.length})`,
+            children: offline
+          }
+        ];
+      });
     }
   }
 };

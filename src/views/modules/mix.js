@@ -36,6 +36,17 @@ export default {
       return height;
     }
   },
+  watch: {
+    type: {
+      handler(value) {
+        if (this.refresh) {
+          clearInterval(this.refresh);
+          setInterval(this.refresh, parseInt(value) * 1000);
+        }
+      },
+      immediate: true
+    }
+  },
   // 初始化地图图层
   created() {
     // moduleName是layer的id，必须的
@@ -55,6 +66,9 @@ export default {
       }
       map.addGraphicsLayer(this.layer);
     }
+  },
+  mounted() {
+    this.refresh && this.refresh();
   },
   methods: {
     async search_(value) {

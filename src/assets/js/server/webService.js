@@ -22,24 +22,38 @@ export default class WebService {
     var options = {
       namespace: 'http://observer.um.soap.webservice.esb.digitalcity.kingdom.com/',
       method: 'findAllOnLineObserverJson',
-      data: data,
-      dataType: 'json'
+      data: data
     };
     return this.invoke("/ObsBusinessService/findAllOnLineObserverJson", options);
+  };
+
+  // xml2json简单包装
+  xml2json(xml) {
+    return new Promise((resolve, reject) => {
+      var xml = "<root>Hello xml2js!</root>"
+      parseString(xml, function(err, result) {
+        err ? reject(err) : resolve(result);
+      });
+    });
   };
 
   // 查询
   invoke(url, { namespace, method, data, dataType }) {
     return this.axios.post(url, data, {
       headers: { SOAPAction: namespace + method }
-    }).then(({ data }) => {
+    }).then(async ({ data }) => {
       try {
-        data = data.getElementsByTagName('return')[0];
-        const result = JSON.parse(data.textContent);
-        console.log(result);
+        const content = data.getElementsByTagName('return')[0].textContent;
+        let result = [];
+        if (dataType == 'xml') {
+          result = await parseString(content) || [];
+        } else {
+          result = JSON.parse(content);
+        }
+        return result;
       } catch (error) {
         return [];
       }
     })
-  }
+  };
 }
