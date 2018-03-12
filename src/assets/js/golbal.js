@@ -84,3 +84,33 @@ function centerShow({
   };
 };
 global.centerShow = centerShow;
+
+
+//新建Graphic对象
+function newGraphic({
+  type = 'POINT',
+  coord = [],
+  symbol = undefined,
+  attr = {},
+  visible = true
+}) {
+  let graphic = new KMap.Graphic();
+  let geometry;
+  switch (type) {
+    case 'POINT':
+      geometry = new KMap.Point(coord);
+      break;
+    case 'POLYLINE':
+      geometry = new KMap.Polyline(coord);
+      break;
+    case 'POLYGON':
+      geometry = new KMap.Polygon(coord);
+      break;
+  }
+  graphic.setGeometry(geometry);
+  graphic.setSymbol(symbol);
+  graphic.setAttributes(attr);
+  graphic.setVisible(visible);
+  return { graphic, geometry, symbol };
+};
+global.newGraphic = newGraphic;

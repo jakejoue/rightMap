@@ -18,7 +18,6 @@ export default {
     height: { type: String, default: "100%" },
     data: { type: Array, default: () => [] },
     loadData: Function,
-    getIcon: { type: Function, default: () => "document" },
     showCheckbox: { type: Boolean, default: false }
   },
   data() {
@@ -36,7 +35,7 @@ export default {
             this.selectIndex == data.nodeKey ? "select" : ""
           }`}
         >
-          <Icon type={data.children ? "folder" : this.getIcon(data)} />
+          <Icon type={data.children ? "folder" : "document"} />
           <span>{data.title}</span>
         </span>
       );
