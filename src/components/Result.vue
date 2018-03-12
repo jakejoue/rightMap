@@ -102,10 +102,6 @@ export default {
     }
   },
   methods: {
-    // loading控制
-    loading(flag = false) {
-      this.loading_ = flag;
-    },
     // 滚动分页
     scrollPage() {
       const ul = this.ul;
