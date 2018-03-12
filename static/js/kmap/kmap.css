@@ -1,110 +1,115 @@
 .tooltip {
-    color: black;
-    font-size: 16px;
+  color: black;
+  font-size: 16px;
 }
 
+/* 弹出框整体样式 */
+
 .esriPopup {
-    position: relative;
-    z-index: 40;
-    font-size: 12px;
-    border-radius: 5px;
-    border: 1px solid black;
-    background-color: rgba(255, 255, 255, 0.9);
+  position: relative;
+  z-index: 40;
+  font-size: 12px;
+  border-radius: 5px;
+  border: 1px solid black;
+  background-color: rgba(255, 255, 255, 1);
 }
 
 .esriPopup .esriPopupWrapper {
-    height: 100%;
-    min-width: 270px;
-    padding: 6px 20px;
+  height: 100%;
+  min-width: 270px;
+  padding: 6px;
 }
 
 .esriPopup .sizer {
-    position: relative;
-    z-index: 1;
-    width: 100%;
+  position: relative;
+  z-index: 1;
+  width: 100%;
 }
 
+/* 标题 */
+
 .esriPopup .titlePane {
-    color: #DDDDDD;
-    font-weight: 600;
-    padding-left: 6px;
-    border-bottom: 1px solid #333333
+  color: #DDDDDD;
+  font-weight: 600;
+  padding-left: 3px;
+  border-bottom: 1px solid #333333
 }
 
 .esriPopup .titlePane .title {
-    position: relative;
-    color: #FF6633;
-    font-size: 15px;
-    display: inline-block;
-    vertical-align: bottom;
-    padding-right: 10px;
+  position: relative;
+  color: #FF6633;
+  font-size: 15px;
+  display: inline-block;
+  vertical-align: bottom;
+  padding-right: 10px;
 }
+
+/* 关闭按钮 */
 
 .esriPopup .titleButton.close {
-    position: absolute;
-    top: 0px !important;
-    right: -10px !important;
-    cursor: pointer;
-    background: url("./images/xx_dark_16.png") no-repeat !important;
-    width: 16px;
-    height: 16px;
+  position: absolute;
+  top: 0px !important;
+  right: 0px !important;
+  cursor: pointer;
+  background: url("./images/xx_dark_16.png") no-repeat !important;
+  width: 16px;
+  height: 16px;
 }
+
+/* 内容 */
 
 .esriPopup .contentPane {
-    position: relative;
-    max-height: 300px;
-    overflow: auto;
-    padding: 10px 0px;
-    color: #333333;
-    overflow-y: hidden;
+  position: relative;
+  max-height: 300px;
+  overflow: auto;
+  padding: 10px 0px;
+  color: #333333;
+  overflow-y: hidden;
 }
-
 
 /* 下方小尖尖样式 */
 
 .esriPopup .pointer.bottom {
-    display: block;
-    left: 50%;
-    margin-left: -8px;
-    bottom: -9px;
+  display: block;
+  left: 50%;
+  margin-left: -8px;
+  bottom: -9px;
 }
 
 .esriPopup .pointer,
 .esriPopup .outerPointer {
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
-    background-color: rgba(255, 255, 255, 1);
-    display: none;
-    position: absolute;
-    height: 16px;
-    width: 16px;
-    z-index: 0;
-    transform: rotate(45deg);
-    -moz-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    -webkit-transform: rotate(45deg);
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  background-color: rgba(255, 255, 255, 1);
+  display: none;
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  z-index: 0;
+  transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
 }
-
 
 /* 一些有效类选择器样式 */
 
 .esriPopup .hidden {
-    display: none;
+  display: none;
 }
 
 .esriPopup .actionsPane .zoomTo {
-    display: none;
+  display: none;
 }
 
 .esriPopup .actionsPane .title {
-    display: none;
+  display: none;
 }
 
 .esriPopup .titleButton.maximize {
-    display: none;
+  display: none;
 }
-
 
 /* 弹出框内容样式(最常用ul) */
 
@@ -112,169 +117,162 @@
 div,
 img,
 table {
-    padding: 0;
-    margin: 0;
-    height: auto;
+  padding: 0;
+  margin: 0;
+  height: auto;
 }
-
 
 /* 内容为ul时候样式 */
 
 .esriPopup .contentPane ul {
-    clear: both;
-    list-style: none;
-    line-height: 23px;
-    max-height: 300px;
+  clear: both;
+  list-style: none;
+  line-height: 23px;
+  max-height: 300px;
 }
 
 .esriPopup .contentPane ul,
 .esriPopup .contentPane img,
 .esriPopup .contentPane .tableContent {
-    padding-left: 20px;
-    padding-right: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
-
 /* 具体内容样式 */
-
 
 /* title为tab切换样式 */
 
 .titleBar {
-    float: left;
+  float: left;
 }
 
 .titleBar .videoSwitch {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 .titleBar a {
-    padding: 3px 10px 2px 10px;
-    border-radius: 5px 5px 0 0;
-    background-color: #52bff7;
-    display: inline-block;
-    line-height: 25px;
-    margin-right: 2px;
-    cursor: pointer;
-    color: white;
-    text-decoration: none;
-    text-shadow: 0px 1px 0px #2f6627;
+  padding: 3px 10px 2px 10px;
+  border-radius: 5px 5px 0 0;
+  background-color: #52bff7;
+  display: inline-block;
+  line-height: 25px;
+  margin-right: 2px;
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #2f6627;
 }
 
 .titleBar>a:hover,
 .titleBar>a:focus,
 .titleBar>a:active {
-    background-color: #309bcd;
+  background-color: #309bcd;
 }
-
 
 /* 轨迹播放tip框样式 */
 
 ul.track {
-    padding: 0px !important
+  padding: 0px !important
 }
 
 .track li {
-    margin: 0px 10px 5px 5px;
+  margin: 0px 10px 5px 5px;
 }
 
 .track li.button {
-    background-color: #b9e0f7;
-    padding-left: 20px;
-    cursor: pointer;
+  background-color: #b9e0f7;
+  padding-left: 20px;
+  cursor: pointer;
 }
 
 .track li.button:hover,
 .track li.button:focus,
 .track li.button.selected {
-    background-color: #35ac46;
+  background-color: #35ac46;
 }
 
 .spanTitle {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
 }
 
 .timeSet {
-    width: 20px;
-    maxLength: 2;
+  width: 20px;
+  maxLength: 2;
 }
-
 
 /* tip框 */
 
 .mapTip {
-    color: white;
-    font-size: 14px;
+  color: white;
+  font-size: 14px;
 }
 
 .mapTip>* {
-    vertical-align: middle;
-    display: inline-block;
-    height: 100%;
+  vertical-align: middle;
+  display: inline-block;
+  height: 100%;
 }
 
 .mapTip>*:FIRST-CHILD {
-    border-top: 7px solid transparent;
-    border-right: 8px solid rgba(0, 0, 0, 0.6);
-    border-bottom: 7px solid transparent;
+  border-top: 7px solid transparent;
+  border-right: 8px solid rgba(0, 0, 0, 0.6);
+  border-bottom: 7px solid transparent;
 }
 
 .mapTip>*:LAST-CHILD {
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 5px;
-    padding: 5px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 5px;
+  padding: 5px;
 }
-
 
 /* 框选样式 */
 
 .ol-dragbox {
-    background-color: rgba(255, 0, 146, 0.4);
-    border-color: rgba(255, 0, 146, 1);
+  background-color: rgba(255, 0, 146, 0.4);
+  border-color: rgba(255, 0, 146, 1);
 }
-
 
 /* 画图工具 */
 
 ul.drawtool {
-    list-style: none;
+  list-style: none;
 }
 
 ul.drawtool>li {
-    height: 35px;
-    width: 35px;
-    display: inline-block;
-    cursor: pointer;
-    margin-right: 10px;
+  height: 35px;
+  width: 35px;
+  display: inline-block;
+  cursor: pointer;
+  margin-right: 10px;
 }
 
 ul.drawtool>li.point {
-    background-image: url("./images/i_draw_point.png");
+  background-image: url("./images/i_draw_point.png");
 }
 
 ul.drawtool>li.linestring {
-    background-image: url("./images/i_draw_line.png");
+  background-image: url("./images/i_draw_line.png");
 }
 
 ul.drawtool>li.linestringfree {
-    background-image: url("./images/i_draw_freeline.png");
+  background-image: url("./images/i_draw_freeline.png");
 }
 
 ul.drawtool>li.polygon {
-    background-image: url("./images/i_draw_poly.png");
+  background-image: url("./images/i_draw_poly.png");
 }
 
 ul.drawtool>li.polygonfree {
-    background-image: url("./images/i_draw_freepoly.png");
+  background-image: url("./images/i_draw_freepoly.png");
 }
 
 ul.drawtool>li.circle {
-    background-image: url("./images/i_draw_circle.png");
+  background-image: url("./images/i_draw_circle.png");
 }
 
 ul.drawtool>li.circlefree {
-    background-image: url("./images/i_draw_ellipse.png");
+  background-image: url("./images/i_draw_ellipse.png");
 }
