@@ -10,7 +10,8 @@ export default {
       placeholder: "请输入部件编码",
       treeCheckable: true,
       wmsLayer: null,
-      infoTemplate
+      infoTemplate,
+      field: "name"
     };
   },
   methods: {
@@ -73,10 +74,9 @@ export default {
     // 初始化树
     const data = await query.getComplayerInfo();
     this.treeData = data.items.map(e => ({
-      title: e.name,
+      name: e.name,
       children: e.layers.map(a =>
         Object.assign(a, {
-          title: a.name,
           icon: `static/img/comp/${a.symbol}`
         })
       )

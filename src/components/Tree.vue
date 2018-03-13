@@ -18,7 +18,8 @@ export default {
     height: { type: String, default: "100%" },
     data: { type: Array, default: () => [] },
     loadData: Function,
-    showCheckbox: { type: Boolean, default: false }
+    showCheckbox: { type: Boolean, default: false },
+    field: { type: String, default: "title" }
   },
   data() {
     return {
@@ -45,7 +46,7 @@ export default {
           ) : (
             <Icon type={data.children ? "folder" : "document"} />
           )}
-          <span>{data.title}</span>
+          <span>{data[this.field]}</span>
         </span>
       );
     },

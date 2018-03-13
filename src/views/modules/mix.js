@@ -134,6 +134,7 @@ export default {
                   <c-tree
                     v-show={!this.data.length && this.treeData.length}
                     data={this.treeData}
+                    field={this.field}
                     onOn-click={this.treeClick}
                     getIcon={this.getIcon}
                     show-checkbox={this.treeCheckable}

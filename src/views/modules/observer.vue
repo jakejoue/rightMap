@@ -24,7 +24,8 @@ export default {
         { value: "15", label: "15秒" },
         { value: "60", label: "60秒" },
         { value: "300", label: "300秒" }
-      ]
+      ],
+      field: "realName"
     };
   },
   methods: {
@@ -48,7 +49,6 @@ export default {
         const offline = [];
         // 遍历
         data.forEach(e => {
-          const title = e.realName;
           // 新建图形
           const { graphic } = newGraphic({
             coord: [e.latitude, e.longitude],
@@ -58,7 +58,7 @@ export default {
           });
           // 写成方法避免框架循环栈溢出
           const node = {
-            title,
+            realName: e.realName,
             icon: e.status
               ? "static/img/tracker_online25.png"
               : "static/img/tracker_offline25.png",
@@ -69,11 +69,11 @@ export default {
         });
         this.treeData = [
           {
-            title: `在线(${online.length})`,
+            realName: `在线(${online.length})`,
             children: online
           },
           {
-            title: `离线(${offline.length})`,
+            realName: `离线(${offline.length})`,
             children: offline
           }
         ];
