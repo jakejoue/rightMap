@@ -11,6 +11,7 @@
     }
 }
 .input-icon;
+
 .ivu-message {
     font-size: 15px;
 }
@@ -54,15 +55,16 @@
     overflow-y: scroll;
 
     span.c-tree-node {
+        .border(transparent);
         cursor: pointer;
         padding: 3px 5px;
         display: inline-block;
         width: ~"calc(100% - 26px)";
         &:hover, &.select {
-            border: 1px solid #FFB951;
+            .border(#FFB951);
         }
         &.select {
-            background-color: #FFE6B0;
+            .bcolor(#FFE6B0);
         }
         .ivu-icon {
             margin-right: 7px;
@@ -71,7 +73,7 @@
             vertical-align: middle;
         }
     }
-
+    
     // 存在复选框时候样式
     &.checkable {
         .ivu-checkbox-wrapper {
@@ -87,10 +89,10 @@
 section.c-result {
     // Result(搜索结果集合样式)，可在vue文件中进行二次覆盖
     .result() {
+        .border(#E5E5E5);
         font-size: 13px;
         padding: 7px 16px;
         margin-bottom: 1px;
-        border: 1px solid #E5E5E5;
         background: linear-gradient(to bottom, #f7f7f7 0%, #e0e0e0 100%);
         &:hover, &.select {
             background: #B9E0F7;
