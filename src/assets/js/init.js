@@ -147,6 +147,7 @@ async function init() {
     const configData = Object.assign({}, mapConfig, webConfig);
     // 代理地址
     configData.proxyUrl = path + "/mapProxy.do";
+    configData.proxyUrl = '/proxy' + "/mapProxy.do";
     // 赋值到全局
     global.configData = configData;
     // 进入下初始化阶段

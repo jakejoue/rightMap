@@ -4,8 +4,7 @@ import axios from 'axios';
 export default class WebService {
   constructor(proxyUrl, webServiceUrl) {
     this.axios = axios.create({
-      // baseURL: proxyUrl + '?' + webServiceUrl,
-      baseURL: '/proxy' + webServiceUrl,
+      baseURL: proxyUrl + '?' + webServiceUrl,
       responseType: 'document'
     });
   };

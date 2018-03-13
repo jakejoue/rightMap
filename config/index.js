@@ -12,8 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/proxy': {
-        target: "http://localhost:9080/KDUMClient/mapProxy.do",
-        pathRewrite: { "^/proxy": "?" }
+        target: "http://localhost:9080/",
+        pathRewrite: { "^/proxy": "KDUMClient" }
       }
     },
 
