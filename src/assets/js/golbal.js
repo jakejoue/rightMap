@@ -1,4 +1,5 @@
 global.path = "http://" + location.host + "/" + location.pathname.split('/')[1];
+global.path = "/proxy";
 
 /**
  * 创建图层
