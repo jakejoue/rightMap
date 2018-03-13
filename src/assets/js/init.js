@@ -1,3 +1,4 @@
+import store from 'store/';
 import KQuery from './server/kquery';
 import WebService from './server/WebService';
 
@@ -133,6 +134,10 @@ function onMapSingleClick(e) {
     if (graphic.getVisible() && layer) {
       centerShow({ graphic, layer, center: false });
     }
+  });
+  store.commit('event/dispatch', {
+    type: 'singleClick',
+    event: e
   });
 };
 // 配置项请求，地图初始化

@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex);
 
+import event from './event';
+
 const store = new Vuex.Store({
   state: {
     // 地图对象
@@ -19,7 +21,7 @@ const store = new Vuex.Store({
     }
   },
   actions: {},
-  modules: {}
+  modules: { event }
 });
 
 export default store;
