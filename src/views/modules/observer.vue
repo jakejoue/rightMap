@@ -57,20 +57,24 @@ export default {
             visible: !!e.status
           });
           // 写成方法避免框架循环栈溢出
-          const node = { title, graphic: () => graphic };
+          const node = {
+            title,
+            icon: e.status
+              ? "static/img/tracker_online25.png"
+              : "static/img/tracker_offline25.png",
+            graphic: () => graphic
+          };
           this.layer.add(graphic);
           e.status ? online.push(node) : offline.push(node);
         });
         this.treeData = [
           {
             title: `在线(${online.length})`,
-            children: online,
-            icon: "static/img/tracker_online25.png"
+            children: online
           },
           {
             title: `离线(${offline.length})`,
-            children: offline,
-            icon: "static/img/tracker_offline25.png"
+            children: offline
           }
         ];
       });

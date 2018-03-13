@@ -24,14 +24,12 @@ export default {
     return {
       selectIndex: -1,
       deepArr: [],
-      checkedData: [],
-      iconMap: new Map()
+      checkedData: []
     };
   },
   methods: {
     renderContent(h, { root, node, data }) {
-      data.icon && this.iconMap.set(data.nodeKey, data.icon);
-      const icon = this.iconMap.get(node.parent);
+      const icon = data.icon;
       return (
         <span
           onClick={() => {

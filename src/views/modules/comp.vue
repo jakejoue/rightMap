@@ -5,41 +5,6 @@ export default {
   moduleName: "comp",
   mixins: [mix],
   data() {
-    setTimeout(() => {
-      this.treeData = [
-        {
-          title: "parent 1",
-          expand: true,
-          children: [
-            {
-              title: "parent 1-1",
-              expand: true,
-              children: [
-                {
-                  title: "leaf 1-1-1",
-                  attr: "d"
-                },
-                {
-                  title: "leaf 1-1-2"
-                }
-              ]
-            },
-            {
-              title: "parent 1-2",
-              expand: true,
-              children: [
-                {
-                  title: "leaf 1-2-1"
-                },
-                {
-                  title: "leaf 1-2-1"
-                }
-              ]
-            }
-          ]
-        }
-      ];
-    }, 2000);
     return {
       placeholder: "请输入部件编码",
       treeCheckable: true
@@ -56,6 +21,21 @@ export default {
         </div>
       );
     }
+  },
+  mounted() {
+    query.getComplayerInfo().then(data => {
+      this.treeData = data.items.map(e => {
+        return {
+          title: e.name,
+          children: e.layers.map(a =>
+            Object.assign(a, {
+              title: a.name,
+              icon: `static/img/comp/${a.symbol}`
+            })
+          )
+        };
+      });
+    });
   }
 };
 </script>
