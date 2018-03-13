@@ -24,7 +24,6 @@ export default {
   data() {
     return {
       selectIndex: -1,
-      deepArr: [],
       checkedData: []
     };
   },
@@ -56,6 +55,23 @@ export default {
     },
     filter(param) {
       return this.checkedData.filter(e => e[param]).map(e => e[param]);
+    }
+  },
+  watch: {
+    data: {
+      immediate: true,
+      handler(...rest) {
+        // 生成deep数据
+        let nodeKey = 0;
+        function buildDeepMap(nodeData, deep = 0) {
+          nodeData.deep = deep + 1;
+          nodeKey++;
+          if (Array.isArray(nodeData.children)) {
+            nodeData.children.forEach(data => buildDeepMap(data, deep + 1));
+          }
+        }
+        this.data.forEach(data => buildDeepMap(data));
+      }
     }
   }
 };
