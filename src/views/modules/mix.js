@@ -88,7 +88,7 @@ export default {
     // 空方法，避免报错
     pageChange(data) { },
     treeClick({ graphic }) {
-      // iview tree循环有bug，可能会造成栈溢出，所有这里调用方法
+      // iview tree对象循环有bug，可能会造成栈溢出，所以这里调用方法
       graphic && centerShow({ graphic: graphic() });
     },
     treeCheck(data, filter) { }

@@ -51,43 +51,10 @@ export default {
     },
     checkChange(data) {
       this.checkedData = data;
-      this.$emit("on-check-change", data, this.filterData);
+      this.$emit("on-check-change", data, this.filter);
     },
-    filterData(deep, key) {
-      if (!deep && !key) return this.checkedData;
-      deep = Number.isInteger(deep) ? deep : this.deepArr.length - 1;
-      const deepNodekey = this.deepArr[deep];
-      if (!deepNodekey) {
-        return [];
-      } else {
-        console.log(deepNodekey);
-        return this.checkedData.filter(e => {
-          let flag = deepNodekey.includes(e.nodeKey);
-          let flag2 = true;
-          key && (flag2 = !!e[key]);
-          return flag && flag2;
-        });
-      }
-    }
-  },
-  watch: {
-    data: {
-      immediate: true,
-      handler(...rest) {
-        this.iconMap = new Map();
-        let deepArr = [],
-          nodeKey = 0;
-        function buildDeepMap(nodeData, deep = 0) {
-          !deepArr[deep] && (deepArr[deep] = []);
-          deepArr[deep].push(nodeKey);
-          nodeKey++;
-          if (Array.isArray(nodeData.children)) {
-            nodeData.children.forEach(data => buildDeepMap(data, deep + 1));
-          }
-        }
-        this.data.forEach(data => buildDeepMap(data));
-        this.deepArr = deepArr;
-      }
+    filter(param) {
+      return this.checkedData.filter(e => e[param]).map(e => e[param]);
     }
   }
 };
