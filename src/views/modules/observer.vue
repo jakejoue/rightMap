@@ -64,11 +64,13 @@ export default {
         this.treeData = [
           {
             title: `在线(${online.length})`,
-            children: online
+            children: online,
+            icon: "static/img/tracker_online25.png"
           },
           {
             title: `离线(${offline.length})`,
-            children: offline
+            children: offline,
+            icon: "static/img/tracker_offline25.png"
           }
         ];
       });

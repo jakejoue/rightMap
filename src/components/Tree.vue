@@ -21,21 +21,32 @@ export default {
     showCheckbox: { type: Boolean, default: false }
   },
   data() {
-    return { selectIndex: -1, deepArr: [], checkedData: [] };
+    return {
+      selectIndex: -1,
+      deepArr: [],
+      checkedData: [],
+      iconMap: new Map()
+    };
   },
   methods: {
     renderContent(h, { root, node, data }) {
+      data.icon && this.iconMap.set(data.nodeKey, data.icon);
+      const icon = this.iconMap.get(node.parent);
       return (
         <span
           onClick={() => {
             this.selectIndex = data.nodeKey;
             this.$emit("on-click", data);
           }}
-          class={`c-tree-node ${
-            this.selectIndex == data.nodeKey ? "select" : ""
-          }`}
+          class={`c-tree-node${
+            this.selectIndex == data.nodeKey ? " select" : ""
+          }${icon ? " icon" : ""}`}
         >
-          <Icon type={data.children ? "folder" : "document"} />
+          {icon ? (
+            <img src={icon} />
+          ) : (
+            <Icon type={data.children ? "folder" : "document"} />
+          )}
           <span>{data.title}</span>
         </span>
       );
@@ -65,6 +76,7 @@ export default {
     data: {
       immediate: true,
       handler(...rest) {
+        this.iconMap = new Map();
         let deepArr = [],
           nodeKey = 0;
         function buildDeepMap(nodeData, deep = 0) {
