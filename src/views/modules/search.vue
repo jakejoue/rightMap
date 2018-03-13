@@ -1,5 +1,7 @@
 <script>
+import getInfoTemplateByType from 't/search';
 import mix from "./mix";
+
 //样式(兴趣点，线，面样式)
 const POINT = new KMap.PictureMarkerSymbol({
   anchor: [0.5, 1],
@@ -67,23 +69,6 @@ const configs = {
     }
   }
 };
-
-// 生成infoTemplate
-function getInfoTemplateByType(type) {
-  const infoTemplate = new KMap.InfoTemplate();
-  const templateSet = configData.infoTemplateSet;
-  const temp = templateSet.filter(e => {
-    return e.aliasName == type;
-  })[0];
-  let content = "<ul>";
-  temp.template.forEach(e => {
-    content += "<li><b>" + e.alias + "：</b>${" + e.name + "}</li>";
-  });
-  content += "</ul>";
-  infoTemplate.setTitle("${name}");
-  infoTemplate.setContent(content);
-  return infoTemplate;
-}
 
 export default {
   moduleName: "search",
