@@ -1,4 +1,5 @@
 <script>
+import infoTemplate from "t/comp";
 import mix from "./mix";
 
 export default {
@@ -8,7 +9,8 @@ export default {
     return {
       placeholder: "请输入部件编码",
       treeCheckable: true,
-      wmsLayer: null
+      wmsLayer: null,
+      infoTemplate
     };
   },
   methods: {
@@ -28,6 +30,32 @@ export default {
         LAYERS: layers.join(",")
       });
       this.wmsLayer.setVisible(!!layers.length);
+      this.$store.dispatch(`event/${layers.length ? "on" : "un"}`, {
+        type: "singleClick",
+        handler: this.clickHandler
+      });
+    },
+    // 单击地图查询元素事件
+    async clickHandler({ coordinate }) {
+      this.layer.clear();
+      var resolution = map.getResolution();
+      var projection = configData.projection;
+      var params = { INFO_FORMAT: "application/json" };
+      var url = this.wmsLayer.getFeatureInfoUrl(
+        coordinate,
+        resolution,
+        projection,
+        params
+      );
+      const { data } = await axios.get(url);
+      const features = KMap.Graphics.fromGeoJSON(data);
+      if (features.length) {
+        this.layer.add(features[0]);
+        centerShow({
+          center: false,
+          graphic: features[0]
+        });
+      }
     }
   },
   async mounted() {

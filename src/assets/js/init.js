@@ -128,9 +128,9 @@ function initMapEvent(map) {
 };
 //地图单击事件
 function onMapSingleClick(e) {
-  map.infoWindow.hide();
   const map = this;
   const pixel = e.pixel;
+  map.infoWindow.hide();
   map.forEachFeatureAtPixel(pixel, function(graphic, layer) {
     if (graphic.getVisible() && layer) {
       centerShow({ graphic, layer, center: false });

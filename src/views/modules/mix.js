@@ -64,6 +64,7 @@ export default {
           label, layer: this.layer
         });
       }
+      this.infoTemplate && (this.layer.setInfoTemplate(this.infoTemplate));
       map.addGraphicsLayer(this.layer);
     }
   },
