@@ -2,19 +2,12 @@
 import getInfoTemplateByType from 't/search';
 import mix from "./mix";
 
-//样式(兴趣点，线，面样式)
+//样式(兴趣点，线，面样式，线面放到全局使用)
 const POINT = new KMap.PictureMarkerSymbol({
   anchor: [0.5, 1],
   src: "static/img/point_32.png"
 });
-const MULTILINESTRING = new KMap.SimpleLineSymbol({
-  stroke: [160, 0, 66, 0.8],
-  width: 3
-});
-const MULTIPOLYGON = new KMap.SimpleFillSymbol({
-  stroke: MULTILINESTRING,
-  fill: [98, 194, 204, 0.5]
-});
+
 // 查询结果字段和字段名称
 const configs = {
   兴趣点: {

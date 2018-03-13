@@ -1,6 +1,18 @@
 global.path = "http://" + location.host + "/" + location.pathname.split('/')[1];
 global.path = "/proxy";
 
+// 默认线和面样式
+const MULTILINESTRING = new KMap.SimpleLineSymbol({
+  stroke: [160, 0, 66, 0.8],
+  width: 3
+});
+const MULTIPOLYGON = new KMap.SimpleFillSymbol({
+  stroke: MULTILINESTRING,
+  fill: [98, 194, 204, 0.5]
+});
+global.MULTILINESTRING = MULTILINESTRING;
+global.MULTIPOLYGON = MULTIPOLYGON;
+
 /**
  * 创建图层
  * @private
