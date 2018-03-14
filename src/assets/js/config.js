@@ -7,6 +7,9 @@ import { Pagination } from 'element-ui'
 import '../less/iview.less'
 import '../less/animate.less'
 
+// 请求时带上cookies
+Axios.defaults.withCredentials = true
+
 // 挂载全局变量
 global.$ = $
 global.axios = Axios
