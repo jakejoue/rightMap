@@ -26,6 +26,26 @@ export default class WebService {
     return this.invoke("/ObsBusinessService/findAllOnLineObserverJson", options);
   };
 
+  // 车辆
+  getAllCarsOnlineState() {
+    var data =
+      '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:gps="http://gps.um.soap.webservice.esb.digitalcity.kingdom.com/">' +
+      '   <soapenv:Header/>' +
+      '   <soapenv:Body>' +
+      '      <gps:getAllCarsOnlineState>' +
+      '         <!--Optional:-->' +
+      '         <UserId>' + user_id + '</UserId>' +
+      '      </gps:getAllCarsOnlineState>' +
+      '   </soapenv:Body>' +
+      '</soapenv:Envelope>';
+    var options = {
+      namespace: 'http://gps.um.soap.webservice.esb.digitalcity.kingdom.com/',
+      method: 'getAllCarsOnlineState',
+      data: data
+    };
+    return this.invoke("/GpsCarQueryService/getAllCarsOnlineState", options);
+  };
+
   // xml2json简单包装
   xml2json(xml) {
     return new Promise((resolve, reject) => {

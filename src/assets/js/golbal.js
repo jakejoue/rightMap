@@ -1,6 +1,20 @@
 global.path = "http://" + location.host + "/" + location.pathname.split('/')[1];
 global.path = "/proxy";
 
+global.user_id = (function getUserId() {
+  var cookie = document.cookie;
+  var params = cookie.split(";");
+  var itemArr, userId = "";
+  for (var i = 0; i < params.length; i++) {
+    itemArr = params[i].split("=");
+    if (itemArr[0].indexOf("user_id") > -1) {
+      userId = itemArr[1];
+      break;
+    }
+  }
+  return userId || "000000004d753da2014d756719870008";
+})();
+
 // 默认线和面样式
 const MULTILINESTRING = new KMap.SimpleLineSymbol({
   stroke: [160, 0, 66, 0.8],

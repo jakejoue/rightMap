@@ -51,7 +51,7 @@ export default {
         data.forEach(e => {
           // 新建图形
           const { graphic } = newGraphic({
-            coord: [e.latitude, e.longitude],
+            coord: [e.longitude, e.latitude],
             symbol: e.status ? onlineSymbol : offlineSymbol,
             attr: e,
             visible: !!e.status
