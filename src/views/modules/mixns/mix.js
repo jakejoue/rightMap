@@ -49,12 +49,12 @@ export default {
   },
   // 初始化地图图层
   created() {
-    // moduleName是layer的id，必须的
-    const { moduleName, label } = this.$options;
-    if (moduleName) {
+    // layerId是layer的id，没有设置将不会初始化图层
+    const { layerId, label } = this.$options;
+    if (layerId) {
       // 如果存在图层，不创建，否则默认创建一个矢量图层
       if (!this.layer) {
-        this.layer = new KMap.GraphicsLayer(moduleName);
+        this.layer = new KMap.GraphicsLayer(layerId);
       }
       // 可见性
       this.layer.setVisible(this.visible);

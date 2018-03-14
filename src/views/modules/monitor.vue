@@ -23,6 +23,7 @@ function getNodeIcon(type, small = false) {
 
 export default {
   moduleName: "monitor",
+  layerId: "monitor",
   label: "视频监控",
   mixins: [mix],
   data() {

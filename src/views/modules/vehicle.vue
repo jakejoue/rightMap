@@ -64,6 +64,7 @@ function getIcon(type, bOnLine, bSmall = false) {
 
 export default {
   moduleName: "vehicle",
+  layerId: "vehicle",
   label: "车辆",
   mixins: [mix],
   data() {

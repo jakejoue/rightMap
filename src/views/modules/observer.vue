@@ -12,6 +12,7 @@ const offlineSymbol = new KMap.PictureMarkerSymbol({
 
 export default {
   moduleName: "observer",
+  layerId: "observer",
   label: "巡查员",
   mixins: [mix],
   data() {

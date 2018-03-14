@@ -1,6 +1,7 @@
 // 弹出框事件
 global.tf = {}
 
+// 全局变量
 global.path = "http://" + location.host + "/" + location.pathname.split('/')[1];
 global.path = "/proxy";
 
@@ -29,6 +30,8 @@ const MULTIPOLYGON = new KMap.SimpleFillSymbol({
 });
 global.MULTILINESTRING = MULTILINESTRING;
 global.MULTIPOLYGON = MULTIPOLYGON;
+
+// 其他事件
 
 /**
  * 创建图层
@@ -120,8 +123,9 @@ global.centerShow = centerShow;
 function newGraphic({
   type = 'POINT',
   coord = [],
-  symbol = undefined,
-  attr = {},
+  symbol,
+  attr,
+  infoTemplate,
   visible = true
 }) {
   let graphic = new KMap.Graphic();
@@ -138,14 +142,16 @@ function newGraphic({
       break;
   }
   graphic.setGeometry(geometry);
-  graphic.setSymbol(symbol);
-  graphic.setAttributes(attr);
   graphic.setVisible(visible);
+
+  attr && graphic.setAttributes(attr);
+  symbol && graphic.setSymbol(symbol);
+  infoTemplate && graphic.setInfoTemplate(infoTemplate);
   return { graphic, geometry, symbol };
 };
 global.newGraphic = newGraphic;
 
-// 生成事件戳
+// 生成时间戳
 function timestamp() {
   return new Date().getTime();
 };

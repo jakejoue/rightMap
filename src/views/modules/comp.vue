@@ -4,6 +4,7 @@ import mix from "./mixns/mix";
 
 export default {
   moduleName: "comp",
+  layerId: "comp",
   mixins: [mix],
   data() {
     return {
@@ -49,12 +50,12 @@ export default {
         params
       );
       const { data } = await axios.get(url);
-      const features = KMap.Graphics.fromGeoJSON(data);
-      if (features.length) {
-        this.layer.add(features[0]);
+      const graphics = KMap.Graphics.fromGeoJSON(data);
+      if (graphics.length) {
+        this.layer.add(graphics[0]);
         centerShow({
           center: false,
-          graphic: features[0]
+          graphic: graphics[0]
         });
       }
     }

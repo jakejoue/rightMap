@@ -66,6 +66,7 @@ const configs = {
 
 export default {
   moduleName: "search",
+  layerId: "search",
   mixins: [mix, queryGrid],
   data() {
     return {
