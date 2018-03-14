@@ -1,5 +1,6 @@
 import store from 'store/';
 import KQuery from './server/kquery';
+import Action from './server/Action';
 import WebService from './server/WebService';
 
 // 解析xml配置文件
@@ -53,6 +54,8 @@ async function initServer(configData) {
       appKey: configData.appKey
     });
     global.query = query;
+    const action = new Action(path);
+    global.action = action;
     const umservice = new WebService(
       configData.proxyUrl,
       configData.localWebserviceUrl

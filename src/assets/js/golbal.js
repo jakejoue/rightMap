@@ -141,3 +141,9 @@ function newGraphic({
   return { graphic, geometry, symbol };
 };
 global.newGraphic = newGraphic;
+
+// 生成事件戳
+function timestamp() {
+  return new Date().getTime();
+};
+global.timestamp = timestamp;
