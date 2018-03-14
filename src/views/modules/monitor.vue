@@ -15,6 +15,10 @@ export default {
           <p>{data.description}</p>
         </div>
       );
+    },
+    async refresh() {
+      const results = await umservice.getMonitorPage();
+      console.log(results);
     }
   }
 };

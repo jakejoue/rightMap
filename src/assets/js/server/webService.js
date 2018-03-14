@@ -46,11 +46,32 @@ export default class WebService {
     return this.invoke("/GpsCarQueryService/getAllCarsOnlineState", options);
   };
 
+  getMonitorPage() {
+    var data =
+      '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' +
+      '  <SOAP-ENV:Body>' +
+      '    <tns:getMonitorPage xmlns:tns="http://video.um.soap.webservice.esb.digitalcity.kingdom.com/">' +
+      '      <arg0/>' +
+      '      <arg1>0</arg1>' +
+      '      <arg2>9999</arg2>' +
+      '    </tns:getMonitorPage>' +
+      '  </SOAP-ENV:Body>' +
+      '</SOAP-ENV:Envelope>';
+    var options = {
+      namespace: 'http://video.um.soap.webservice.esb.digitalcity.kingdom.com/',
+      method: 'getMonitorPage',
+      data: data,
+      dataType: 'xml'
+    };
+    return this.invoke("/VideoService/getMonitorPage", options);
+  };
+
   // xml2json简单包装
   xml2json(xml) {
+    xml = xml.outerHTML;
     return new Promise((resolve, reject) => {
-      parseString(xml, function(err, result) {
-        err ? reject(err) : resolve(result);
+      parseString(xml, { explicitArray: false, ignoreAttrs: true }, function(err, result) {
+        err ? reject(err) : resolve(result['return']);
       });
     });
   };
@@ -61,12 +82,12 @@ export default class WebService {
       headers: { SOAPAction: namespace + method }
     }).then(async ({ data }) => {
       try {
-        const content = data.getElementsByTagName('return')[0].textContent;
+        const content = data.getElementsByTagName('return')[0];
         let result = [];
         if (dataType == 'xml') {
           result = await this.xml2json(content) || [];
         } else {
-          result = JSON.parse(content);
+          result = JSON.parse(content.textContent);
         }
         return result;
       } catch (error) {
