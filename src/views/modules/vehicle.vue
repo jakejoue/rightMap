@@ -77,11 +77,13 @@ export default {
         { value: "60", label: "60秒" },
         { value: "300", label: "300秒" }
       ],
+      carNum: false,
+      offLineCar: false,
       formAppend: (
         <div class="carSwitch">
-          <Switch onOn-change={this.carNum} />
+          <Switch v-model={this.carNum} onOn-change={this.change} />
           <label>显示车牌号</label>
-          <Switch onOn-change={this.offLineCar} />
+          <Switch v-model={this.offLineCar} onOn-change={this.change} />
           <label>显示离线车辆</label>
         </div>
       ),
@@ -89,11 +91,16 @@ export default {
     };
   },
   methods: {
-    carNum(value) {
-      console.log("carNum", value);
-    },
-    offLineCar(value) {
-      console.log("carNum", value);
+    change() {
+      this.layer.forEach(g => {
+        const { type, isOnLine } = g.getAttributes();
+        const showCar = isOnLine || this.offLineCar;
+        if (type == "carNum") {
+          g.setVisible(this.carNum && showCar);
+        } else {
+          g.setVisible(showCar);
+        }
+      });
     },
     search(value) {},
     reset() {},
@@ -105,36 +112,62 @@ export default {
         </div>
       );
     },
-    typeChange(value) {
-      console.log(value);
-    },
     async refresh() {
       const results = [...(await umservice.getAllCarsOnlineState())];
       const onlineMap = new Map();
       const offlineMap = new Map();
       let offlinesize = 0,
         onlineSize = 0;
-      console.log(results[0]);
+      // 生成树和图上元素
       results.forEach(e => {
-        e.isOnLine ? onlineSize++ : offlinesize++;
-        const gpsDevice = e.gpsDevice;
-        const department = gpsDevice.pmidepartment;
+        const { gpsDevice, longitude, latitude, isOnLine } = e;
+        const { pmidepartment: department, equipmentType, gpsName } = gpsDevice;
         // 分组(树的二级菜单)
         const groupName = department.name || "其它";
-
+        // 图标(图上用和tree用)
+        const sIcon = getIcon(equipmentType, isOnLine, true);
+        const icon = getIcon(equipmentType, isOnLine);
+        // 车辆
         const { graphic } = newGraphic({
-          coord: [e.longitude, e.latitude],
-          visible: !!e.isOnLine
+          coord: [longitude, latitude],
+          visible: !!isOnLine,
+          symbol: new KMap.PictureMarkerSymbol({
+            src: icon
+          }),
+          attr: {
+            type: "car",
+            isOnLine
+          }
         });
-
+        // 车牌号
+        const { graphic: txtGraphic } = newGraphic({
+          coord: [longitude, latitude],
+          visible: !!isOnLine,
+          symbol: new KMap.SimpleTextSymbol({
+            text: gpsName,
+            fill: [255, 0, 0],
+            font: "12px sans-serif",
+            offsetY: -15
+          }),
+          attr: {
+            type: "carNum",
+            isOnLine
+          }
+        });
+        this.layer.add(graphic);
+        this.layer.add(txtGraphic);
+        // tree节点
         const node = {
-          title: e.gpsDevice.gpsName,
-          icon: getIcon(gpsDevice.equipmentType, e.isOnLine, true),
-          iconStyle: "margin-right: 5px"
+          title: gpsName,
+          icon: sIcon,
+          iconStyle: "margin-right: 5px",
+          graphic: () => graphic
         };
-        let map = e.isOnLine ? onlineMap : offlineMap;
+        const map = isOnLine ? onlineMap : offlineMap;
         !map.has(groupName) && map.set(groupName, []);
         map.get(groupName).push(node);
+        // 总数统计
+        isOnLine ? onlineSize++ : offlinesize++;
       });
 
       this.treeData = [

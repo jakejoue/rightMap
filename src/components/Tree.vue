@@ -64,7 +64,7 @@ export default {
         // 生成deep数据
         let nodeKey = 0;
         function buildDeepMap(nodeData, deep = 0) {
-          nodeData.deep = deep + 1;
+          nodeData.deep = deep;
           nodeKey++;
           if (Array.isArray(nodeData.children)) {
             nodeData.children.forEach(data => buildDeepMap(data, deep + 1));

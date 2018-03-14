@@ -1,7 +1,7 @@
 <template>
   <section id="layres">
     <header>图层控制</header>
-    <CheckboxGroup v-model="selectedLayers" @on-change="change">
+    <CheckboxGroup v-model="sLayers" @on-change="change">
       <ul>
         <li v-for="(layer, i) in layers" :key="i">
           <Checkbox :label="layer.label"></Checkbox>
@@ -15,7 +15,7 @@
 export default {
   data() {
     return {
-      selectedLayers: []
+      sLayers: []
     };
   },
   computed: {
@@ -24,13 +24,19 @@ export default {
     }
   },
   methods: {
-    change(layers) {}
+    change() {
+      this.layers.forEach(e => {
+        const { label, layer } = e;
+        layer.setVisible(this.sLayers.includes(label));
+      });
+    }
   },
   watch: {
     layers(layers) {
-      this.selectedLayers = [];
-      layers.forEach(({ label, layer }) => {
-        layer.getVisible() && this.selectedLayers.push(label);
+      this.sLayers = [];
+      layers.forEach(e => {
+        const { label, layer } = e;
+        layer.getVisible() && this.sLayers.push(label);
       });
     }
   }
