@@ -30,7 +30,7 @@ KQuery.prototype.getLength = function(arr) {
 };
 
 /**
- * 计算长度
+ * 计算面积
  * 
  * @param {Array.<number>} arr [x1, y1, x2, y2,...] 点数组 
  */
@@ -44,7 +44,7 @@ KQuery.prototype.getArea = function(arr) {
 };
 
 /**
- * 计算长度
+ * 坐标转换
  * 
  * @param {number} lon 经度 
  * @param {number} lat 纬度 
@@ -60,7 +60,7 @@ KQuery.prototype.project2map = function(lon, lat) {
 };
 
 /**
- * 计算长度
+ * 坐标转换
  * 
  * @param {number} x 坐标x 
  * @param {number} y 坐标y 
