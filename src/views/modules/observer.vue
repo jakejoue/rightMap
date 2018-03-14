@@ -42,42 +42,42 @@ export default {
       );
     },
     // 后台请求进行数据刷新
-    refresh() {
-      umservice.findAllOnLineObserverJson().then(data => {
-        this.layer.clear();
-        const online = [];
-        const offline = [];
-        // 遍历
-        data.forEach(e => {
-          // 新建图形
-          const { graphic } = newGraphic({
-            coord: [e.longitude, e.latitude],
-            symbol: e.status ? onlineSymbol : offlineSymbol,
-            attr: e,
-            visible: !!e.status
-          });
-          // 写成方法避免框架循环栈溢出
-          const node = {
-            realName: e.realName,
-            icon: e.status
-              ? "static/img/tracker_online25.png"
-              : "static/img/tracker_offline25.png",
-            graphic: () => graphic
-          };
-          this.layer.add(graphic);
-          e.status ? online.push(node) : offline.push(node);
+    async refresh() {
+      const data = await umservice.findAllOnLineObserverJson();
+
+      this.layer.clear();
+      const online = [];
+      const offline = [];
+      // 遍历
+      data.forEach(e => {
+        // 新建图形
+        const { graphic } = newGraphic({
+          coord: [e.longitude, e.latitude],
+          symbol: e.status ? onlineSymbol : offlineSymbol,
+          attr: e,
+          visible: !!e.status
         });
-        this.treeData = [
-          {
-            realName: `在线(${online.length})`,
-            children: online
-          },
-          {
-            realName: `离线(${offline.length})`,
-            children: offline
-          }
-        ];
+        // 写成方法避免框架循环栈溢出
+        const node = {
+          realName: e.realName,
+          icon: e.status
+            ? "static/img/tracker_online25.png"
+            : "static/img/tracker_offline25.png",
+          graphic: () => graphic
+        };
+        this.layer.add(graphic);
+        e.status ? online.push(node) : offline.push(node);
       });
+      this.treeData = [
+        {
+          realName: `在线(${online.length})`,
+          children: online
+        },
+        {
+          realName: `离线(${offline.length})`,
+          children: offline
+        }
+      ];
     }
   }
 };
