@@ -1,5 +1,5 @@
 <script>
-import mix from "./mix";
+import mix from "./mixns/mix";
 
 const onlineSymbol = new KMap.PictureMarkerSymbol({
   anchor: [0.5, 1],

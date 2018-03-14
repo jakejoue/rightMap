@@ -1,6 +1,6 @@
 <script>
 import infoTemplate from "t/comp";
-import mix from "./mix";
+import mix from "./mixns/mix";
 
 export default {
   moduleName: "comp",

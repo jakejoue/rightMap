@@ -1,6 +1,6 @@
 <script>
 import { Switch } from "iview";
-import mix from "./mix";
+import mix from "./mixns/mix";
 
 export default {
   moduleName: "vehicle",

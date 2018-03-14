@@ -1,6 +1,6 @@
 <script>
 import getInfoTemplateByType from 't/search';
-import mix from "./mix";
+import mix from "./mixns/mix";
 
 //样式(兴趣点，线，面样式，线面放到全局使用)
 const POINT = new KMap.PictureMarkerSymbol({

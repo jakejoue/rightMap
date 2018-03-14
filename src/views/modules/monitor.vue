@@ -1,5 +1,5 @@
 <script>
-import mix from "./mix";
+import mix from "./mixns/mix";
 
 export default {
   moduleName: "monitor",

@@ -1,6 +1,6 @@
 <script>
-import mix from "./mix";
-import transform from "./transform";
+import mix from "./mixns/mix";
+import transform from "./mixns/transform";
 
 export default {
   moduleName: "zone",
