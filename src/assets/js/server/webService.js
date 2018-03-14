@@ -29,7 +29,6 @@ export default class WebService {
   // xml2json简单包装
   xml2json(xml) {
     return new Promise((resolve, reject) => {
-      var xml = "<root>Hello xml2js!</root>"
       parseString(xml, function(err, result) {
         err ? reject(err) : resolve(result);
       });
@@ -45,7 +44,7 @@ export default class WebService {
         const content = data.getElementsByTagName('return')[0].textContent;
         let result = [];
         if (dataType == 'xml') {
-          result = await parseString(content) || [];
+          result = await this.xml2json(content) || [];
         } else {
           result = JSON.parse(content);
         }

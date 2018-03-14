@@ -78,6 +78,7 @@ export default {
     },
     async reset_() {
       this.data = [];
+      map.infoWindow.hide();
       this.reset && this.reset();
     },
     select({ target }) {
