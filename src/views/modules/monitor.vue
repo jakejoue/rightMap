@@ -1,5 +1,6 @@
 <script>
 import mix from "./mixns/mix";
+import infoTemplate from "t/monitor.js";
 
 function getNodeIcon(type, small = false) {
   var result = "static/img/monitor/";
@@ -26,7 +27,8 @@ export default {
   mixins: [mix],
   data() {
     return {
-      field: "name"
+      field: "name",
+      infoTemplate
     };
   },
   methods: {
