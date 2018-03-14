@@ -41,7 +41,7 @@ export default {
           }${icon ? " icon" : ""}`}
         >
           {icon ? (
-            <img src={icon} />
+            <img src={icon} style={data.iconStyle || ""} />
           ) : (
             <Icon type={data.children ? "folder" : "document"} />
           )}

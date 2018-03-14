@@ -129,7 +129,8 @@ export default {
 
         const node = {
           title: e.gpsDevice.gpsName,
-          icon: getIcon(gpsDevice.equipmentType, e.isOnLine, true)
+          icon: getIcon(gpsDevice.equipmentType, e.isOnLine, true),
+          iconStyle: "margin-right: 5px"
         };
         let map = e.isOnLine ? onlineMap : offlineMap;
         !map.has(groupName) && map.set(groupName, []);
