@@ -61,6 +61,7 @@ export default {
     data: {
       immediate: true,
       handler(...rest) {
+        this.selectIndex = -1;
         // 生成deep数据
         let nodeKey = 0;
         function buildDeepMap(nodeData, deep = 0) {

@@ -37,7 +37,7 @@
     <!-- 如果部署客户端项目的服务器IP，不和上面任意一项匹配，则匹配下面的选项，本机调试时请修改配置-->
     <!-- 开发人员电脑-->
     <when  clientIP="localhost">
-         <WebService>http://10.201.61.19:8082/KDDCESBServer</WebService>
+         <WebService>http://10.201.61.11:9080/KDDCESBServer</WebService>
          <GPSService>http://10.201.61.19:8086/KDUMGpsServer</GPSService>
          <MapService>http://192.168.10.14:8399/arcgis/rest/services/chenzhou</MapService>     
          <GeoService>http://192.168.10.14:8080/geoserver</GeoService>    
