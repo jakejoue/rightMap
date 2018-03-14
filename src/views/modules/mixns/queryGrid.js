@@ -45,6 +45,7 @@ export default {
       }
     },
     queryTaskErrorResults(err) {
+      this.loading(false);
       console.log(err);
       this.$Message.error("服务器故障无法完成查询");
     }

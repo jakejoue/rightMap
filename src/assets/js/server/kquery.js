@@ -272,7 +272,7 @@ KQuery.prototype.buildData = function(args) {
  */
 KQuery.prototype.getData = function(args) {
   var url = this.buildUrl(args);
-  return this.axios.get(encodeURI(url)).then(({ data }) => data);;
+  return this.axios.get(encodeURI(url)).then(({ data }) => data);
 };
 
 /**
