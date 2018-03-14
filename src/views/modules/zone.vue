@@ -1,10 +1,11 @@
 <script>
 import mix from "./mixns/mix";
 import transform from "./mixns/transform";
+import queryGrid from "./mixns/queryGrid";
 
 export default {
   moduleName: "zone",
-  mixins: [mix],
+  mixins: [mix, queryGrid],
   data() {
     return {
       field: "name"
@@ -21,7 +22,7 @@ export default {
         </div>
       );
     },
-    treeClick({ name, deep }) {
+    treeClick({ name: value, layerName: type }) {
       map.getGraphics().forEach(function(g) {
         var attributes = g.getAttributes();
         if (
@@ -32,32 +33,33 @@ export default {
           map.getGraphics().remove(g);
         }
       });
-      query.queryGrid(name, deep).then(results => {
-        if (results && results.items && results.items.length > 0) {
-          let graphic, geometry, result;
-          let graphics = [];
-          for (var i = 0; i < results.items.length; i++) {
-            result = results.items[i];
-            geometry = KMap.Geometry.fromWKT(result.geo);
-            graphic = new KMap.Graphic();
-            graphic.setId("extent" + i);
-            graphic.setGeometry(geometry);
-            graphic.setAttributes({
-              Name: "extent",
-              Code: result.code,
-              Type: result.type
-            });
-            graphic.setSymbol(MULTIPOLYGON);
-            graphics.push(graphic);
-          }
-          map.getGraphics().addAll(graphics);
-
-          centerShow({
-            show: false,
-            graphic
+      this.queryGrid(type, value);
+    },
+    showQueryTaskResults(results) {
+      if (results && results.items && results.items.length > 0) {
+        let graphic, geometry, result;
+        let graphics = [];
+        for (var i = 0; i < results.items.length; i++) {
+          result = results.items[i];
+          geometry = KMap.Geometry.fromWKT(result.geo);
+          graphic = new KMap.Graphic();
+          graphic.setId("extent" + i);
+          graphic.setGeometry(geometry);
+          graphic.setAttributes({
+            Name: "extent",
+            Code: result.code,
+            Type: result.type
           });
+          graphic.setSymbol(MULTIPOLYGON);
+          graphics.push(graphic);
         }
-      });
+        map.getGraphics().addAll(graphics);
+
+        centerShow({
+          show: false,
+          graphic
+        });
+      }
     }
   },
   mounted() {

@@ -1,6 +1,7 @@
 <script>
-import getInfoTemplateByType from 't/search';
+import getInfoTemplateByType from "t/search";
 import mix from "./mixns/mix";
+import queryGrid from "./mixns/queryGrid";
 
 //样式(兴趣点，线，面样式，线面放到全局使用)
 const POINT = new KMap.PictureMarkerSymbol({
@@ -65,7 +66,7 @@ const configs = {
 
 export default {
   moduleName: "search",
-  mixins: [mix],
+  mixins: [mix, queryGrid],
   data() {
     return {
       tip: "使用上面的查询框，根据名称来查询要素。",
@@ -98,64 +99,7 @@ export default {
     },
     search(value) {
       this.loading(true, "正在查询...");
-      switch (this.type) {
-        case "兴趣点":
-          query
-            .queryPoint(value, 0, 1000)
-            .then(data => {
-              data.items.forEach(item => {
-                item.geo = KMap.Geometry.toWKT(
-                  new KMap.Point([item.x, item.y])
-                );
-                item.name = item.name || "";
-                item.address = item.address || "";
-                item.tel = item.tel || "";
-              });
-              return data;
-            })
-            .then(this.showQueryTaskResults)
-            .catch(this.queryTaskErrorResults);
-          break;
-        case "道路":
-          query
-            .queryRoad(value, 0, 100)
-            .then(this.showQueryTaskResults)
-            .catch(this.queryTaskErrorResults);
-          break;
-        case "行政区":
-          query
-            .queryGrid(value, "1", 0, 100)
-            .then(this.showQueryTaskResults)
-            .catch(this.queryTaskErrorResults);
-          break;
-        case "街道办":
-          query
-            .queryGrid(value, "2", 0, 100)
-            .then(this.showQueryTaskResults)
-            .catch(this.queryTaskErrorResults);
-          break;
-        case "社区":
-          query
-            .queryGrid(value, "3", 0, 100)
-            .then(this.showQueryTaskResults)
-            .catch(this.queryTaskErrorResults);
-          break;
-        case "工作网格":
-          query
-            .queryGrid(value, "4", 0, 100)
-            .then(this.showQueryTaskResults)
-            .catch(this.queryTaskErrorResults);
-          break;
-        case "单元网格":
-          query
-            .queryGrid(value, "5", 0, 100)
-            .then(this.showQueryTaskResults)
-            .catch(this.queryTaskErrorResults);
-          break;
-        default:
-          console.log("未定义的查找的类型：" + searchType);
-          return false;
-      }
+      this.queryGrid(this.type, value);
     },
     reset() {
       this.layer.clear();
@@ -190,10 +134,6 @@ export default {
       if (!results.total) {
         this.$Message.info("没有查询到任何结果");
       }
-    },
-    queryTaskErrorResults(err) {
-      console.log(err);
-      this.$Message.error("服务器故障无法完成查询");
     }
   }
 };
