@@ -1,11 +1,11 @@
 <template>
   <section id="rightmap">
     <!-- 头部 -->
-    <header></header>
+    <header v-if="!noHeader"></header>
     <!-- 内容 -->
-    <article>
+    <article :class="[noHeader?'noHeader':'',noAside?'noAside':'']">
       <!-- 左边模板图标 -->
-      <aside>
+      <aside v-if="!noAside">
         <ul v-if="map">
           <li v-for="(item, index) in modules" :key="index" :title="item.title" @click="aIndex = aIndex == index ? -1 : index" :class="[aIndex==index?'select':'']">
             <img :src="item.img" :alt="item.title">
@@ -44,7 +44,7 @@
       </main>
       <!-- form对话框 -->
       <transition name="fade">
-        <div id="mform" v-show="aIndex != -1" v-if="map">
+        <div id="mform" v-show="aIndex != -1" v-if="map&&!noAside">
           <section v-for="(item, index) in modules" :key="index" v-show="aIndex == index">
             <h2 class="title">
               <big>{{item.title}}</big>
@@ -56,7 +56,7 @@
       </transition>
     </article>
     <!-- 底部 -->
-    <footer>
+    <footer v-if="!noFooter">
       <div></div>
       <p>所属权为个人所有</p>
     </footer>
@@ -69,12 +69,16 @@ import streetMap from "./mapTools/streetMap";
 import mCtrl from "./mapCtrl";
 import config from "./modules/";
 import init from "assets/js/init";
+import transform from "./modules/mixns/transform";
 
 export default {
   components: { mTools, mCtrl, streetMap },
   mixins: [init],
   data() {
     return {
+      noHeader: false,
+      noAside: false,
+      noFooter: true,
       aIndex: -1,
       modules: config.modules
     };
@@ -133,6 +137,14 @@ export default {
   }
   // 内容部分
   article {
+    &.noHeader {
+      padding-top: 0px;
+    }
+    &.noAside {
+      main#kmap {
+        width: 100%;
+      }
+    }
     .full;
     padding-top: @header;
 
