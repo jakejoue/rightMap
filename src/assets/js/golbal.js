@@ -81,7 +81,6 @@ function centerShow({
   graphic,
   layer,
   zoom = 14,
-  show = true,
   center = true
 }) {
   map.infoWindow.hide();
@@ -96,13 +95,11 @@ function centerShow({
   }
   config = Object.assign({}, config, {
     easing(n) {
-      if (n == 1 && show) {
-        showInfo();
-      }
+      n >= 1 && showInfo();
       return n;
     }
   });
-  center && map.zoomByExtent(extent, config) || showInfo();
+  center ? map.zoomByExtent(extent, config) : showInfo();
   // 显示infowindow
   function showInfo() {
     let template = graphic.getInfoTemplate();

@@ -50,10 +50,7 @@ export default {
         }
         map.getGraphics().addAll(graphics);
 
-        centerShow({
-          show: false,
-          graphic
-        });
+        centerShow({ graphic });
       }
     },
     select({ target }) {
