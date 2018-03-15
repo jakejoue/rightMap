@@ -55,6 +55,9 @@ export default {
           graphic
         });
       }
+    },
+    select({ target }) {
+      this.treeClick(target);
     }
   },
   mounted() {
