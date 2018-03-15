@@ -130,7 +130,7 @@ export default {
         } = e;
         const {
           pmidepartment: department,
-          equipmentType,
+          equipmentTypeStr,
           gpsName,
           person
         } = gpsDevice;
@@ -149,8 +149,13 @@ export default {
           isOnLine
         };
         // 图标(图上用和tree用)
-        const sIcon = getIcon(equipmentType, isOnLine, true);
-        const icon = getIcon(equipmentType, isOnLine);
+        const sIcon = getIcon(equipmentTypeStr, isOnLine, true);
+        const icon = getIcon(equipmentTypeStr, isOnLine);
+        const label = isOnLine
+          ? equipmentTypeStr.trim() ? equipmentTypeStr : "在线"
+          : "离线";
+        // 添加图例
+        this.$store.commit("addLegend", { label, icon: sIcon });
         // 车辆
         const { graphic } = newGraphic({
           coord: [longitude, latitude],

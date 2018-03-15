@@ -9,7 +9,9 @@ const store = new Vuex.Store({
     // 地图对象
     map: null,
     // 右上角可管理图层
-    ctrlLayers: []
+    ctrlLayers: [],
+    // 车辆图例
+    legend: []
   },
   getters: {},
   mutations: {
@@ -18,6 +20,14 @@ const store = new Vuex.Store({
     },
     addCtrlLayer({ ctrlLayers }, { label, layer }) {
       ctrlLayers.push({ label, layer });
+    },
+    addLegend({ legend }, { label, icon }) {
+      const target = legend.filter(e => e.label = label)[0];
+      if (!target) {
+        legend.push({ label, icon });
+      } else {
+        target.icon = icon;
+      }
     }
   },
   actions: {},

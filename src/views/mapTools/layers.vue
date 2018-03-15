@@ -50,7 +50,7 @@ section#layres {
     text-align: center;
   }
   li {
-    padding: 0 20px;
+    padding-left: 20px;
     .ivu-checkbox-wrapper {
       font-size: 15px;
     }

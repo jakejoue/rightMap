@@ -3,16 +3,16 @@
     <big v-show="page&&showTotal">共{{total}}条，共{{pageCount}}页</big>
     <c-load :loading="loading_"></c-load>
     <ul v-if="!page && server" class="c-result-ul" @scroll.passive="scrollPage" ref="list">
-      <li v-for="(item, index) in indata"
-        :key="index"
+      <li v-for="item in indata"
+        :key="item.index"
         :class="[selectIndex==item.index?'select':'']"
         @click="selectItem(item)">
         <slot :data="item.target"></slot>
       </li>
     </ul>
     <ul v-else class="c-result-ul" ref="list">
-      <li v-for="(item, index) in indata"
-        :key="index"
+      <li v-for="item in indata"
+        :key="item.index"
         :class="[selectIndex==item.index?'select':'']"
         @click="selectItem(item)">
         <slot :data="item.target"></slot>
