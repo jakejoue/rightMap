@@ -1,7 +1,7 @@
 <script>
 import mix from "./mixns/mix";
 import filter from "./mixns/filter";
-import infoTemplate from 't/observer';
+import infoTemplate from "t/observer";
 
 const onlineSymbol = new KMap.PictureMarkerSymbol({
   anchor: [0.5, 1],
@@ -28,14 +28,14 @@ export default {
         { value: "60", label: "60秒" },
         { value: "300", label: "300秒" }
       ],
-      field: "realName",
-      filterField: ["realName"],
+      field: "name",
+      filterField: ["name"],
       infoTemplate
     };
   },
   methods: {
     getResT(data) {
-      return <p>{data.realName}</p>;
+      return <p>{data.name}</p>;
     },
     // 后台请求进行数据刷新
     async refresh() {
@@ -47,32 +47,53 @@ export default {
       const offline = [];
       // 遍历
       data.forEach(e => {
+        // 用到的字段
+        const {
+          id,
+          realName: name,
+          sex,
+          mobile,
+          gpstime,
+          isOnline,
+          longitude,
+          latitude
+        } = e;
+
+        // 属性
+        const attr = {
+          id,
+          name,
+          sex: sex == 0 ? "未知" : sex === 1 ? "男" : "女",
+          state: isOnline == 1 ? "在线" : "离线",
+          mobile,
+          timeStr: gpstime ? dateToStr(new Date(gpstime.time), " ") : ""
+        };
         // 新建图形
         const { graphic } = newGraphic({
-          coord: [e.longitude, e.latitude],
-          symbol: e.status ? onlineSymbol : offlineSymbol,
-          attr: e,
-          visible: !!e.status
+          coord: [longitude, latitude],
+          symbol: isOnline ? onlineSymbol : offlineSymbol,
+          attr,
+          visible: !!isOnline
         });
         // 写成方法避免框架循环栈溢出
         const node = {
-          realName: e.realName,
-          icon: e.status
+          name,
+          icon: isOnline
             ? "static/img/tracker_online25.png"
             : "static/img/tracker_offline25.png",
           graphic: () => graphic
         };
         this.layer.add(graphic);
-        e.status ? online.push(node) : offline.push(node);
+        e.isOnline ? online.push(node) : offline.push(node);
         this.filterData.push(node);
       });
       this.treeData = [
         {
-          realName: `在线(${online.length})`,
+          name: `在线(${online.length})`,
           children: online
         },
         {
-          realName: `离线(${offline.length})`,
+          name: `离线(${offline.length})`,
           children: offline
         }
       ];
