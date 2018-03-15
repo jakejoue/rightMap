@@ -1,26 +1,21 @@
 <script>
 import mix from "./mixns/mix";
+import filter from "./mixns/filter";
 import transform from "./mixns/transform";
 import queryGrid from "./mixns/queryGrid";
 
 export default {
   moduleName: "zone",
-  mixins: [mix, queryGrid],
+  mixins: [mix, queryGrid, filter],
   data() {
     return {
-      field: "name"
+      field: "name",
+      filterField: ["name"]
     };
   },
   methods: {
-    search(value) {},
-    reset() {},
     getResT(data) {
-      return (
-        <div>
-          <p>{data.name}</p>
-          <p>{data.description}</p>
-        </div>
-      );
+      return <p>{data.name}</p>;
     },
     treeClick({ name: value, layerName: type }) {
       map.getGraphics().forEach(function(g) {
@@ -63,6 +58,7 @@ export default {
     }
   },
   mounted() {
+    this.filterData = configData.districtTree;
     this.treeData = transform(configData.districtTree);
   }
 };

@@ -131,7 +131,7 @@ export default {
         // 车辆
         const { graphic } = newGraphic({
           coord: [longitude, latitude],
-          visible: !!isOnLine,
+          visible: false,
           symbol: new KMap.PictureMarkerSymbol({
             src: icon
           }),
@@ -143,7 +143,7 @@ export default {
         // 车牌号
         const { graphic: txtGraphic } = newGraphic({
           coord: [longitude, latitude],
-          visible: !!isOnLine,
+          visible: false,
           symbol: new KMap.SimpleTextSymbol({
             text: gpsName,
             fill: [255, 0, 0],
@@ -170,7 +170,9 @@ export default {
         // 总数统计
         isOnLine ? onlineSize++ : offlinesize++;
       });
-
+      // 刷新可见性
+      this.change();
+      // tree数据
       this.treeData = [
         {
           title: `在线(${onlineSize})`,
