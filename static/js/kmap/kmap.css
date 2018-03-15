@@ -173,11 +173,16 @@ table {
 /* 轨迹播放tip框样式 */
 
 ul.track {
-  padding: 0px !important
+  padding: 0px 5px !important
 }
 
 .track li {
   margin: 0px 10px 5px 5px;
+}
+
+.track li input {
+  color: #0C5EAC;
+  line-height: normal;
 }
 
 .track li.button {

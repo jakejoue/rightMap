@@ -120,7 +120,7 @@ function initMapEvent(map) {
       }
     }
     // 事件选择器初始化
-    // initTime();
+    initTime();
     // 设置窗体偏移
     /** 略 **/
   });
