@@ -4,6 +4,27 @@ import cSearch from "@/components/Search";
 import cTree from "@/components/Tree";
 import { Select, Option } from 'iview';
 
+/**
+ * search 模块，包含search，reset方法，placeholder变量
+ * 前后有formAppend(Height),formPrepend(Height)用于追加html，height用于计算结果集高度
+ * 
+ * select 模块，数据源typeList，结果绑定为type，有typeChange方法
+ * 前面有typeLabel用于追加描述信息
+ * 
+ * tip 模块，有搜索结果时隐藏，没有时显示(用于搜索前提示，不计入高度)，推荐只需要进行搜索时候使用
+ * 
+ * splitLine 分割线
+ * 
+ * tree 模块，数据源treeData，判断条件hasTree（默认显示，data不为空时隐藏）
+ * 属性：field（显示用字段名）treeCheckable（显示可选框）
+ * 方法：treeClick（节点被选中）treeCheck（被选中节点有变）
+ * 
+ * result 模块，数据源data，判断条件hasResult（data为空默认不显示）
+ * 属性：page（分页），showTotal（在上方显示总条数和总页数）
+ * 方法：select（结果被选中），pageChange（分页时触发）
+ * getResT方法，返回结果的模板
+ */
+
 export default {
   components: {
     cResult,
@@ -13,12 +34,15 @@ export default {
   data() {
     return {
       data: [],
+      hasResult: true,
       treeData: [],
       hasTree: true,
+
       splitLine: true,
       formAppendHeight: 0,
       formPrependHeight: 0,
       placeholder: '',
+
       layer: null,
       visible: true
     }
@@ -116,31 +140,33 @@ export default {
           { this.tip ? <p class="tip" v-show={!this.data.length}>{this.tip}</p> : '' }
           <hr v-show={this.splitLine} style={{marginTop:"8px"}}/>
           <div class="full" style={ Object.assign({marginTop:"8px"}, {height:this.height}) }>
-              <c-result
-                ref="cResult"
-                data={this.data}
-                page={this.page}
-                onSelect={this.select}
-                onPage-change={this.pageChange}
-                show-total={this.showTotal}
-                scopedSlots={{
-                  default: ({data})=> {
-                    return this.getResT ? this.getResT(data) : '';
-                  }
-                }}>
-              </c-result>
-              {
-                this.hasTree ?
-                  <c-tree
-                    v-show={!this.data.length && this.treeData.length}
-                    data={this.treeData}
-                    field={this.field}
-                    onOn-click={this.treeClick}
-                    getIcon={this.getIcon}
-                    show-checkbox={this.treeCheckable}
-                    onOn-check-change={this.treeCheck}>
-                  </c-tree> : ''
-              }
+            {
+              this.hasTree ?
+                <c-tree
+                  v-show={!this.data.length && this.treeData.length}
+                  data={this.treeData}
+                  field={this.field}
+                  onOn-click={this.treeClick}
+                  show-checkbox={this.treeCheckable}
+                  onOn-check-change={this.treeCheck}>
+                </c-tree> : ''
+            }
+            {
+              this.hasResult ? 
+                <c-result
+                  ref="cResult"
+                  data={this.data}
+                  page={this.page}
+                  onSelect={this.select}
+                  onPage-change={this.pageChange}
+                  show-total={this.showTotal}
+                  scopedSlots={{
+                    default: ({data})=> {
+                      return this.getResT ? this.getResT(data) : '';
+                    }
+                  }}>
+                </c-result> : ''
+            }
           </div>
       </div>
     );

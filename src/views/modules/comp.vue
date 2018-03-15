@@ -2,12 +2,32 @@
 import infoTemplate from "t/comp";
 import mix from "./mixns/mix";
 
+// 查询结果样式
+const lineSymbol = new KMap.SimpleLineSymbol({
+  stroke: [147, 112, 219],
+  width: 4
+});
+const fillSymbol = new KMap.SimpleFillSymbol({
+  stroke: lineSymbol,
+  fill: [0, 229, 238, 0.5]
+});
+const markSymbol = new KMap.SimpleMarkerSymbol({
+  anchor: undefined,
+  opacity: undefined,
+  radius: 8,
+  offset: undefined,
+  fill: [0, 229, 238, 0.5],
+  stroke: [147, 112, 219],
+  width: 1
+});
+
 export default {
   moduleName: "comp",
   layerId: "comp",
   mixins: [mix],
   data() {
     return {
+      hasResult: false,
       placeholder: "请输入部件编码",
       treeCheckable: true,
       wmsLayer: null,
@@ -16,7 +36,32 @@ export default {
     };
   },
   methods: {
-    search(value) {},
+    async search(value) {
+      this.layer.clear();
+      map.infoWindow.hide();
+      const { total, items } = await query.queryComp(value, 0, 1);
+      if (total == 0) {
+        this.$Message.info("没有查询到任何结果");
+      } else {
+        const geometry = KMap.Geometry.fromWKT(items[0].geo);
+        const g = new KMap.Graphic();
+        g.setGeometry(geometry);
+        g.setAttributes(items[0].attrs);
+        switch (geometry.getType()) {
+          case "point":
+            g.setSymbol(markSymbol);
+            break;
+          case "polyline":
+            g.setSymbol(lineSymbol);
+            break;
+          case "polygon":
+            g.setSymbol(fillSymbol);
+            break;
+        }
+        this.layer.add(g);
+        centerShow({ graphic: g, zoom: configData.maxZoom });
+      }
+    },
     reset() {},
     getResT(data) {
       return (
