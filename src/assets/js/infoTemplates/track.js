@@ -68,23 +68,20 @@ global.tf.playTrack = function playTrack(item, type) {
     timeSet.eTime = dateToStr(eTime, "T");
   }
   const target = map.infoWindow.getSelectedFeature();
-  //   if (target) {
-  //     map.infoWindow.hide();
-  //     //close方法先调用，才能进行后续显示（不同类别直接的切换）
-  //     new Promise((resolve, reject) => {
-  //       store.commit('track/close');
-  //       resolve();
-  //     }).then(_ => {
-  //       store.commit('track/show', {
-  //         type,
-  //         time: {
-  //           sTime: timeSet.sTime.replace("T", " "),
-  //           eTime: timeSet.eTime.replace("T", " ")
-  //         },
-  //         target: target
-  //       });
-  //     });
-  //   }
+  if (target) {
+    (async () => {
+      map.infoWindow.hide();
+      await store.commit('track/close');
+      store.commit('track/show', {
+        type,
+        time: {
+          sTime: timeSet.sTime.replace("T", " "),
+          eTime: timeSet.eTime.replace("T", " ")
+        },
+        target: target
+      });
+    })();
+  }
 };
 
 
