@@ -93,9 +93,10 @@ export default {
       this.$refs.cSearch.focus();
     },
     pageChange({ pageData }) {
+      map.infoWindow.hide();
       this.layer.clear();
       pageData.forEach(e => {
-        this.layer.add(e.target.graphic);
+        this.layer.add(e.target.graphic());
       });
     },
     search(value) {
@@ -128,7 +129,7 @@ export default {
         const g = KMap.Geometry.fromWKT(e.geo);
         graphic.setGeometry(g);
         graphic.setAttributes(e);
-        e.graphic = graphic;
+        e.graphic = () => graphic;
         return e;
       });
       this.loading(false);

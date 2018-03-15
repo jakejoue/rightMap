@@ -83,9 +83,8 @@ export default {
     },
     select({ target }) {
       const graphic = target.graphic;
-      if (graphic) {
-        centerShow({ graphic });
-      }
+      // 统一赋值为方法
+      graphic && centerShow({ graphic: graphic() });
     },
     // 空方法，避免报错
     pageChange(data) { },

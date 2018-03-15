@@ -1,6 +1,7 @@
 <script>
 import { Switch } from "iview";
 import mix from "./mixns/mix";
+import filter from "./mixns/filter";
 
 // map对象转json
 function map2Json(/**@type {Map}*/ map) {
@@ -66,7 +67,7 @@ export default {
   moduleName: "vehicle",
   layerId: "vehicle",
   label: "车辆",
-  mixins: [mix],
+  mixins: [mix, filter],
   data() {
     return {
       typeLabel: "刷新间隔",
@@ -103,17 +104,11 @@ export default {
         }
       });
     },
-    search(value) {},
-    reset() {},
     getResT(data) {
-      return (
-        <div>
-          <p>{data.name}</p>
-          <p>{data.description}</p>
-        </div>
-      );
+      return <p>{data.title}</p>;
     },
     async refresh() {
+      this.filterData = [];
       const results = [...(await umservice.getAllCarsOnlineState())];
       const onlineMap = new Map();
       const offlineMap = new Map();
@@ -167,6 +162,7 @@ export default {
         const map = isOnLine ? onlineMap : offlineMap;
         !map.has(groupName) && map.set(groupName, []);
         map.get(groupName).push(node);
+        this.filterData.push(node);
         // 总数统计
         isOnLine ? onlineSize++ : offlinesize++;
       });
