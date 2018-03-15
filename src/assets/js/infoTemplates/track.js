@@ -29,11 +29,11 @@ global.tf.playTrack = function playTrack(item, type) {
   if (mode === "custom") {
     timeSet = getTimeSetting();
     if (!checkTimeLimites(timeSet.sTime, timeSet.eTime)) {
-      alert("查询轨迹: 查询开始时间应该小于结束时间。");
+      root.$Message.warning("开始时间应该小于结束时间");
       return;
     }
     if (timeSet.sDate !== timeSet.eDate) {
-      alert("查询轨迹: 暂时只支持查询同一天的车辆历史轨迹。");
+      root.$Message.warning("暂时只支持查询同一天的车辆历史轨迹");
       return;
     }
   } else {

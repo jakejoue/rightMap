@@ -10,7 +10,7 @@ Vue.config.productionTip = false
 Vue.config.devtools = true
 
 /* eslint-disable no-new */
-new Vue({
+global.root = new Vue({
   el: '#app',
   components: { App },
   template: '<App/>',
