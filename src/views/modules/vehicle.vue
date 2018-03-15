@@ -2,6 +2,7 @@
 import { Switch } from "iview";
 import mix from "./mixns/mix";
 import filter from "./mixns/filter";
+import infoTemplate from "t/vehicle";
 
 // map对象转json
 function map2Json(/**@type {Map}*/ map) {
@@ -89,7 +90,8 @@ export default {
           <label>显示离线车辆</label>
         </div>
       ),
-      formAppendHeight: 26
+      formAppendHeight: 26,
+      infoTemplate
     };
   },
   methods: {
@@ -116,10 +118,36 @@ export default {
         onlineSize = 0;
       // 生成树和图上元素
       results.forEach(e => {
-        const { gpsDevice, longitude, latitude, isOnLine } = e;
-        const { pmidepartment: department, equipmentType, gpsName } = gpsDevice;
+        const {
+          gpsDevice,
+          gpstime,
+          id,
+          speed,
+          location,
+          longitude,
+          latitude,
+          isOnLine
+        } = e;
+        const {
+          pmidepartment: department,
+          equipmentType,
+          gpsName,
+          person
+        } = gpsDevice;
         // 分组(树的二级菜单)
         const groupName = department.name || "其它";
+        // 附加属性
+        const attr = {
+          id,
+          gpsName,
+          speed,
+          department: groupName,
+          driver: person ? person.realname : "",
+          phone: person ? person.mobile : "",
+          Time: gpstime ? dateToStr(new Date(gpstime.time), " ") : "",
+          location,
+          isOnLine
+        };
         // 图标(图上用和tree用)
         const sIcon = getIcon(equipmentType, isOnLine, true);
         const icon = getIcon(equipmentType, isOnLine);
@@ -131,8 +159,8 @@ export default {
             src: icon
           }),
           attr: {
-            type: "car",
-            isOnLine
+            ...attr,
+            type: "car"
           }
         });
         // 车牌号
@@ -146,8 +174,8 @@ export default {
             offsetY: -15
           }),
           attr: {
-            type: "carNum",
-            isOnLine
+            ...attr,
+            type: "carNum"
           }
         });
         this.layer.add(graphic);
