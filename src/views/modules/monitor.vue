@@ -1,5 +1,6 @@
 <script>
 import mix from "./mixns/mix";
+import filter from "./mixns/filter";
 import infoTemplate from "t/monitor.js";
 
 function getNodeIcon(type, small = false) {
@@ -25,23 +26,17 @@ export default {
   moduleName: "monitor",
   layerId: "monitor",
   label: "视频监控",
-  mixins: [mix],
+  mixins: [mix, filter],
   data() {
     return {
       field: "name",
-      infoTemplate
+      infoTemplate,
+      filterField: ["name"]
     };
   },
   methods: {
-    search(value) {},
-    reset() {},
     getResT(data) {
-      return (
-        <div>
-          <p>{data.name}</p>
-          <p>{data.description}</p>
-        </div>
-      );
+      return <p>{data.name}</p>;
     }
   },
   async mounted() {
@@ -69,6 +64,7 @@ export default {
         graphic: () => graphic
       });
     });
+    this.filterData = data;
     this.treeData = [
       {
         name: "视频监控",

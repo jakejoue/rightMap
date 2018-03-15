@@ -1,5 +1,6 @@
 <script>
 import mix from "./mixns/mix";
+import filter from "./mixns/filter";
 
 const onlineSymbol = new KMap.PictureMarkerSymbol({
   anchor: [0.5, 1],
@@ -14,7 +15,7 @@ export default {
   moduleName: "observer",
   layerId: "observer",
   label: "巡查员",
-  mixins: [mix],
+  mixins: [mix, filter],
   data() {
     return {
       typeLabel: "刷新间隔",
@@ -26,24 +27,17 @@ export default {
         { value: "60", label: "60秒" },
         { value: "300", label: "300秒" }
       ],
-      field: "realName"
+      field: "realName",
+      filterField: ["realName"]
     };
   },
   methods: {
-    search(value) {
-      this.data = [];
-    },
-    reset() {},
     getResT(data) {
-      return (
-        <div>
-          <p>{data.name}</p>
-          <p>{data.description}</p>
-        </div>
-      );
+      return <p>{data.realName}</p>;
     },
     // 后台请求进行数据刷新
     async refresh() {
+      this.filterData = [];
       const data = await umservice.findAllOnLineObserverJson();
 
       this.layer.clear();
@@ -68,6 +62,7 @@ export default {
         };
         this.layer.add(graphic);
         e.status ? online.push(node) : offline.push(node);
+        this.filterData.push(node);
       });
       this.treeData = [
         {
