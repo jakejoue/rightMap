@@ -11,16 +11,13 @@ class obsTrack extends Track {
   }) {
     super("obsTrack");
 
-    this.LONOFFECT = $.g.configData.offset ?
-      $.g.configData.offset.longitude : 0;
-    this.LATOFFECT = $.g.configData.offset ?
-      $.g.configData.offset.latitude : 0;
+    this.LONOFFECT = configData.offset ?
+      configData.offset.longitude : 0;
+    this.LATOFFECT = configData.offset ?
+      configData.offset.latitude : 0;
 
-    this.server = $.g.gpsService;
-    if (!this.server) {
-      throw "GPS服务接口未初始化";
-      return;
-    }
+    this.server = gpsService;
+
     //采集员
     this.obs = null;
     this.obsG = null;
@@ -80,13 +77,13 @@ class obsTrack extends Track {
     const config = {
       sTime: this.sTime,
       eTime: this.eTime,
-      obsId: this.obs.getAttribute('Id')
+      obsId: this.obs.getAttribute('id')
     };
     this.getTrackLength(config);
   };
   //判断轨迹存在
   getTrackLength(config) {
-    this.server.findObsTrackLogLength(config, count => {
+    this.server.findObsTrackLogLength(config).then(count => {
       count = parseInt(count, 10);
       if (count === 0) {
         this.error("未查询到轨迹数据");
@@ -105,11 +102,11 @@ class obsTrack extends Track {
         this.getTrack(start - 1, 800, config);
         this.hint++;
       }
-    }, this.error);
+    }).catch(this.error);
   };
   //获取轨迹数据
   getTrack(start, pageSize, opts) {
-    this.server.findObsTrackLogsJson(opts, start, pageSize, results => {
+    this.server.findObsTrackLogsJson(opts, start, pageSize).then(results => {
       this.path[results['currentPage']] = results.rows;
       this.hint--;
       if (this.hint == 0) {
@@ -134,18 +131,18 @@ class obsTrack extends Track {
         });
         this.handleTrack([this.path]);
       }
-    }, this.error);
+    }).catch(this.error);
   };
   //处理轨迹数据
   handleTrack(path) {
-    this.map = $.g.map;
+    this.map = map;
     this.layer = new KMap.GraphicsLayer("obsTrackLayer");
 
     //采集员图标
     this.obsG = newGraphic({
       coord: path[0][0],
       symbol: new KMap.PictureMarkerSymbol({
-        src: './static/images/observarTrack.gif'
+        src: './static/img/observarTrack.gif'
       })
     });
     //采集员信息图标

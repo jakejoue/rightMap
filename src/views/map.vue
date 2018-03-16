@@ -20,26 +20,27 @@
           <m-tools v-if="map"></m-tools>
           <!-- 地图信息弹窗 -->
           <div id="kmap-popup" class="esriPopup">
-              <div class="esriPopupWrapper">
-                  <div class="sizer">
-                      <div class="titlePane" unselectable="on">
-                          <div id="kmap-popup-title" class="title" unselectable="on">
-                              <!-- 标题 -->
-                          </div>
-                          <div id="kmap-popup-closer" title="关闭" class="titleButton close" unselectable="on">
-                          <!-- 关闭按钮 -->
-                          </div>
-                      </div>
+            <div class="esriPopupWrapper">
+              <div class="sizer">
+                <div class="titlePane" unselectable="on">
+                  <div id="kmap-popup-title" class="title" unselectable="on">
+                    <!-- 标题 -->
                   </div>
-                  <div class="sizer content">
-                      <div id="kmap-popup-content" class="contentPane">
-                          <!-- 内容 -->
-                      </div>
+                  <div id="kmap-popup-closer" title="关闭" class="titleButton close" unselectable="on">
+                    <!-- 关闭按钮 -->
                   </div>
-                  <div class="pointer bottom">
-                  </div>
+                </div>
               </div>
+              <div class="sizer content">
+                <div id="kmap-popup-content" class="contentPane">
+                  <!-- 内容 -->
+                </div>
+              </div>
+              <div class="pointer bottom">
+              </div>
+            </div>
           </div>
+          <c-track></c-track>
         </div>
       </main>
       <!-- form对话框 -->
@@ -69,10 +70,10 @@ import streetMap from "./mapTools/streetMap";
 import mCtrl from "./mapCtrl";
 import config from "./modules/";
 import init from "assets/js/init";
-import transform from "./modules/mixns/transform";
+import cTrack from "./track";
 
 export default {
-  components: { mTools, mCtrl, streetMap },
+  components: { mTools, mCtrl, streetMap, cTrack },
   mixins: [init],
   data() {
     return {

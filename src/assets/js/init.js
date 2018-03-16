@@ -1,6 +1,7 @@
 import store from 'store/';
 import KQuery from './server/kquery';
 import Action from './server/Action';
+import GpsService from './server/gpsService';
 import WebService from './server/WebService';
 
 // 解析xml配置文件
@@ -54,14 +55,23 @@ async function initServer(configData) {
       appKey: configData.appKey
     });
     global.query = query;
+
     const action = new Action(path);
     global.action = action;
+
+    const gpsService = new GpsService(
+      configData.proxyUrl,
+      configData.gpsServerUrl
+    );
+    global.gpsService = gpsService;
+
     const umservice = new WebService(
       configData.proxyUrl,
       configData.localWebserviceUrl
     );
     global.umservice = umservice;
-    resolve(query, umservice);
+
+    resolve({ query, action, gpsService, umservice });
   });
 };
 // 初始化地图

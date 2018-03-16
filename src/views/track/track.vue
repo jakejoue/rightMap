@@ -1,6 +1,6 @@
 //轨迹播放操作窗口
 <template>
-  <c-drag className="ctrack" :show="show">
+  <c-drag className="ctrack" :show="inerShow">
     <p class="title" slot="title">
       {{ targetName }}
       <big @click.stop="$store.commit('track/close')" class="close">×</big>
@@ -87,7 +87,8 @@ export default {
   components: { cDrag, cSliderBar },
   data() {
     return {
-      targetName: "你好世界",
+      inerShow: false,
+      targetName: "",
       play: false, //是否播放
       backwardflag: false,
       forward: 2, //向前播放
@@ -106,9 +107,9 @@ export default {
   computed: {
     ...mapState({
       show: state => state.track.show,
-      type: type => state.track.type,
-      time: time => state.track.time,
-      target: target => state.track.target
+      type: state => state.track.type,
+      time: state => state.track.time,
+      target: state => state.track.target
     })
   },
   methods: {
@@ -164,7 +165,7 @@ export default {
     },
     initView() {
       this.targetName = "";
-      this.play = this.backwardflag = false;
+      this.inerShow = this.play = this.backwardflag = false;
       this.percent = 0;
       this.value = "9";
       this.zhiliuV = this.baojinV = false;
@@ -194,11 +195,11 @@ export default {
           },
           error: e => {
             this.interOBJ = null;
-            this.$store.commit("close");
+            this.$store.commit("track/close");
             if (typeof e == "string") {
-              alert(e);
+              this.$Message.warning(e);
             } else {
-              alert("查询数据出错");
+              this.$Message.error("查询数据出错");
             }
             return;
           },
@@ -212,7 +213,7 @@ export default {
         this.interOBJ.setTarget(target);
         this.interOBJ.setTime(time.sTime, time.eTime);
         this.targetName = !this.car
-          ? target.getAttribute("Name")
+          ? target.getAttribute("name")
           : target.getAttribute("gpsName");
         //播放轨迹（正确初始化进行操作框显示）
         this.interOBJ.playTrack();

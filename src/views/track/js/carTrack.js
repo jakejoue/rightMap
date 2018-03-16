@@ -11,16 +11,13 @@ class carTrack extends Track {
   }) {
     super("carTrack");
 
-    this.LONOFFECT = $.g.configData.offset ?
-      $.g.configData.offset.longitude : 0;
-    this.LATOFFECT = $.g.configData.offset ?
-      $.g.configData.offset.latitude : 0;
+    this.LONOFFECT = configData.offset ?
+      configData.offset.longitude : 0;
+    this.LATOFFECT = configData.offset ?
+      configData.offset.latitude : 0;
 
-    this.server = $.g.gpsService;
-    if (!this.server) {
-      throw "GPS服务接口未初始化";
-      return;
-    }
+    this.server = gpsService;
+
     //车辆
     this.car = null;
     this.carG = null;
@@ -87,13 +84,13 @@ class carTrack extends Track {
     const config = {
       sTime: this.sTime,
       eTime: this.eTime,
-      carId: this.car.getAttribute('gpsDevice').id
+      carId: this.car.getAttribute('id')
     };
     this.getTrackLength(config);
   };
   //判断轨迹存在
   getTrackLength(config) {
-    this.server.findTrackLogLength(config, count => {
+    this.server.findTrackLogLength(config).then(count => {
       count = parseInt(count, 10);
       if (count === 0) {
         this.error("未查询到轨迹数据");
@@ -113,11 +110,11 @@ class carTrack extends Track {
         this.getTrack(start - 1, 800, config);
         this.hint++;
       }
-    }, this.error);
+    }).catch(this.error);
   };
   //获取轨迹数据
   getTrack(start, pageSize, opts) {
-    this.server.findTrackLogsWithParamsJson(opts, start, pageSize, results => {
+    this.server.findTrackLogsWithParamsJson(opts, start, pageSize).then(results => {
       this.path[results['currentPage']] = results.rows;
       this.hint--;
       if (this.hint == 0) {
@@ -153,18 +150,18 @@ class carTrack extends Track {
         });
         this.handleTrack([this.path]);
       }
-    }, this.error);
+    }).catch(this.error);
   };
   //处理轨迹数据
   handleTrack(path) {
-    this.map = $.g.map;
+    this.map = map;
     this.layer = new KMap.GraphicsLayer("carTrackLayer");
 
     //车辆图标
     this.carG = newGraphic({
       coord: path[0][0],
       symbol: new KMap.PictureMarkerSymbol({
-        src: './static/images/track-0.png'
+        src: './static/img/track-0.png'
       })
     });
     //车辆信息图标
@@ -257,7 +254,7 @@ class carTrack extends Track {
       });
 
       var eventSymbol = new KMap.PictureMarkerSymbol({
-        src: './static/images/stopPosition.png'
+        src: './static/img/stopPosition.png'
       });
       date = new Date();
       const infoTemplate = getRetentionPointInfo();
@@ -293,11 +290,11 @@ class carTrack extends Track {
       this.server.findTrackAlarmPageJson({
         sTime: this.sTime,
         eTime: this.eTime,
-        carId: this.car.getAttribute('gpsDevice').id
-      }, user_id, results => {
+        carId: this.car.getAttribute('id')
+      }, user_id).then(results => {
         const alarmArr = JSON.parse(results);
         const eventSymbol = new KMap.PictureMarkerSymbol({
-          src: './static/images/eventPosition.png'
+          src: './static/img/eventPosition.png'
         });
         const infoTemplate = getAlarmPointInfo();
         let gc, lat, lon;
@@ -315,8 +312,8 @@ class carTrack extends Track {
           this.layer.add(gc.graphic);
         }
         this.alarmLoaded = true;
-      }, e => {
-        alert('请求报警点数据失败!!!');
+      }).catch(e => {
+        root.$Message.warning('请求报警点数据失败!!!');
         callBack();
         return;
       });
