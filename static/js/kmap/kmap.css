@@ -1,3 +1,7 @@
+.hidden {
+  display: none;
+}
+
 .tooltip {
   color: black;
   font-size: 16px;
