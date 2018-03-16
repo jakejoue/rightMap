@@ -127,6 +127,12 @@ export default {
         })
       )
     }));
+    this.$store.dispatch("event/on", {
+      type: "clearAll",
+      handler: () => {
+        this.layer.clear();
+      }
+    });
   }
 };
 </script>

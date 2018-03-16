@@ -11,6 +11,8 @@ const config = [{
   img: resolve('clearAll_16'),
   handler({ target }) {
     target.active = -1;
+    map.getGraphics().clear();
+    target.$store.commit("event/dispatch", { type: "clearAll" });
   }
 },
 {
