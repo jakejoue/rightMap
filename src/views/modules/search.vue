@@ -141,10 +141,14 @@ export default {
 };
 </script>
 
-<style>
-li.search-li {
-  line-height: normal !important;
-  background: linear-gradient(to bottom, #f7f7f7 0%, #e0e0e0 100%) !important;
+<style lang="less">
+.c-result {
+  ul.c-result-ul {
+    li.search-li {
+      line-height: normal;
+      background: linear-gradient(to bottom, #f7f7f7 0%, #e0e0e0 100%);
+    }
+  }
 }
 </style>
 
