@@ -94,7 +94,7 @@
         margin-bottom: 1px;
         line-height: 35px;
         background: rgb(247, 247, 247);
-        &:hover, &.select {
+        &:hover {
             background: #B9E0F7;
         }
         &.select {
@@ -109,11 +109,11 @@
     }
     color: #000;
     position: relative;
-    ul.c-result-ul {
+    > ul.c-result-ul {
         flex: 1;
         overflow-y: scroll;
         list-style-type: none;
-        li {
+        > li {
             cursor: pointer;
             .result;
         }
