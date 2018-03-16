@@ -1,4 +1,4 @@
-// import search from './search.vue';
+// 模板的配置地方
 
 export default {
   modules: [{

@@ -18,3 +18,8 @@ KMap.InfoTemplate是js字符串模板，用于在地图上打开弹窗，此处�
 
 轨迹播放的时间控件是My97DataPicker，地图弹框关闭和打开都会进行dom销毁重绘，控件的初始化在弹窗的show事件里面，暂时不存在框架冲突（避免使用窗体的类名和id）
 ```
+
+```
+npm start 启动
+npm run build 打包
+```
