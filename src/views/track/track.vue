@@ -194,6 +194,7 @@ export default {
             this.attr = attr;
           },
           error: e => {
+            this.loading(false);
             this.interOBJ = null;
             this.$store.commit("track/close");
             if (typeof e == "string") {
@@ -204,6 +205,7 @@ export default {
             return;
           },
           initSuccess: e => {
+            this.loading(false);
             this.inerShow = true;
             e.play();
           }
@@ -216,6 +218,7 @@ export default {
           ? target.getAttribute("name")
           : target.getAttribute("gpsName");
         //播放轨迹（正确初始化进行操作框显示）
+        this.loading(true, "正在查询轨迹数据...");
         this.interOBJ.playTrack();
       } else {
         //隐藏操作栏
