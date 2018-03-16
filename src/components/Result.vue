@@ -1,11 +1,11 @@
 <template>
-  <div class="c-result" v-show="indata.length > 0" :style="{'height':height}">
+  <div class="c-result" :class="[className?className:'']" v-show="indata.length > 0" :style="{'height':height}">
     <big v-show="page&&showTotal">共{{total}}条，共{{pageCount}}页</big>
     <c-load :loading="loading_"></c-load>
     <ul v-if="!page && server" class="c-result-ul" @scroll.passive="scrollPage" ref="list">
       <li v-for="item in indata"
         :key="item.index"
-        :class="[selectIndex==item.index?'select':'']"
+        :class="[selectIndex==item.index?'select':'',className?className+'-li':'']"
         @click="selectItem(item)">
         <slot :data="item.target"></slot>
       </li>
@@ -13,7 +13,7 @@
     <ul v-else class="c-result-ul" ref="list">
       <li v-for="item in indata"
         :key="item.index"
-        :class="[selectIndex==item.index?'select':'']"
+        :class="[selectIndex==item.index?'select':'',className?className+'-li':'']"
         @click="selectItem(item)">
         <slot :data="item.target"></slot>
       </li>
@@ -49,6 +49,7 @@ export default {
     cLoad
   },
   props: {
+    className: { type: String },
     height: { type: String, default: "100%" },
     // 数据
     data: { type: Array, default: () => [] },

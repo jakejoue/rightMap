@@ -155,6 +155,7 @@ export default {
               this.hasResult ? 
                 <c-result
                   ref="cResult"
+                  className={this.$options.moduleName}
                   data={this.data}
                   page={this.page}
                   onSelect={this.select}
