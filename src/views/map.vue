@@ -79,7 +79,7 @@ export default {
     return {
       noHeader: false,
       noAside: false,
-      noFooter: true,
+      noFooter: false,
       aIndex: -1,
       modules: config.modules
     };

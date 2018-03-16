@@ -153,3 +153,14 @@ function timestamp() {
   return new Date().getTime();
 };
 global.timestamp = timestamp;
+
+// 按照名称清除默认的绘画图层
+function clearGraphicsByName(value, key = "Name") {
+  map.getGraphics().forEach(function(g) {
+    const Name = g.getAttribute(key);
+    if (Name === value) {
+      map.getGraphics().remove(g);
+    }
+  });
+};
+global.clearGraphicsByName = clearGraphicsByName;

@@ -18,16 +18,7 @@ export default {
       return <p>{data.name}</p>;
     },
     treeClick({ name: value, layerName: type }) {
-      map.getGraphics().forEach(function(g) {
-        var attributes = g.getAttributes();
-        if (
-          attributes &&
-          attributes.hasOwnProperty("Name") &&
-          attributes.Name === "extent"
-        ) {
-          map.getGraphics().remove(g);
-        }
-      });
+      clearGraphicsByName("extent");
       this.queryGrid(type, value);
     },
     showQueryTaskResults(results) {
