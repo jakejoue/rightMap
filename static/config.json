@@ -41,6 +41,13 @@
 		 {"aliasName":"单元网格","layerName":"WG", "type":"5", "nameSpace":"yuhuaqu:", "searchField":"WGBH", "codeField":"","template":
 		 	[{"name":"name", "alias":"编码"},{"name":"area", "alias":"面积"}]}
 	 ],
+	 "infoTOffset": {
+		"search": [-1, -35],
+		"observer": [-1, -35],
+		"vehicle": [0, -20],
+		"monitor": [-1, -20],
+		"comp": [0, -15]
+	 },
 	 "districtTree":[
     	{"id":"440303","pId":"4403","name":"罗湖区","code":"440303","layerName":"行政区"},
 		{"id":"440303001","pId":"440303","name":"黄贝","code":"440303001","layerName":"街道办"},

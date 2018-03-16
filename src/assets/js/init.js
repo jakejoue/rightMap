@@ -132,7 +132,13 @@ function initMapEvent(map) {
     // 事件选择器初始化
     initTime();
     // 设置窗体偏移
-    /** 略 **/
+    let offset = [0, 0];
+    const graphic = event.target.getSelectedFeature();
+    if (graphic.getGeometry().getType() == 'point') {
+      const id = graphic.getLayer().getId();
+      offset = configData.infoTOffset[id] || [0, 0];
+    }
+    event.target.setOffset(offset);
   });
   map.infoWindow = mapPopup;
   map.addOverlay(mapPopup);
