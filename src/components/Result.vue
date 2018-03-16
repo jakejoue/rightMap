@@ -2,18 +2,18 @@
   <div class="c-result" :class="[className?className:'']" v-show="indata.length > 0" :style="{'height':height}">
     <big v-show="page&&showTotal">共{{total}}条，共{{pageCount}}页</big>
     <c-load :loading="loading_"></c-load>
-    <ul v-if="!page && server" class="c-result-ul" @scroll.passive="scrollPage" ref="list">
+    <ul v-if="!page && server" class="c-result-ul" :class="className?className+'-ul':''" @scroll.passive="scrollPage" ref="list">
       <li v-for="item in indata"
         :key="item.index"
-        :class="[selectIndex==item.index?'select':'',className?className+'-li':'']"
+        :class="[selectIndex==item.index?'select':'']"
         @click="selectItem(item)">
         <slot :data="item.target"></slot>
       </li>
     </ul>
-    <ul v-else class="c-result-ul" ref="list">
+    <ul v-else class="c-result-ul" :class="className?className+'-ul':''" ref="list">
       <li v-for="item in indata"
         :key="item.index"
-        :class="[selectIndex==item.index?'select':'',className?className+'-li':'']"
+        :class="[selectIndex==item.index?'select':'']"
         @click="selectItem(item)">
         <slot :data="item.target"></slot>
       </li>

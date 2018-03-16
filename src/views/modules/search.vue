@@ -142,18 +142,11 @@ export default {
 </script>
 
 <style lang="less">
-.c-result {
-  ul.c-result-ul {
-    li.search-li {
+.search {
+  ul.search-ul {
+    li {
       line-height: normal;
       background: linear-gradient(to bottom, #f7f7f7 0%, #e0e0e0 100%);
-      &:hover {
-        background: #b9e0f7;
-      }
-      &.select {
-        color: #fff;
-        background: #35ac46;
-      }
     }
   }
 }
