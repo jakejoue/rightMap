@@ -14,12 +14,17 @@ export default {
   },
   mutations: {
     show(state, { type, time, target }) {
-      state = { type, time, target, show: true };
-      console.log(state);
+      state.show = true;
+      state.type = type;
+      state.time = time;
+      state.target = target;
+
     },
     close(state) {
-      state = { type: "", time: null, target: null, show: false };
-      console.log(state);
+      state.show = false;
+      state.type = "";
+      state.time = null;
+      state.target = null;;
     }
   }
 };

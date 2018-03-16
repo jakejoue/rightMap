@@ -32,6 +32,7 @@ module.exports = {
       'assets': resolve('src/assets'),
       'store': resolve('src/store'),
       'views': resolve('src/views'),
+      'c': resolve('src/components'),
       't': resolve('src/assets/js/infoTemplates'),
     }
   },

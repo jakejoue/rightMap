@@ -1,7 +1,7 @@
 // 通用部分（查询相关）
-import cResult from "@/components/Result";
-import cSearch from "@/components/Search";
-import cTree from "@/components/Tree";
+import cResult from "c/Result";
+import cSearch from "c/Search";
+import cTree from "c/Tree";
 import { Select, Option } from 'iview';
 
 /**
