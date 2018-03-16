@@ -1,13 +1,13 @@
 ```
 整体是基于vue的一个地图应用
 
-整体是控件采用了iveiw的ui库
+整体控件采用了iveiw的ui库
 动画使用vue2-animate库
 
 因为分页控件的样式问题
 额外使用了element-ui的分页控件
 
-引入了jquery库是用于一些dom元素的样式获取，以及一些实用的方法
+引入了jquery库是用于一些dom元素的样式获取方法，以及一些实用的方法
 没有直接使用jquery进行dom操作
 
 后台请求采用axios基于promise
