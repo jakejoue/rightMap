@@ -34,7 +34,7 @@ import './golbal'
 Vue.component('Icon', Icon)
 Vue.component('i-Input', Input)
 Vue.component('Button', Button)
-Vue.component('Switch', Switch)
+Vue.component('i-Switch', Switch)
 Vue.component('Select', Select)
 Vue.component('Option', Option)
 Vue.component('Checkbox', Checkbox)
