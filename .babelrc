@@ -8,13 +8,21 @@
     }],
     "stage-2"
   ],
-  "plugins": ["jsx-v-model", "transform-vue-jsx", "transform-runtime", ["component", {
-    "libraryName": "element-ui",
-    "styleLibrary": {
-      "name": "theme-default",
-      "base": false,
-      "path": "[module].css",
-      "mixin": false
-    }
-  }]]
+  "plugins": [
+    "jsx-v-model",
+    "transform-vue-jsx",
+    "transform-runtime", ["component", {
+      "libraryName": "element-ui",
+      "styleLibrary": {
+        "name": "theme-default",
+        "base": false,
+        "path": "[module].css",
+        "mixin": false
+      }
+    }],
+    ["import", {
+      "libraryName": "iview",
+      "libraryDirectory": "src/components"
+    }]
+  ]
 }
