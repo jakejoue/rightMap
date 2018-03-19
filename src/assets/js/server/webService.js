@@ -5,7 +5,7 @@ export default class WebService {
   constructor(proxyUrl, webServiceUrl) {
     this.axios = axios.create({
       baseURL: proxyUrl + '?' + webServiceUrl,
-      responseType: 'document'
+      responseType: 'text'
     });
   };
 
@@ -82,7 +82,7 @@ export default class WebService {
       headers: { SOAPAction: namespace + method }
     }).then(async ({ data }) => {
       try {
-        const content = data.getElementsByTagName('return')[0];
+        const content = $(data).find("return")[0];
         let result = [];
         if (dataType == 'xml') {
           result = await this.xml2json(content) || [];

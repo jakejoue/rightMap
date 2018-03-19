@@ -27,6 +27,23 @@ export default {
     close() {
       this.show_ = false;
       this.expand = false;
+    },
+    resize() {
+      let height = 0;
+      this.show_ && (height = 50);
+      this.expand && (height = 100);
+      this.$store.commit("event/dispatch", {
+        type: "resize",
+        event: height
+      });
+    }
+  },
+  watch: {
+    show_() {
+      this.resize();
+    },
+    expand() {
+      this.resize();
     }
   }
 };

@@ -14,8 +14,8 @@
       </aside>
       <!-- 地图部分 -->
       <main id="kmap">
-        <street-map ref="streetMap"></street-map>
-        <div id="mapTarget">
+        <street-map v-if="map" ref="streetMap"></street-map>
+        <div id="mapTarget" :style="{'height':height+'%'}">
           <m-ctrl v-if="map" :class="aIndex==-1?'':'expand'"></m-ctrl>
           <m-tools v-if="map"></m-tools>
           <!-- 地图信息弹窗 -->
@@ -77,6 +77,7 @@ export default {
   mixins: [init],
   data() {
     return {
+      height: 100,
       noHeader: false,
       noAside: false,
       noFooter: false,
@@ -91,6 +92,17 @@ export default {
       oldV != -1 && modules[oldV].$emit("close");
       newV != -1 && modules[newV].$emit("show");
     }
+  },
+  mounted() {
+    this.$store.dispatch("event/on", {
+      type: "resize",
+      handler: height => {
+        this.height = 100 - height;
+        this.$nextTick(function() {
+          this.map.updateSize();
+        });
+      }
+    });
   }
 };
 </script>
