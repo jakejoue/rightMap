@@ -90,7 +90,7 @@ export default {
           <label>显示离线车辆</label>
         </div>
       ),
-      formAppendHeight: 26,
+      formAppendHeight: 24,
       infoTemplate
     };
   },

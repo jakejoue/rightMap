@@ -36,6 +36,9 @@ module.exports = {
       't': resolve('src/assets/js/infoTemplates'),
     }
   },
+  externals: {
+    jquery: 'jQuery'
+  },
   module: {
     rules: [
       {
