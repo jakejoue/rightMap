@@ -26,40 +26,40 @@ function getIcon(type, bOnLine, bSmall = false) {
       case "中联中型作业车":
       case "中型货车":
       case "小型货车":
-        result = "/static/img/car/car1" + suffix + suffix2 + ".png";
+        result = "./static/img/car/car1" + suffix + suffix2 + ".png";
         break;
       case "皮卡车":
       case "皮卡":
-        result = "/static/img/car/car2" + suffix + suffix2 + ".png";
+        result = "./static/img/car/car2" + suffix + suffix2 + ".png";
         break;
       case "双排座":
       case "单排座":
-        result = "/static/img/car/car3" + suffix + suffix2 + ".png";
+        result = "./static/img/car/car3" + suffix + suffix2 + ".png";
         break;
       case "19污泥车":
       case "19号污泥车":
       case "21污泥车":
       case "21号污泥车":
       case "泥污车":
-        result = "/static/img/car/car4" + suffix + suffix2 + ".png";
+        result = "./static/img/car/car4" + suffix + suffix2 + ".png";
         break;
       case "洒水车":
-        result = "/static/img/car/car5" + suffix + suffix2 + ".png";
+        result = "./static/img/car/car5" + suffix + suffix2 + ".png";
         break;
       case "扫路车":
-        result = "/static/img/car/car6" + suffix + suffix2 + ".png";
+        result = "./static/img/car/car6" + suffix + suffix2 + ".png";
         break;
       case "打药车":
-        result = "/static/img/car/car7" + suffix + suffix2 + ".png";
+        result = "./static/img/car/car7" + suffix + suffix2 + ".png";
         break;
       case "轿车 ":
-        result = "/static/img/car/car8" + suffix + suffix2 + ".png";
+        result = "./static/img/car/car8" + suffix + suffix2 + ".png";
         break;
       default:
-        result = "/static/img/car/car9" + suffix + suffix2 + ".png";
+        result = "./static/img/car/car9" + suffix + suffix2 + ".png";
     }
   } else {
-    result = "/static/img/car/car" + suffix + suffix2 + ".png";
+    result = "./static/img/car/car" + suffix + suffix2 + ".png";
   }
   return result;
 }
