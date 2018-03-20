@@ -3,7 +3,9 @@ global.tf = {}
 
 // 全局变量
 global.path = "http://" + location.host + "/" + location.pathname.split('/')[1];
-global.path = "/proxy";
+if (process.env.NODE_ENV == 'development') {
+  global.path = "/proxy";
+}
 
 global.user_id = (function getUserId() {
   var cookie = document.cookie;
