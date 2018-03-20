@@ -145,8 +145,8 @@ export default {
 .search {
   ul.search-ul {
     li {
-      line-height: normal;
-      background: linear-gradient(to bottom, #f7f7f7 0%, #e0e0e0 100%);
+      line-height: normal !important;
+      background: linear-gradient(to bottom, #f7f7f7 0%, #e0e0e0 100%) !important;
     }
   }
 }
