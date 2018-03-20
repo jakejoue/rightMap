@@ -85,7 +85,8 @@ export default {
       page: true,
       showTotal: true,
       hasTree: false,
-      config: {}
+      config: {},
+      resultClass: 'search'
     };
   },
   methods: {
@@ -141,14 +142,7 @@ export default {
 };
 </script>
 
-<style lang="less">
-.search {
-  ul.search-ul {
-    li {
-      line-height: normal !important;
-      background: linear-gradient(to bottom, #f7f7f7 0%, #e0e0e0 100%) !important;
-    }
-  }
-}
+<style lang="less" scoped>
+
 </style>
 
