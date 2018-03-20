@@ -41,7 +41,7 @@ module.exports = {
   },
   module: {
     rules: [
-      // iview按需引入需要转义（最前）
+      // iview按需引入在ie下需要转义（最前）
       {
         test: /iview/,
         loader: 'babel-loader',
