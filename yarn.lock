@@ -480,9 +480,9 @@ babel-plugin-component@0:
   version "0.11.0"
   resolved "http://registry.npm.taobao.org/babel-plugin-component/download/babel-plugin-component-0.11.0.tgz#ef124d9a85005ee535e23e15e7223190299bbf81"
 
-babel-plugin-import@^1.6.5:
-  version "1.6.5"
-  resolved "http://registry.npm.taobao.org/babel-plugin-import/download/babel-plugin-import-1.6.5.tgz#fb25fafdaeef1e309d3a17338eefb4bad54f7fc0"
+babel-plugin-import@^1.6.7:
+  version "1.6.7"
+  resolved "http://registry.npm.taobao.org/babel-plugin-import/download/babel-plugin-import-1.6.7.tgz#ca8d5ddd321136ea9a7c530870058dba482e42d8"
   dependencies:
     "@babel/helper-module-imports" "^7.0.0-beta.34"
 

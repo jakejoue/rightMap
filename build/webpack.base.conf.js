@@ -41,6 +41,12 @@ module.exports = {
   },
   module: {
     rules: [
+      // iview按需引入需要转义（最前）
+      {
+        test: /iview/,
+        loader: 'babel-loader',
+        include: [resolve('node_modules/iview')]
+      },
       {
         test: /\.vue$/,
         loader: 'vue-loader',
