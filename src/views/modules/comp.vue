@@ -123,7 +123,7 @@ export default {
       name: e.name,
       children: e.layers.map(a =>
         Object.assign(a, {
-          icon: `static/img/comp/${a.symbol}`
+          icon: `./static/img/comp/${a.symbol}`
         })
       )
     }));

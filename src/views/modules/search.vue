@@ -6,7 +6,7 @@ import queryGrid from "./mixns/queryGrid";
 //样式(兴趣点，线，面样式，线面放到全局使用)
 const POINT = new KMap.PictureMarkerSymbol({
   anchor: [0.5, 1],
-  src: "static/img/point_32.png"
+  src: "./static/img/point_32.png"
 });
 
 // 查询结果字段和字段名称

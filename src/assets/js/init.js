@@ -164,8 +164,8 @@ function onMapSingleClick(e) {
 async function init() {
   // 请求配置文件
   return axios.all([
-    axios.get("static/config.json"),
-    axios.get("static/config.xml")
+    axios.get("./static/config.json"),
+    axios.get("./static/config.xml")
   ]).then(axios.spread(({ data: mapConfig }, { data: webConfig }) => {
     webConfig = parseUrlConfig(webConfig);
     // 合并配置项

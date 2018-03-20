@@ -5,11 +5,11 @@ import infoTemplate from "t/observer";
 
 const onlineSymbol = new KMap.PictureMarkerSymbol({
   anchor: [0.5, 1],
-  src: "static/img/tracker_online25.png"
+  src: "./static/img/tracker_online25.png"
 });
 const offlineSymbol = new KMap.PictureMarkerSymbol({
   anchor: [0.5, 1],
-  src: "static/img/tracker_offline25.png"
+  src: "./static/img/tracker_offline25.png"
 });
 
 export default {
@@ -79,8 +79,8 @@ export default {
         const node = {
           name,
           icon: isOnline
-            ? "static/img/tracker_online25.png"
-            : "static/img/tracker_offline25.png",
+            ? "./static/img/tracker_online25.png"
+            : "./static/img/tracker_offline25.png",
           graphic: () => graphic
         };
         this.layer.add(graphic);

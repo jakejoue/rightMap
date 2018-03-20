@@ -4,7 +4,7 @@ import filter from "./mixns/filter";
 import infoTemplate from "t/monitor.js";
 
 function getNodeIcon(type, small = false) {
-  var result = "static/img/monitor/";
+  var result = "./static/img/monitor/";
   switch (parseInt(type)) {
     case 1:
       result += `monitor1${small ? "_s" : ""}.png`;

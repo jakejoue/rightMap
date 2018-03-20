@@ -12,8 +12,8 @@ export default {
   data() {
     return {
       config: [
-        { img: "static/img/cn_canvas.jpg", title: "矢量" },
-        { img: "static/img/tempimagery.jpg", title: "影像" }
+        { img: "./static/img/cn_canvas.jpg", title: "矢量" },
+        { img: "./static/img/tempimagery.jpg", title: "影像" }
       ],
       active: 0
     };

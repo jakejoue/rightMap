@@ -43,7 +43,7 @@ const config = [
                 coord: [x, y],
                 symbol: new KMap.PictureMarkerSymbol({
                   anchor: [0.5, 1],
-                  src: 'static/img/bubble30.png'
+                  src: './static/img/bubble30.png'
                 }),
                 attr: { ...markInfo, "resultID": "MapLocating" }
               });

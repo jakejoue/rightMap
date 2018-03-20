@@ -3,7 +3,7 @@ import legend from './legend';
 import mapBase from './mapBase';
 
 function resolve(filename, filetype = 'png') {
-  return `static/img/${filename}.${filetype}`;
+  return `./static/img/${filename}.${filetype}`;
 }
 
 const config = [{
