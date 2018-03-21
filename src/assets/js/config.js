@@ -46,7 +46,7 @@ Vue.component('Spin', Spin)
 Vue.prototype.$Spin = Spin
 Vue.prototype.$Message = Message
 
-Vue.use(Pagination)
+Vue.component('el-pagination', Pagination)
 
 
 // 全局loading模态框
