@@ -15,7 +15,7 @@ export default {
   data: () => ({ active: -1, config, content: false }),
   methods: {
     select(item) {
-      item.handler && item.handler();
+      item.handler && item.handler(this);
     }
   }
 };
