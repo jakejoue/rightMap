@@ -8,7 +8,6 @@ const config = [
       actionName: "streetView",
       message: "点击主干道显示街景",
       handerClick({ event: evt }) {
-        // 加载地图点
         const [x, y] = evt.coordinate;
         const { graphic } = newGraphic({
           coord: [x, y],
@@ -21,7 +20,7 @@ const config = [
         map.getGraphics().add(graphic);
         target.$parent.$refs['streetMap'].show();
         // 坐标转换显示街景
-        query.project2wgs(evt.coordinate[0], evt.coordinate[1]).then(function(result) {
+        query.project2wgs(x, y).then(function(result) {
           var point = [result.lon, result.lat];
           var truemapObj = document.getElementById("trueMap");
           if (truemapObj !== undefined && truemapObj !== null &&
