@@ -41,6 +41,7 @@ export default {
         if (flag === true || flag === undefined) {
           this.value = "";
           this.clear = false;
+          this.input.focus();
         }
       } else {
         this.input.blur();
