@@ -1,7 +1,7 @@
 <template>
   <div id="tools" class="unselectable">
       <ul>
-          <li v-for="(item, i) in config" :key="i"
+          <li v-for="(item, i) in config" :key="item.id"
             @click="select(i)"
             :class="[item.select ? (active == i ? 'select' : '') : '']"
             :title="item.title">
@@ -13,7 +13,7 @@
           class="content"
           :key="i"
           :is="item.component"
-          :ref="item.title"
+          :ref="item.id"
           v-show="i == content">
         </component>
       </section>
@@ -38,13 +38,13 @@ export default {
 
       if (newV != oldV) {
         this.active = newV;
-        this.$refs[newItem.title] && (this.content = this.content == newV ? -1 : newV);
+        this.$refs[newItem.id] && (this.content = this.content == newV ? -1 : newV);
         newItem.handler && newItem.handler({
           type: true,
           target: this
         });
       }else {
-        this.$refs[newItem.title] && (this.content = -1);
+        this.$refs[newItem.id] && (this.content = -1);
       }
     }
   }
