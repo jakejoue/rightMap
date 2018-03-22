@@ -68,9 +68,10 @@
 import mTools from "./mapTools/";
 import streetMap from "./mapTools/streetMap";
 import mCtrl from "./mapCtrl";
-import config from "./modules/";
-import init from "assets/js/init";
 import cTrack from "./track";
+
+import init from "assets/js/init";
+import getModules from "./modules/";
 
 export default {
   components: { mTools, mCtrl, streetMap, cTrack },
@@ -82,7 +83,7 @@ export default {
       noAside: false,
       noFooter: false,
       aIndex: -1,
-      modules: config.modules
+      modules: getModules()
     };
   },
   watch: {
