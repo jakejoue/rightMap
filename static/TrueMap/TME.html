@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0014)about:internet -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css" media="screen">
+html, body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	overflow: auto;
+	text-align: center;
+	background-color: #ffffff;
+}
+
+#flashContent {
+	display: none;
+}
+</style>
+
+<script type="text/javascript" src="swfobject.js"></script>
+<script type="text/javascript">
+            <!-- For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. --> 
+            var swfVersionStr = "10.0.0";
+            <!-- To use express install, set to playerProductInstall.swf, otherwise the empty string. -->
+            var xiSwfUrlStr = "playerProductInstall.swf";
+            var flashvars = {};
+            var params = {};
+            params.quality = "high";
+            params.bgcolor = "#ffffff";
+            params.wmode = "transparent";
+            params.allowscriptaccess = "sameDomain";
+            params.allowfullscreen = "true";
+            var attributes = {};
+            attributes.id = "TME";
+            attributes.name = "TME";
+            attributes.align = "middle";
+            swfobject.embedSWF(
+                "TrueMapExplorer.swf", "flashContent", 
+                "100%", "100%", 
+                swfVersionStr, xiSwfUrlStr, 
+                flashvars, params, attributes);
+			swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+
+			//API测试
+
+			//获取flash对象
+			function getFlash()
+			{
+				return document.getElementById("TME");
+			}
+			//flash加载完成
+			function FlashInitEnd()
+			{
+				//设置配置文件
+				getFlash().SetConfig("config.xml");
+				//注册站点加载失败事件
+				getFlash().registerMonitor("stationLoadError");
+			}
+			//请求站点出错时候调用
+			function stationLoadError(){
+				 //alert("无法获取站点");
+			}
+			//配置文件加载完成
+			function ConfigLoadEnd()
+			{
+				getFlash().showUI();
+				getFlash().registerMarkerClickEvent("markerClickEvent");
+				//DrawPano();
+				//GetAllPano();
+			}
+			//通过经纬度定位影像
+			function showVisionByLngLat(lon,lat){
+				getFlash().showVisionByLngLat(lon,lat,null,0.0005);
+			}
+			//影像加载完成回调
+			function TVImageLoadEnd (imageID){
+				var info = getFlash().getVisionInfo();
+				var lon = info.X;
+				var lat = info.Y;
+				var yaw = info.Yaw;
+				var type=getFlash().getVisionType();
+				//alert("当前经度："+lon+";\n当前纬度："+lat+";\n当前车身姿态："+yaw);
+				window.parent.moveCar(lon,lat,yaw);
+			}
+			//配置文件加载失败
+			function FailInfo(s){
+				alert("配置文件加载失败"+s);
+			}
+			//获取站点信息
+			function getVisionInfo(){
+				alert(getFlash().getVisionInfo().toString());
+			}
+			//获取当前类型
+			function getVisionType(){
+				alert(getFlash().getVisionType().toString());
+			}
+			//通过标注名称定位影像
+			function searchMarkerByName(){
+				getFlash().searchMarkerByName("2","",true);
+			}
+			function searchMarkerByAttribute(objcode){
+				getFlash().searchMarkerByAttribute("Lsh",objcode,null,true);
+			}
+			//添加标注
+			function addMarker(){
+				getFlash().addMarker("qweq","DLL/FLASHNo_Image.png",0.5,0.5);
+			}
+			//给指定影像添加标注，会跳转到指定影像
+			function addMarkerForImage(){
+				//getFlash().addMarkerForImage("qwezxd","000307-1-201011260432560020","DLL/FLASHNo_Image.png",0.5,0.5);
+			}
+			//注册标注的点击事件
+			function registerMarkerClickEvent(){
+				getFlash().registerMarkerClickEvent("markerClickEvent");
+			}
+			//标注点击的回调函数
+			function markerClickEvent(markerInfo){
+				//alert(markerInfo.MarkerAttribute["标识码"].Value);
+				for(var i=0;i<=markerInfo.MarkerAttribute.length;i++){
+					if(markerInfo.MarkerAttribute[i].Name=="Lsh"){
+					parent.ViewLableInfoByObjCode(markerInfo.MarkerAttribute[i].Value);
+					}
+				}
+			}
+			//注册影像上鼠标的点击事件
+			function registerMouseClickEvent(){
+				getFlash().registerMouseClickEvent("imageClickEvent");
+			}
+			//影像上的点击与双击事件回调
+			function imageClickEvent(imageID,x,y){
+				//alert(imageID+x+y)
+			}
+			//影像上的双击事件
+			function registerMouseDoubleClickEvent(){
+				getFlash().registerMouseDoubleClickEvent("imageClickEvent");
+			}
+
+				
+
+</script>
+</head>
+<body>
+	<script type="text/javascript"> 
+
+  </script>
+	<div id="flashContent"></div>
+	<noscript>
+		<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+			width="100%" height="100%" id="TME">
+			<param name="movie" value="TrueMapExplorer.swf" />
+			<param name="quality" value="high" />
+			<param name="bgcolor" value="#ffffff" />
+			<param name="allowScriptAccess" value="sameDomain" />
+			<param name="allowFullScreen" value="true" />
+			<object type="application/x-shockwave-flash"
+				data="TrueMapExplorer.swf" width="100%" height="100%">
+				<param name="quality" value="high" />
+				<param name="bgcolor" value="#ffffff" />
+				<param name="allowScriptAccess" value="sameDomain" />
+				<param name="allowFullScreen" value="true" />
+			</object>
+		</object>
+	</noscript>
+</body>
+</html>

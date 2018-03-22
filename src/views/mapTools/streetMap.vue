@@ -8,7 +8,7 @@
               <Icon type="android-close"></Icon>
           </li>
       </ul>
-      <iframe class="full" src="" frameborder="0"></iframe>
+      <iframe id="trueMap" class="full" src="./static/TrueMap/TME.html" frameborder="0"></iframe>
   </div>
 </template>
 

@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+ <TrueVisionData>
+   <TrueVisionSeverUrl>http://172.20.1.5:8008/</TrueVisionSeverUrl>  <!--192.168.12.233:8018-->
+    <BaseUI>DLL/TVUI.swf</BaseUI>
+    <IOErrorPicURL>DLL/FLASHNo_Image.png</IOErrorPicURL>
+  <InitData stationID="000258-0-201108160504570262" /> 
+  </TrueVisionData>
+ <MarkerBubbleConfig skinUiUrl="DLL/BubbleUI.swf">
+   <TrueVisionView>
+<Bubble markerType="符号">
+	<node label="Name" name="部件名称" type="text" ></node>
+        <node label="Lsh" name="流水号" type="text" ></node>
+        <node label="ObjCode" name="标识码" type="text" ></node>
+        <node label="ObjState" name="状态" type="text" ></node>
+        <node label="BGCode" name="所在单元网格" type="text" ></node>
+        <node label="DataSource" name="数据来源" type="text" ></node>
+        <node label="DeptName1" name="主管部门名称" type="text" ></node>
+        <node label="DeptName2" name="权属单位名称" type="text" ></node>
+	 </Bubble>
+       <Bubble markerType="符号">
+       <node label="Name" name="部件名称" type="text" ></node>
+        <node label="Lsh" name="流水号" type="text" ></node>
+        <node label="ObjCode" name="标识码" type="text" ></node>
+        <node label="ObjState" name="状态" type="text" ></node>
+        <node label="BGCode" name="所在单元网格" type="text" ></node>
+        <node label="DataSource" name="数据来源" type="text" ></node>
+        <node label="DeptName1" name="主管部门名称" type="text" ></node>
+        <node label="DeptName2" name="权属单位名称" type="text" ></node>
+      </Bubble>
+	 <Bubble markerType="tempMarker">
+	     <node label="GUUD" name="网格" type="text" ></node>
+	  </Bubble>
+   </TrueVisionView>
+   <StreetView>
+	  <Bubble id="SinglePano">
+	     <node label="Road" name="路名" type="text" ></node>
+       <node label="Address" name="地址" type="text" ></node>
+	  </Bubble>
+   </StreetView>
+ </MarkerBubbleConfig>
+ <SymbolManager skinUiUrl="DLL/MarkerManager.swf">
+   <SearchCondition>
+   </SearchCondition>
+   <MarkViewSet>
+   </MarkViewSet>
+   <MarkerTag>
+      <Tag>常规</Tag>
+   </MarkerTag>
+ </SymbolManager>
+<PlugData >
+  <HistoryInfo skinUiUrl="DLL/History.swf">1</HistoryInfo>
+  <MeasureInfo skinUiUrl="DLL/Measure.swf">1</MeasureInfo>
+</PlugData>
+<StreetImageData>
+    <UI skinUiUrl="DLL/StreetUI.swf">1</UI> 
+</StreetImageData>
+<AlertData>
+  <UI skinUiUrl="DLL/Alert.swf"></UI>
+</AlertData>
+</root>

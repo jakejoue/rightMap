@@ -1,0 +1,26 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v = "urn:schemas-microsoft-com:vml">
+  <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+     <script type="text/javascript" language="javascript">   
+ 
+       function ViewPano(name)
+        {
+                 
+                if(name==null)
+                    return;
+                var panoWindowUrl ="../TrueMapVision"+"/PanoView/LocalDemo.html?panoUrl="+name;
+                //window.showModalDialog(panoWindowUrl, window, 'dialogHeight=420px;dialogWidth=640px;status=no;help=no;scroll=no;');
+               //_mPanoUrl = "http://192.168.0.100:8281/PanoView/3¸£ÌïÇøÎ¯.jpg";  
+               // var panoWindowUrl ="../TrueMapVision"+"/PanoView/LocalDemo.html?panoUrl="+_mPanoUrl;
+               document.getElementById( "TrueMapFrame ").src= panoWindowUrl;
+        }
+
+    </script>
+  </head> 
+  <body style="margin:0; padding:0">
+     <iframe margin="0" padding="0" height="100%" width="100%" id="TrueMapFrame" scrolling="no">       
+     </iframe>
+  </body>
+</html>
