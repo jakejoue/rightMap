@@ -77,3 +77,8 @@ Vue.prototype.loading = function(flag = false, html = 'Loading') {
     this.$Spin.hide();
   }
 }
+
+// 一个eventBus
+global.event = new Vue({
+  name: "eventBus"
+});

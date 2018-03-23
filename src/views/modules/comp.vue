@@ -77,10 +77,9 @@ export default {
         LAYERS: layers.join(",")
       });
       this.wmsLayer.setVisible(!!layers.length);
-      this.$store.dispatch(`event/${layers.length ? "on" : "un"}`, {
-        type: "singleClick",
-        handler: this.clickHandler
-      });
+      layers.length
+        ? event.$on("singleClick", this.clickHandler)
+        : event.$off("singleClick", this.clickHandler);
     },
     // 单击地图查询元素事件
     async clickHandler({ coordinate }) {
@@ -127,11 +126,8 @@ export default {
         })
       )
     }));
-    this.$store.dispatch("event/on", {
-      type: "clearAll",
-      handler: () => {
-        this.layer.clear();
-      }
+    event.$on("clearAll", () => {
+      this.layer.clear();
     });
   }
 };

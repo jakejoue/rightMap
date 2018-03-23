@@ -1,4 +1,3 @@
-import store from 'store/';
 import KQuery from './server/kquery';
 import Action from './server/Action';
 import GpsService from './server/gpsService';
@@ -155,10 +154,7 @@ function onMapSingleClick(e) {
       centerShow({ graphic, layer, center: false });
     }
   });
-  store.commit('event/dispatch', {
-    type: 'singleClick',
-    event: e
-  });
+  event.$emit('singleClick', e);
 };
 // 配置项请求，地图初始化
 async function init() {

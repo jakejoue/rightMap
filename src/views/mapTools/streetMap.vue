@@ -1,14 +1,14 @@
 <template>
   <div id="streetMap" v-show="show_" :class="expand?'full':''">
-      <ul>
-          <li @click="expand = !expand" :title="expand?'最小化':'全屏'">
-              <Icon :type="expand?'android-contract':'android-expand'"></Icon>
-          </li>
-          <li title="关闭" @click="close">
-              <Icon type="android-close"></Icon>
-          </li>
-      </ul>
-      <iframe id="trueMap" class="full" src="./static/TrueMap/TME.html" frameborder="0"></iframe>
+    <ul>
+      <li @click="expand = !expand" :title="expand?'最小化':'全屏'">
+        <Icon :type="expand?'android-contract':'android-expand'"></Icon>
+      </li>
+      <li title="关闭" @click="close">
+        <Icon type="android-close"></Icon>
+      </li>
+    </ul>
+    <iframe id="trueMap" class="full" src="./static/TrueMap/TME.html" frameborder="0"></iframe>
   </div>
 </template>
 
@@ -32,10 +32,7 @@ export default {
       let height = 0;
       this.show_ && (height = 50);
       this.expand && (height = 100);
-      this.$store.commit("event/dispatch", {
-        type: "resize",
-        event: height
-      });
+      event.$emit("resize", height);
     }
   },
   watch: {

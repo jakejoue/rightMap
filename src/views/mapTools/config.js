@@ -13,7 +13,7 @@ const config = [{
   handler({ target }) {
     target.active = -1;
     map.getGraphics().clear();
-    target.$store.commit("event/dispatch", { type: "clearAll" });
+    event.$emit("clearAll")
   }
 },
 {

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex);
 
-import event from './event';
 import track from './track';
 
 const store = new Vuex.Store({
@@ -32,7 +31,7 @@ const store = new Vuex.Store({
     }
   },
   actions: {},
-  modules: { event, track }
+  modules: { track }
 });
 
 export default store;

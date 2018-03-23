@@ -95,14 +95,11 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch("event/on", {
-      type: "resize",
-      handler: height => {
-        this.height = 100 - height;
-        this.$nextTick(function() {
-          this.map.updateSize();
-        });
-      }
+    event.$on("resize", height => {
+      this.height = 100 - height;
+      this.$nextTick(function() {
+        this.map.updateSize();
+      });
     });
   }
 };
