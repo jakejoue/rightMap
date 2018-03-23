@@ -109,7 +109,7 @@ export default {
     },
     getResT(data) {
       return (
-        <div style={{ minHeight: "50px", fontSize: "14px" }}>
+        <div>
           {Object.keys(this.config.field).map(e => {
             return (
               <p>
