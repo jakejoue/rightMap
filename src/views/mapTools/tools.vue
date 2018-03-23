@@ -98,9 +98,10 @@ div#tools {
     }
   }
   > section {
+    .abs;
     .bcolor(@bcolor);
     .border(@lcolor);
-    float: right;
+    right: 0;
     font-size: 15px;
     border-radius: 10px 0 0 10px;
     > .content {

@@ -1,5 +1,5 @@
 <template>
-  <section id="layres">
+  <div id="layres">
     <header>图层控制</header>
     <CheckboxGroup v-model="sLayers" @on-change="change">
       <ul>
@@ -8,7 +8,7 @@
         </li>
       </ul>
     </CheckboxGroup>
-  </section>
+  </div>
 </template>
 
 <script>
