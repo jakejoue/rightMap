@@ -45,13 +45,13 @@
       </main>
       <!-- form对话框 -->
       <transition name="fade">
-        <div id="mform" v-show="aIndex != -1" v-if="map&&!noAside">
+        <div id="mform" v-show="aIndex != -1" v-if="map&&!noAside" :class="[noHeader?'noHeader':'']">
           <section v-for="(item, index) in modules" :key="index" v-show="aIndex == index">
             <h2 class="title">
               <big>{{item.title}}</big>
               <Icon type="android-arrow-dropleft" class="close" @click.native="aIndex=-1"></Icon>
             </h2>
-            <component :is="item.module" class="module" ref="modules"></component>
+            <component :is="item.module" class="module" :class="[noFooter?'noFooter':'']" ref="modules"></component>
           </section>
         </div>
       </transition>
@@ -206,6 +206,10 @@ export default {
       width: @m-width;
       height: calc(~"100% - @{header}");
       padding: @m-padding;
+      &.noHeader {
+        top: 0;
+        height: 100%;
+      }
       section {
         .full;
         // 菜单栏
@@ -224,6 +228,9 @@ export default {
         .module {
           .full;
           height: calc(~"100% - (@{footer} + @{m-title})");
+          &.noFooter {
+            height: calc(~"100% - @{m-title}");
+          }
         }
       }
     }
