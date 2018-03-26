@@ -128,7 +128,7 @@ function initMapEvent(map) {
         tab[0].click();
       }
     }
-    // 事件选择器初始化
+    // 时间选择器初始化
     initTime();
     // 设置窗体偏移
     let offset = [0, 0];
