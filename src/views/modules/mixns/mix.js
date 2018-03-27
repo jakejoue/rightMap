@@ -137,7 +137,7 @@ export default {
             </div> : ''
           }
           { this.formAppend ? this.formAppend : '' }
-          { this.tip ? <p class="tip" v-show={!this.data.length}>{this.tip}</p> : '' }
+          { this.tip ? <p class="tip" v-show={!this.data.length && !this.treeData.length}>{this.tip}</p> : '' }
           <hr v-show={this.splitLine} style={{marginTop:"8px"}}/>
           <div class="full" style={ Object.assign({marginTop:"8px"}, {height:this.height}) }>
             {
