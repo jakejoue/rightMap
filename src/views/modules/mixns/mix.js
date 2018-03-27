@@ -122,7 +122,7 @@ export default {
     return (
       <div>
           { this.formPrepend ? this.formPrepend : '' }
-          <c-search ref="cSearch" size="large" search={this.search_} reset={this.reset_} placeholder={this.placeholder}></c-search>
+          <c-search ref="cSearch" size="large" onSearch={this.search_} onReset={this.reset_} placeholder={this.placeholder}></c-search>
           {
             (this.typeList && this.typeList.length) ? 
             <div class="typeSelect">
