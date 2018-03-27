@@ -83,7 +83,6 @@ export default {
     },
     // 单击地图查询元素事件
     async clickHandler({ coordinate }) {
-      this.layer.clear();
       var resolution = map.getResolution();
       var projection = configData.projection;
       var params = { INFO_FORMAT: "application/json" };
@@ -96,8 +95,8 @@ export default {
       const { data } = await axios.get(url);
       const graphics = KMap.Graphics.fromGeoJSON(data);
       if (graphics.length) {
-        this.layer.add(graphics[0]);
         centerShow({
+          layer: this.layer,
           center: false,
           graphic: graphics[0]
         });
