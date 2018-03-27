@@ -12,8 +12,9 @@ const config = [
         const { graphic } = newGraphic({
           coord: [x, y],
           symbol: new KMap.PictureMarkerSymbol({
+            scale: 0.6,
             anchor: [0.5, 1],
-            src: './static/img/bubble30.png'
+            src: './static/img/single_marker.png'
           }),
           attr: { "resultID": "streetView" }
         });
@@ -76,8 +77,9 @@ const config = [
             const { graphic } = newGraphic({
               coord: [x, y],
               symbol: new KMap.PictureMarkerSymbol({
+                scale: 0.6,
                 anchor: [0.5, 1],
-                src: './static/img/bubble30.png'
+                src: './static/img/single_marker.png'
               }),
               attr: { ...markInfo, "resultID": "MapLocating" }
             });
