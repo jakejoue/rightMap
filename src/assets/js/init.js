@@ -183,6 +183,8 @@ export default {
   },
   mounted() {
     init().then(([map, server]) => {
+      global.mapTip = new KMap.Interaction.MapTip();
+      map.addInteraction(mapTip);
       this.$store.commit('setMap', map);
     });
   }

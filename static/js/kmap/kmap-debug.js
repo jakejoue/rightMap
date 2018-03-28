@@ -1,6 +1,6 @@
 // OpenLayers. See https://openlayers.org/
 // License: https://raw.githubusercontent.com/openlayers/openlayers/master/LICENSE.md
-// Version: 0.1-11-gc4fbe2e
+// Version: 0.1-17-g8a8b0d1
 ;(function (root, factory) {
   if (typeof exports === "object") {
     module.exports = factory();
@@ -79008,7 +79008,8 @@ KMap.Layer.Type = {
   TileWMSLayer: 'TileWMSLayer',
   WMSLayer: 'WMSLayer',
   WMTSLayer: 'WMTSLayer',
-  AMapLayer: 'AMapLayer'
+  AMapLayer: 'AMapLayer',
+  TdtLayer: 'TdtLayer'
 };
 
 /**
@@ -83336,6 +83337,112 @@ KMap.Interaction.Draw.prototype.setMap = function (map) {
   ol.interaction.Draw.prototype.setMap.call(this, map);
 }
 
+goog.provide('KMap.Interaction.MapTip');
+goog.provide('KMap.Interaction.MapTip.Event');
+
+/**
+ * 带tip框的坐标拾取器
+ * @api
+ * @constructor
+ * @extends {ol.interaction.Interaction}
+ */
+KMap.Interaction.MapTip = function(options) {
+    options = options || {};
+    this.helpTooltipElement_ = document.createElement('div');
+    this.helpTooltip_ = new KMap.Overlay({
+        element: this.helpTooltipElement_,
+        offset: options.offset || [10, 0],
+        positioning: options.positioning || 'center-left'
+    });
+    this.setMessage(options.message || '');
+    this.handler_ = null;
+
+    ol.interaction.Interaction.call(this, {
+        handleEvent: KMap.Interaction.MapTip.handleEvent
+    });
+};
+ol.inherits(KMap.Interaction.MapTip, ol.interaction.Interaction);
+
+/**
+ * @this {KMap.Interaction.MapTip}
+ */
+KMap.Interaction.MapTip.handleEvent = function(mapBrowserEvent) {
+    var stopEvent = false;
+    if (this.getActive()) {
+        if (mapBrowserEvent.type == ol.MapBrowserEventType.POINTERMOVE) {
+            this.helpTooltip_.setPosition(mapBrowserEvent.coordinate);
+        }
+        if (mapBrowserEvent.type == ol.MapBrowserEventType.SINGLECLICK) {
+            this.dispatchEvent(new KMap.Interaction.MapTip.Event('mapTip', mapBrowserEvent.coordinate));
+            mapBrowserEvent.preventDefault();
+            stopEvent = true;
+        }
+    }
+    return !stopEvent;
+};
+
+/**
+ * @private
+ */
+KMap.Interaction.MapTip.prototype.setActive = function(active) {
+    ol.interaction.Interaction.prototype.setActive.call(this, !!active);
+    this.getActive() ?
+        this.helpTooltipElement_.classList.remove('hidden') :
+        this.helpTooltipElement_.classList.add('hidden');
+};
+
+/**
+ * @api
+ */
+KMap.Interaction.MapTip.prototype.setMessage = function(message) {
+    this.helpTooltipElement_.innerHTML = '<div class="mapTip"><span></span><span>' + message + '</span></div>';
+};
+
+/**
+ * @api
+ */
+KMap.Interaction.MapTip.prototype.getLocation = function(listener, message) {
+    var self = this;
+    self.setActive(true);
+    if (message) {
+        this.setMessage(message);
+    }
+    if (this.handler_) {
+        this.un('mapTip', this.handler_, this);
+    }
+    this.handler_ = function(event) {
+        if (typeof listener == 'function') {
+            listener(event);
+        }
+        self.setActive(false);
+    };
+    return this.once('mapTip', this.handler_, this);
+};
+
+KMap.Interaction.MapTip.prototype.setMap = function(map) {
+    if (!map) {
+        map = this.getMap();
+        map.removeOverlay(this.helpTooltip_);
+    } else {
+        this.setActive(false);
+        map.addOverlay(this.helpTooltip_);
+    }
+    ol.interaction.Interaction.prototype.setMap.call(this, map);
+};
+
+/**
+ * @api
+ * @constructor
+ * @extends {ol.events.Event}
+ */
+KMap.Interaction.MapTip.Event = function(type, coordinate) {
+    ol.events.Event.call(this, type);
+    /**
+     * @api
+     */
+    this.coordinate = coordinate;
+};
+ol.inherits(KMap.Interaction.MapTip.Event, ol.events.Event);
 goog.provide('KMap.Interaction.Modify');
 
 goog.require('KMap');
@@ -84307,6 +84414,78 @@ KMap.FeatureLayer.fromLayer = function (layer) {
  */
 KMap.FeatureLayer.prototype.getType = function () {
     return KMap.Layer.Type.FeatureLayer;
+};
+goog.provide('KMap.TdtLayer');
+
+goog.require('KMap');
+goog.require('KMap.Layer');
+goog.require('ol.proj');
+
+/**
+ * @api
+ * @constructor
+ * @extends {KMap.Layer}
+ * @param {string} id id.
+ * @param {Object|ol.layer.Base} options options.
+ */
+KMap.TdtLayer = function(id, options) {
+    KMap.Layer.call(this, id, options);
+
+};
+ol.inherits(KMap.TdtLayer, KMap.Layer);
+
+/**
+ * @param {Object} options 
+ * @returns {ol.layer.Base}
+ */
+KMap.TdtLayer.prototype.createLayer = function(options) {
+    var projection = ol.proj.get("EPSG:4326");
+    var projectionExtent = projection.getExtent();
+    var size = ol.extent.getWidth(projectionExtent) / 256;
+
+    var resolutions = [];
+    var matrixIds = [];
+    for (var z = 0; z < 21; ++z) {
+        resolutions[z] = size / Math.pow(2, z);
+        matrixIds[z] = z;
+    }
+    var tileGrid = new ol.tilegrid.WMTS({
+        origin: ol.extent.getTopLeft(projectionExtent),
+        resolutions: resolutions,
+        matrixIds: matrixIds
+    });
+    var opts = {
+        tileGrid: tileGrid,
+        projection: projection,
+        style: options.style || 'default',
+        matrixSet: options.matrixSet,
+        url: options.url,
+        format: options.format || 'tiles',
+        layer: options.layer,
+        crossOrigin: 'anonymous'
+    };
+    return new ol.layer.Tile({
+        source: new ol.source.WMTS( /** @type {!olx.source.WMTSOptions} */ (opts))
+    });
+};
+
+/**
+ * @api
+ * @param {ol.layer.Base} layer 
+ * @returns {KMap.Layer}
+ */
+KMap.TdtLayer.fromLayer = function(layer) {
+    var layerId = /**@type {string}*/ (layer.get(KMap.Layer.Property.ID));
+    return new KMap.TdtLayer(layerId, layer);
+};
+
+/**
+ * 返回图层的类型
+ * @return {KMap.Layer.Type}
+ * @api
+ */
+KMap.TdtLayer.prototype.getType = function() {
+    return KMap.Layer.Type.TdtLayer;
 };
 ﻿goog.provide('KMap.TileWMSLayer');
 
@@ -85570,6 +85749,8 @@ goog.require('KMap.InfoTemplate');
 goog.require('KMap.Interaction.Draw');
 goog.require('KMap.Interaction.Location');
 goog.require('KMap.Interaction.Location.Event');
+goog.require('KMap.Interaction.MapTip');
+goog.require('KMap.Interaction.MapTip.Event');
 goog.require('KMap.Interaction.Modify');
 goog.require('KMap.Interaction.Pointer');
 goog.require('KMap.Interaction.Select');
@@ -85592,6 +85773,7 @@ goog.require('KMap.SimpleMarkerSymbol');
 goog.require('KMap.SimpleRenderer');
 goog.require('KMap.SimpleTextSymbol');
 goog.require('KMap.Symbol');
+goog.require('KMap.TdtLayer');
 goog.require('KMap.TileWMSLayer');
 goog.require('KMap.Transform');
 goog.require('KMap.UniqueValueRenderer');
@@ -86201,6 +86383,31 @@ goog.exportProperty(
     KMap.Interaction.Location.Event.prototype.coordinate);
 
 goog.exportSymbol(
+    'KMap.Interaction.MapTip',
+    KMap.Interaction.MapTip,
+    OPENLAYERS);
+
+goog.exportProperty(
+    KMap.Interaction.MapTip.prototype,
+    'setMessage',
+    KMap.Interaction.MapTip.prototype.setMessage);
+
+goog.exportProperty(
+    KMap.Interaction.MapTip.prototype,
+    'getLocation',
+    KMap.Interaction.MapTip.prototype.getLocation);
+
+goog.exportSymbol(
+    'KMap.Interaction.MapTip.Event',
+    KMap.Interaction.MapTip.Event,
+    OPENLAYERS);
+
+goog.exportProperty(
+    KMap.Interaction.MapTip.Event.prototype,
+    'coordinate',
+    KMap.Interaction.MapTip.Event.prototype.coordinate);
+
+goog.exportSymbol(
     'KMap.Interaction.Modify',
     KMap.Interaction.Modify,
     OPENLAYERS);
@@ -86569,6 +86776,21 @@ goog.exportProperty(
     KMap.Layer.prototype,
     'getType',
     KMap.Layer.prototype.getType);
+
+goog.exportSymbol(
+    'KMap.TdtLayer',
+    KMap.TdtLayer,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'KMap.TdtLayer.fromLayer',
+    KMap.TdtLayer.fromLayer,
+    OPENLAYERS);
+
+goog.exportProperty(
+    KMap.TdtLayer.prototype,
+    'getType',
+    KMap.TdtLayer.prototype.getType);
 
 goog.exportSymbol(
     'KMap.TileWMSLayer',
@@ -88071,6 +88293,66 @@ goog.exportProperty(
     KMap.GroupLayer.prototype.setMinResolution);
 
 goog.exportProperty(
+    KMap.TdtLayer.prototype,
+    'getId',
+    KMap.TdtLayer.prototype.getId);
+
+goog.exportProperty(
+    KMap.TdtLayer.prototype,
+    'setId',
+    KMap.TdtLayer.prototype.setId);
+
+goog.exportProperty(
+    KMap.TdtLayer.prototype,
+    'getLayer',
+    KMap.TdtLayer.prototype.getLayer);
+
+goog.exportProperty(
+    KMap.TdtLayer.prototype,
+    'setLayer',
+    KMap.TdtLayer.prototype.setLayer);
+
+goog.exportProperty(
+    KMap.TdtLayer.prototype,
+    'getVisible',
+    KMap.TdtLayer.prototype.getVisible);
+
+goog.exportProperty(
+    KMap.TdtLayer.prototype,
+    'setVisible',
+    KMap.TdtLayer.prototype.setVisible);
+
+goog.exportProperty(
+    KMap.TdtLayer.prototype,
+    'getExtent',
+    KMap.TdtLayer.prototype.getExtent);
+
+goog.exportProperty(
+    KMap.TdtLayer.prototype,
+    'setExtent',
+    KMap.TdtLayer.prototype.setExtent);
+
+goog.exportProperty(
+    KMap.TdtLayer.prototype,
+    'getMaxResolution',
+    KMap.TdtLayer.prototype.getMaxResolution);
+
+goog.exportProperty(
+    KMap.TdtLayer.prototype,
+    'setMaxResolution',
+    KMap.TdtLayer.prototype.setMaxResolution);
+
+goog.exportProperty(
+    KMap.TdtLayer.prototype,
+    'getMinResolution',
+    KMap.TdtLayer.prototype.getMinResolution);
+
+goog.exportProperty(
+    KMap.TdtLayer.prototype,
+    'setMinResolution',
+    KMap.TdtLayer.prototype.setMinResolution);
+
+goog.exportProperty(
     KMap.TileWMSLayer.prototype,
     'getId',
     KMap.TileWMSLayer.prototype.getId);
@@ -88284,7 +88566,7 @@ goog.exportProperty(
     KMap.SimpleTextSymbol.prototype,
     'getStyle',
     KMap.SimpleTextSymbol.prototype.getStyle);
-ol.VERSION = '0.1-11-gc4fbe2e';
+ol.VERSION = '0.1-17-g8a8b0d1';
 OPENLAYERS.ol = ol;
 
   return OPENLAYERS;
