@@ -166,3 +166,16 @@ function clearGraphicsByName(value, key = "Name") {
   });
 };
 global.clearGraphicsByName = clearGraphicsByName;
+
+// 按照名称获取默认的绘画图层
+function getGraphicsByName(value, key = "Name") {
+  const rets = [];
+  map.getGraphics().forEach(function(g) {
+    const Name = g.getAttribute(key);
+    if (Name === value) {
+      rets.push(g)
+    }
+  });
+  return rets;
+};
+global.getGraphicsByName = getGraphicsByName;
