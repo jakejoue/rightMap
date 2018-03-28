@@ -79,6 +79,9 @@ Vue.prototype.loading = function(flag = false, html = 'Loading') {
 }
 
 // 一个eventBus
+// singleClick(e) 地图单击事件
+// resize(height) 地图窗口变更事件(height是街景的百分百高度)
+// clearAll() 右上角的清楚按钮的事件
 global.event = new Vue({
   name: "eventBus"
 });
