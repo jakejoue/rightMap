@@ -27,6 +27,7 @@ export default {
     close() {
       this.show_ = false;
       this.expand = false;
+      clearGraphicsByName("streetView", "resultID");
     },
     resize() {
       let height = 0;
@@ -42,6 +43,42 @@ export default {
     expand() {
       this.resize();
     }
+  },
+  mounted() {
+    event.$on("streetView/show", coordinate => {
+      clearGraphicsByName("streetView", "resultID");
+      coordinate = coordinate || map.getCenter();
+      const { graphic } = newGraphic({
+        coord: coordinate,
+        symbol: new KMap.PictureMarkerSymbol({
+          scale: 0.6,
+          anchor: [0.5, 1],
+          src: "./static/img/single_marker.png"
+        }),
+        attr: { resultID: "streetView" }
+      });
+      map.getGraphics().add(graphic);
+      // 坐标转换显示街景
+      const [x, y] = coordinate;
+      query.project2wgs(x, y).then(function(result) {
+        var point = [result.lon, result.lat];
+        var truemapObj = document.getElementById("trueMap");
+        if (
+          truemapObj !== undefined &&
+          truemapObj !== null &&
+          truemapObj.contentWindow.showVisionByLngLat !== undefined &&
+          truemapObj.contentWindow.showVisionByLngLat !== null &&
+          $.isFunction(truemapObj.contentWindow.showVisionByLngLat)
+        ) {
+          try {
+            truemapObj.contentWindow.showVisionByLngLat(point[0], point[1]);
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      });
+      this.show_ = true;
+    });
   }
 };
 </script>

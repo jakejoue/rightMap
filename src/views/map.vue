@@ -14,7 +14,7 @@
       </aside>
       <!-- 地图部分 -->
       <main id="kmap">
-        <street-map v-if="map" ref="streetMap"></street-map>
+        <street-map v-if="map"></street-map>
         <div id="mapTarget" :style="{'height':height+'%'}">
           <m-ctrl v-if="map" :class="aIndex==-1?'':'expand'"></m-ctrl>
           <m-tools v-if="map"></m-tools>

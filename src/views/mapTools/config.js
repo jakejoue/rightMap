@@ -51,7 +51,7 @@ const config = [{
   title: '显示街景',
   img: resolve('street_view_16'),
   handler({ target }) {
-    target.$parent.$refs['streetMap'].show();
+    event.$emit("streetView/show");
     target.active = -1;
   }
 },
