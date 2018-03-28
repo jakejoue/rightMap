@@ -45,6 +45,9 @@ Vue.component('Tree', Tree)
 Vue.component('Spin', Spin)
 Vue.prototype.$Spin = Spin
 Vue.prototype.$Message = Message
+Message.config({
+  duration: 3
+})
 
 Vue.component('el-pagination', Pagination)
 
