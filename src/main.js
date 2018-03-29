@@ -1,10 +1,11 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+// 最先加载配置
+import 'assets/js/config'
 import Vue from 'vue'
 import store from './store'
 // import router from './router'
 import App from './App'
-import 'assets/js/config'
 
 Vue.config.productionTip = false
 Vue.config.devtools = true
@@ -17,3 +18,5 @@ global.root = new Vue({
   store,
   // router
 })
+
+import './interface'

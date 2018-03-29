@@ -70,7 +70,7 @@ import streetMap from "./mapTools/streetMap";
 import mCtrl from "./mapCtrl";
 import cTrack from "./track";
 
-import init from "assets/js/init";
+import init from "./init";
 import getModules from "./modules/";
 
 export default {

@@ -1,7 +1,7 @@
-import KQuery from './server/kquery';
-import Action from './server/Action';
-import GpsService from './server/gpsService';
-import WebService from './server/WebService';
+import KQuery from 'assets/js/server/kquery';
+import Action from 'assets/js/server/Action';
+import GpsService from 'assets/js/server/gpsService';
+import WebService from 'assets/js/server/WebService';
 
 // 解析xml配置文件
 function parseUrlConfig(xml) {

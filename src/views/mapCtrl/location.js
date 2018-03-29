@@ -1,4 +1,4 @@
-export default () => {
+function location() {
   clearGraphicsByName("MapLocating", "resultID");
   mapTip.getLocation(({ coordinate }) => {
     const [x, y] = coordinate;
@@ -23,3 +23,7 @@ export default () => {
     });
   }, "单击地图进行定位");
 };
+
+event.$on("interface/doMark", location);
+
+export default location;
