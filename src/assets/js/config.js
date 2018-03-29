@@ -1,6 +1,5 @@
 // vue相关的第三方框架配置地方
 import Vue from 'vue'
-import $ from 'jquery'
 import Axios from 'axios'
 import {
   Icon,
@@ -25,7 +24,6 @@ import '../less/animate.less'
 Axios.defaults.withCredentials = true
 
 // 挂载全局变量
-global.$ = $
 global.axios = Axios
 
 // 引入全局方法
