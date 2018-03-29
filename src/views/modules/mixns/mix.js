@@ -96,11 +96,11 @@ export default {
     this.refresh && this.refresh();
   },
   methods: {
-    async search_(value) {
+    search_(value) {
       map.infoWindow.hide();
-      this.search && await this.search(value);
+      this.search && this.search(value);
     },
-    async reset_() {
+    reset_() {
       this.data = [];
       map.infoWindow.hide();
       this.reset && this.reset();
