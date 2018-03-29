@@ -49,6 +49,7 @@ export default {
     cLoad
   },
   props: {
+    // 用于样式的覆盖
     className: { type: String },
     height: { type: String, default: "100%" },
     // 数据
