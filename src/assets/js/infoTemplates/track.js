@@ -1,5 +1,10 @@
 import store from 'store/';
 
+// 窗体打开前事件
+event.$on("infoWindow/show", graphic => {
+  initTime();
+});
+
 //轨迹info相关
 const shourInput = "<input type='text' class='timeSet hourSet beginTime' onblur=timePickerFunc(0,0)>";
 const sminuteInput = "<input type='text' class='timeSet minuteSet beginTime' onblur=timePickerFunc(1,1)>";

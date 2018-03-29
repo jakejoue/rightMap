@@ -113,7 +113,7 @@ function initMapEvent(map) {
     "title": 'kmap-popup-title',
     "content": 'kmap-popup-content'
   });
-  mapPopup.on("show", (event) => {
+  mapPopup.on("show", (evt) => {
     // 窗体切换事件
     const tab = $('#kmap-popup-title div.titleBar [InfoTag]');
     if (tab.length > 0) {
@@ -128,16 +128,15 @@ function initMapEvent(map) {
         tab[0].click();
       }
     }
-    // 时间选择器初始化
-    initTime();
     // 设置窗体偏移
     let offset = [0, 0];
-    const graphic = event.target.getSelectedFeature();
+    const graphic = evt.target.getSelectedFeature();
+    event.$emit("infoWindow/show", graphic);
     if (graphic.getGeometry().getType() == 'point') {
       const id = graphic.getLayer().getId();
       offset = configData.infoTOffset[id] || [0, 0];
     }
-    event.target.setOffset(offset);
+    evt.target.setOffset(offset);
   });
   map.infoWindow = mapPopup;
   map.addOverlay(mapPopup);
