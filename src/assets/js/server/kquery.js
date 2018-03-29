@@ -9,9 +9,11 @@ function KQuery({ server, appKey }) {
 
   this.axios = axios.create({
     responseType: 'text',
-    timeout: 10000
+    timeout: 10000,
+    headers: {
+      'Content-Type': 'text/plain;charset=UTF-8'
+    }
   });
-  this.axios.defaults.headers.post['Content-Type'] = 'text/plain;charset=UTF-8';
 };
 
 
