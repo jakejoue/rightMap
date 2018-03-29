@@ -11,10 +11,13 @@ global.interface = new Vue({
       event.$emit("interface/doMark")
     },
     getMapResult() {
-      const graphic = getGraphicsByName("resultID", "MapLocating");
+      const graphic = getGraphicsByName("MapLocating", "resultID")[0];
+      if (graphic) {
+        return { ...graphic.getAttribute('markInfo') };
+      }
     },
     clearMapResult() {
-      clearGraphicsByName("resultID", "MapLocating");
+      clearGraphicsByName("MapLocating", "resultID");
     },
     // 案件定位
     locateEvent() {}

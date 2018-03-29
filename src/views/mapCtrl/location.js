@@ -14,7 +14,7 @@ function location() {
             anchor: [0.5, 1],
             src: './static/img/single_marker.png'
           }),
-          attr: { ...markInfo, "resultID": "MapLocating" }
+          attr: { markInfo, "resultID": "MapLocating" }
         });
         map.getGraphics().add(graphic);
       }
