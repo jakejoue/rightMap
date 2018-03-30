@@ -16,7 +16,9 @@ function location() {
           }),
           attr: { markInfo, "resultID": "MapLocating" }
         });
-        map.getGraphics().add(graphic);
+        if (!getGraphicsByName("MapLocating", "resultID").length) {
+          map.getGraphics().add(graphic);
+        }
       }
     }).catch(e => {
       root.$Message.error("地图定位：请求服务器失败，请重新尝试。");
