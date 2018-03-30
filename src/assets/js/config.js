@@ -23,7 +23,7 @@ import '../less/animate.less'
 // 请求时带上cookies
 Axios.defaults.withCredentials = true
 Axios.defaults.transformRequest = [function(data, headers) {
-  if (headers['Content-Type'] == 'application/x-www-form-urlencoded' && typeof data == 'object') {
+  if ((!headers['Content-Type'] || headers['Content-Type'] == 'application/x-www-form-urlencoded') && typeof data == 'object') {
     let ret = ''
     for (let it in data) {
       ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
