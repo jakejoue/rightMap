@@ -241,7 +241,7 @@ KQuery.prototype.getMapPic = function(opts, success) {
 KQuery.prototype.buildUrl = function(args) {
   var url = this.server + "/query?appKey=" + this.appKey;
   for (var key in args) {
-    if (key && args[key]) {
+    if (key && (args[key] || args[key] == 0)) {
       url += "&" + key + "=" + args[key];
     }
   }

@@ -17,17 +17,15 @@ export default {
   data() {
     return {
       show_: false,
-      expand: false
+      expand: false,
+      layer: new KMap.GraphicsLayer("streetView")
     };
   },
   methods: {
-    show() {
-      this.show_ = true;
-    },
     close() {
       this.show_ = false;
       this.expand = false;
-      clearGraphicsByName("streetView", "resultID");
+      this.layer.clear();
     },
     resize() {
       let height = 0;
@@ -45,19 +43,20 @@ export default {
     }
   },
   mounted() {
+    map.addGraphicsLayer(this.layer);
     event.$on("streetView/show", coordinate => {
-      clearGraphicsByName("streetView", "resultID");
+      this.layer.clear();
       coordinate = coordinate || map.getCenter();
       const { graphic } = newGraphic({
         coord: coordinate,
         symbol: new KMap.PictureMarkerSymbol({
-          scale: 0.6,
           anchor: [0.5, 1],
-          src: "./static/img/single_marker.png"
+          src: "./static/img/truemap.gif"
         }),
         attr: { resultID: "streetView" }
       });
-      map.getGraphics().add(graphic);
+      this.layer.add(graphic);
+      map.setCenter(coordinate);
       // 坐标转换显示街景
       const [x, y] = coordinate;
       query.project2wgs(x, y).then(function(result) {
@@ -78,6 +77,21 @@ export default {
         }
       });
       this.show_ = true;
+    });
+    event.$on("streetView/moveCar", (lon, lat, yaw) => {
+      query.project2map(lon, lat).then(result => {
+        const coord = [result.x, result.y];
+        let graphic = getGraphicsByName(
+          "streetView",
+          "resultID",
+          this.layer
+        )[0];
+        if (graphic) {
+          graphic.getGeometry().setCoordinates(coord);
+          graphic.getSymbol().setAngle(yaw);
+          map.setCenter(coord);
+        }
+      });
     });
   }
 };

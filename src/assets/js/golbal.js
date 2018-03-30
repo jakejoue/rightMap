@@ -157,20 +157,22 @@ function timestamp() {
 global.timestamp = timestamp;
 
 // 按照名称清除默认的绘画图层
-function clearGraphicsByName(value, key = "Name") {
-  map.getGraphics().forEach(function(g) {
+function clearGraphicsByName(value, key = "Name", layer) {
+  layer = layer || map.getGraphics();
+  layer.forEach(function(g) {
     const Name = g.getAttribute(key);
     if (Name === value) {
-      map.getGraphics().remove(g);
+      layer.remove(g);
     }
   });
 };
 global.clearGraphicsByName = clearGraphicsByName;
 
 // 按照名称获取默认的绘画图层
-function getGraphicsByName(value, key = "Name") {
+function getGraphicsByName(value, key = "Name", layer) {
+  layer = layer || map.getGraphics();
   const rets = [];
-  map.getGraphics().forEach(function(g) {
+  layer.forEach(function(g) {
     const Name = g.getAttribute(key);
     if (Name === value) {
       rets.push(g)

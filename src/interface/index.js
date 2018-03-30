@@ -19,6 +19,13 @@ global.interface = new Vue({
     clearMapResult() {
       clearGraphicsByName("MapLocating", "resultID");
     },
+    // 播放街景
+    playStreetmap(coord) {
+      event.$emit('streetView/show', coord);
+    },
+    moveCar(lon, lat, yaw) {
+      event.$emit('streetView/moveCar', lon, lat, yaw);
+    },
     // 案件定位
     locateEvent() {}
   }
