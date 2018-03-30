@@ -22,6 +22,20 @@ import '../less/animate.less'
 
 // 请求时带上cookies
 Axios.defaults.withCredentials = true
+Axios.defaults.transformRequest = [function(data, headers) {
+  if (headers['Content-Type'] == 'application/x-www-form-urlencoded' && typeof data == 'object') {
+    let ret = ''
+    for (let it in data) {
+      ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+    }
+    ret = ret.slice(0, -1);
+    return ret
+  }
+  if (headers['Content-Type'] == 'application/json' && (typeof data == 'object' || typeof data == 'array')) {
+    return JSON.stringify(data);
+  }
+  return data;
+}]
 
 // 挂载全局变量
 global.axios = Axios
