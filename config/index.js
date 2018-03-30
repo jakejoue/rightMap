@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/proxy': {
-        target: "http://localhost:9080/",
+        target: "http://10.201.61.19:8081/",
         pathRewrite: { "^/proxy": "KDUMClient" }
       }
     },
