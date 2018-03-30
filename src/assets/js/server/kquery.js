@@ -1,3 +1,5 @@
+import Axios from "axios";
+
 /**
  * 服务器查询接口
  * 
@@ -7,7 +9,7 @@ function KQuery({ server, appKey }) {
   this.server = server;
   this.appKey = appKey;
 
-  this.axios = axios.create({
+  this.axios = Axios.create({
     responseType: 'text',
     timeout: 10000,
     headers: {

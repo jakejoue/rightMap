@@ -1,6 +1,8 @@
+import Axios from "axios";
+
 class Action {
   constructor(path) {
-    this.axios = axios.create({
+    this.axios = Axios.create({
       baseURL: path
     });
   };

@@ -1,11 +1,14 @@
 import { parseString } from 'xml2js'
-import axios from 'axios';
+import Axios from 'axios';
 
 export default class WebService {
   constructor(proxyUrl, webServiceUrl) {
-    this.axios = axios.create({
+    this.axios = Axios.create({
       baseURL: proxyUrl + '?' + webServiceUrl,
-      responseType: 'text'
+      responseType: 'text',
+      headers: {
+        "Content-Type": "application/json"
+      }
     });
   };
 

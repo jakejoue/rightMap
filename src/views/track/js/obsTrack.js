@@ -28,7 +28,6 @@ class obsTrack extends Track {
     this.eTime = null;
 
     //轨迹
-    this.hint = 0;
     this.path = [];
     this.attr = [];
 
@@ -82,56 +81,52 @@ class obsTrack extends Track {
     this.getTrackLength(config);
   };
   //判断轨迹存在
-  getTrackLength(config) {
-    this.server.findObsTrackLogLength(config).then(count => {
-      count = parseInt(count, 10);
-      if (count === 0) {
-        this.error("未查询到轨迹数据");
-        return;
-      } else {
-        let start = 1;
-        this.hint = 0
-        this.path = [];
-        this.attr = [];
-
-        while (start * 800 < count) {
-          this.getTrack(start - 1, 800, config);
-          start++;
-          this.hint++;
-        }
-        this.getTrack(start - 1, 800, config);
-        this.hint++;
-      }
-    }).catch(this.error);
+  async getTrackLength(config) {
+    let count = await this.server.findObsTrackLogLength(config).catch(err => {
+      this.error();
+      throw err;
+    });
+    count = parseInt(count, 10);
+    if (count === 0) {
+      this.error("未查询到轨迹数据");
+      return;
+    } else {
+      let start = 0;
+      this.path = [];
+      this.attr = [];
+      do {
+        start++;
+        let results = await this.server.findObsTrackLogsJson(config, start, 800).catch(err => {
+          this.error();
+          throw err;
+        });
+        this.path[results['currentPage']] = results.rows;
+      } while (start * 800 < count);
+      this.collectTrack();
+    }
   };
   //获取轨迹数据
-  getTrack(start, pageSize, opts) {
-    this.server.findObsTrackLogsJson(opts, start, pageSize).then(results => {
-      this.path[results['currentPage']] = results.rows;
-      this.hint--;
-      if (this.hint == 0) {
-        //合并和重复点删除
-        this.path = [].concat(...this.path);
-        this.path = simplyPath(this.path, { x: 'longitude', y: 'latitude' });
-        //遍历出需要的属性
-        this.path = this.path.map(ele => {
-          let timeStr = "";
-          if (ele.pdaTime) {
-            let recordTime = new Date();
-            recordTime.setTime(ele.pdaTime.time);
-            timeStr = dateToStr(recordTime, ' ');
-          }
-
-          var x = ele['longitude'] + this.LONOFFECT;
-          var y = ele['latitude'] + this.LATOFFECT;
-          this.attr.push({
-            time: timeStr
-          });
-          return [x, y];
-        });
-        this.handleTrack([this.path]);
+  collectTrack() {
+    //合并和重复点删除
+    this.path = [].concat(...this.path);
+    this.path = simplyPath(this.path, { x: 'longitude', y: 'latitude' });
+    //遍历出需要的属性
+    this.path = this.path.map(ele => {
+      let timeStr = "";
+      if (ele.pdaTime) {
+        let recordTime = new Date();
+        recordTime.setTime(ele.pdaTime.time);
+        timeStr = dateToStr(recordTime, ' ');
       }
-    }).catch(this.error);
+
+      var x = ele['longitude'] + this.LONOFFECT;
+      var y = ele['latitude'] + this.LATOFFECT;
+      this.attr.push({
+        time: timeStr
+      });
+      return [x, y];
+    });
+    this.handleTrack([this.path]);
   };
   //处理轨迹数据
   handleTrack(path) {

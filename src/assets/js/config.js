@@ -22,17 +22,7 @@ import '../less/animate.less'
 
 // 请求时带上cookies
 Axios.defaults.withCredentials = true
-Axios.defaults.headers = {
-  'Content-Type': 'application/x-www-form-urlencoded'
-}
-Axios.defaults.transformRequest = [function(data) {
-  let ret = ''
-  for (let it in data) {
-    ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-  }
-  ret = ret.slice(0, -1);
-  return ret
-}]
+
 // 挂载全局变量
 global.axios = Axios
 

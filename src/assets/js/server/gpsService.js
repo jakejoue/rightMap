@@ -1,7 +1,12 @@
+import Axios from "axios";
+
 function GpsService(proxyurl, url) {
   this.axios = axios.create({
     baseURL: proxyurl + '?' + url,
-    responseType: 'document'
+    responseType: 'document',
+    headers: {
+      "Content-Type": "application/json"
+    }
   });
 };
 
