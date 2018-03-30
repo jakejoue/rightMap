@@ -1,5 +1,5 @@
 var contentStr =
-  "<ul class='observerDetail'>" +
+  "<ul>" +
   "<li><b>名&nbsp;&nbsp;&nbsp;&nbsp;称：</b>${OBJNAME}</li>" +
   "<li><b>编&nbsp;&nbsp;&nbsp;&nbsp;码：</b>${OBJCODE}</li>" +
   "<li><b>状&nbsp;&nbsp;&nbsp;&nbsp;态：</b>${OBJSTATE}</li>" +
@@ -10,4 +10,4 @@ var infoTemplate = new KMap.InfoTemplate();
 infoTemplate.setTitle("详细信息");
 infoTemplate.setContent(contentStr);
 
-export default infoTemplate;
+export { infoTemplate };

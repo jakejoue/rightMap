@@ -1,7 +1,7 @@
 <script>
 import mix from "./mixns/mix";
 import filter from "./mixns/filter";
-import infoTemplate from "t/monitor.js";
+import { infoTemplate } from "t/monitor.js";
 
 function getNodeIcon(type, small = false) {
   var result = "./static/img/monitor/";

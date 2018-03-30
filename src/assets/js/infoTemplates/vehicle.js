@@ -24,4 +24,4 @@ infoTemplate.setContent(`
     ${getContent('car')}
 `);
 
-export default infoTemplate;
+export { infoTemplate };

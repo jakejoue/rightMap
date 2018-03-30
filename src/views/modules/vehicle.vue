@@ -2,7 +2,7 @@
 import { Switch } from "iview";
 import mix from "./mixns/mix";
 import filter from "./mixns/filter";
-import infoTemplate from "t/vehicle";
+import { infoTemplate } from "t/vehicle";
 
 // map对象转json
 function map2Json(/**@type {Map}*/ map) {

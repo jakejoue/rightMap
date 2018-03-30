@@ -1,7 +1,7 @@
 <script>
 import mix from "./mixns/mix";
 import filter from "./mixns/filter";
-import infoTemplate from "t/observer";
+import { infoTemplate } from "t/observer";
 
 const onlineSymbol = new KMap.PictureMarkerSymbol({
   anchor: [0.5, 1],

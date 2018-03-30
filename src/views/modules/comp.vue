@@ -1,5 +1,5 @@
 <script>
-import infoTemplate from "t/comp";
+import { infoTemplate } from "t/comp";
 import mix from "./mixns/mix";
 
 // 查询结果样式

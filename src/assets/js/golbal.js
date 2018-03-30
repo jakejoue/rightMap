@@ -83,7 +83,8 @@ function centerShow({
   graphic,
   layer,
   zoom = 14,
-  center = true
+  center = true,
+  show = true
 }) {
   map.infoWindow.hide();
   const geom = graphic.getGeometry();
@@ -104,6 +105,7 @@ function centerShow({
   center ? map.zoomByExtent(extent, config) : showInfo();
   // 显示infowindow
   function showInfo() {
+    if(!show) return;
     let template = graphic.getInfoTemplate();
     if (layer && !template) {
       template = layer.getInfoTemplate();

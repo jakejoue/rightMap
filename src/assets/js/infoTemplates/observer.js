@@ -20,4 +20,4 @@ infoTemplate.setContent(`
     ${getContent('observer')}
  `);
 
-export default infoTemplate;
+export { infoTemplate };

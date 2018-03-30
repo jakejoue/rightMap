@@ -90,6 +90,7 @@ export default {
       }
       this.infoTemplate && (this.layer.setInfoTemplate(this.infoTemplate));
       map.addGraphicsLayer(this.layer);
+      this.$store.commit("addLayer", { id: layerId, layer: this.layer });
     }
   },
   mounted() {

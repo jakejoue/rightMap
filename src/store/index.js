@@ -11,7 +11,9 @@ const store = new Vuex.Store({
     // 右上角可管理图层
     ctrlLayers: [],
     // 车辆图例
-    legend: []
+    legend: [],
+    // 图层(业务图层)，不需要vue相关组件的响应，所以这里用Map（map等数据结构，vuex不能正确监听）
+    layers: new Map()
   },
   getters: {},
   mutations: {
@@ -28,9 +30,19 @@ const store = new Vuex.Store({
       } else {
         target.icon = icon;
       }
+    },
+    addLayer({ layers }, { id, layer }) {
+      layers.set(id, layer);
     }
   },
-  actions: {},
+  actions: {
+    getLayer({ state }, id) {
+      return new Promise((resolve, reject) => {
+        const layer = state.layers.get(id);
+        layer ? resolve(layer) : reject(layer);
+      });
+    }
+  },
   modules: { track }
 });
 

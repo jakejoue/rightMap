@@ -69,6 +69,24 @@ export default class WebService {
     return this.invoke("/VideoService/getMonitorPage", options);
   };
 
+  getEventById(eventId) {
+    var data = '<?xml version="1.0" encoding="utf-8"?>' +
+      '<soap:Envelope xmlns:tns="http://eventaccept.business.um.soap.webservice.esb.digitalcity.kingdom.com/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+      '<soap:Body>' +
+      '<tns:getEventById>' +
+      '<eventId>' + eventId + '</eventId>' +
+      '</tns:getEventById>' +
+      '</soap:Body>' +
+      '</soap:Envelope>';
+    var options = {
+      namespace: 'http://eventaccept.business.um.soap.webservice.esb.digitalcity.kingdom.com/',
+      method: 'getEventById',
+      dataType: 'xml',
+      data: data
+    };
+    return this.invoke("/ToDoEventService/getEventById", options);
+  };
+
   // xml2json简单包装
   xml2json(xml) {
     xml = xml.outerHTML;

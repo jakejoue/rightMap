@@ -22,4 +22,4 @@ infoTemplate.setContent(
   "</ul>"
 );
 
-export default infoTemplate;
+export { infoTemplate };
