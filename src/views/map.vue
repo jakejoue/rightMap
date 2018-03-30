@@ -59,7 +59,7 @@
     <!-- 底部 -->
     <footer v-if="!noFooter">
       <div></div>
-      <p>所属权为个人所有</p>
+      <p>业主单位：深圳市城市管理和行政执法局&nbsp;&nbsp;&nbsp;&nbsp;开发单位：深圳市金证科技股份有限公司</p>
     </footer>
   </section>
 </template>
