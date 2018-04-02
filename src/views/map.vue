@@ -65,10 +65,10 @@
 </template>
 
 <script>
-import mTools from "./mapTools/";
-import streetMap from "./mapTools/streetMap";
-import mCtrl from "./mapCtrl";
-import cTrack from "./track";
+const mTools = () => import("./mapTools/");
+const streetMap = () => import("./mapTools/streetMap");
+const mCtrl = () => import("./mapCtrl");
+const cTrack = () => import("./track");
 
 import init from "./init";
 import getModules from "./modules/";
