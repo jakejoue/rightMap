@@ -1,5 +1,5 @@
 <template>
-  <div id="tools">
+  <div id="tools" v-if="config.length">
     <ul>
       <li v-for="(item, i) in config" :key="i" @click="select(item)" :title="item.title">
         <div class="full" :class="item.class"></div>
