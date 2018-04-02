@@ -129,14 +129,13 @@ function initMapEvent(map) {
       }
     }
     // 设置窗体偏移
-    let offset = [0, 0];
     const graphic = evt.target.getSelectedFeature();
     event.$emit("infoWindow/show", graphic);
     if (graphic.getGeometry().getType() == 'point') {
       const id = graphic.getLayer().getId();
-      offset = configData.infoTOffset[id] || graphic.getAttribute('offset') || [0, 0];
+      const offset = configData.infoTOffset[id] || graphic.getAttribute('offset');
+      offset && evt.target.setOffset(offset);
     }
-    evt.target.setOffset(offset);
   });
   map.infoWindow = mapPopup;
   map.addOverlay(mapPopup);
