@@ -54,9 +54,10 @@ const defaultConfig = [
 export default () => {
   const params = location.search.slice(1);
   const config = params ? params.split(',') : defaultConfig;
-  if (config.length) {
-    return modules.filter(e => config.includes(e.id));
-  } else {
-    return modules;
-  }
+  const ret = [];
+  config.forEach(e => {
+    const item = modules.find(a => a.id == e);
+    item && ret.push(item);
+  });
+  return ret;
 };
