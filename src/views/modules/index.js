@@ -65,5 +65,9 @@ export default () => {
     const item = modules.find(a => a.id == e);
     item && ret.push(item);
   });
-  return ret;
+  return {
+    modules: ret,
+    noHeader: !!params.length,
+    noFooter: !!params.length
+  };
 };

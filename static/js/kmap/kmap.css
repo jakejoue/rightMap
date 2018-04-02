@@ -286,3 +286,13 @@ ul.drawtool>li.circle {
 ul.drawtool>li.circlefree {
   background-image: url("./images/i_draw_ellipse.png");
 }
+
+.custom-mouse-position {
+  position: absolute;
+  left: 8px;
+  bottom: 40px;
+  font-size: 13px;
+  background: #008;
+  color: #F00;
+  opacity: 0.50;
+}

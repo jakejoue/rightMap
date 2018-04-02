@@ -71,19 +71,20 @@ const mCtrl = () => import("./mapCtrl");
 const cTrack = () => import("./track");
 
 import init from "./init";
-import getModules from "./modules/";
+import getConfig from "./modules/";
 
 export default {
   components: { mTools, mCtrl, streetMap, cTrack },
   mixins: [init],
   data() {
+    const config = getConfig();
     return {
       height: 100,
-      noHeader: false,
+      noHeader: config.noHeader,
       noAside: false,
-      noFooter: false,
+      noFooter: config.noFooter,
       aIndex: -1,
-      modules: getModules()
+      modules: config.modules
     };
   },
   watch: {
