@@ -4,14 +4,13 @@ import filter from "./mixns/filter";
 import { infoTemplate } from "t/garden";
 
 export default {
-  moduleName: "garder",
-  layerId: "garder",
+  moduleName: "uva",
+  layerId: "uva",
   mixins: [mix, filter],
   data() {
     return {
       field: "name",
       filterField: ["name"],
-      placeholder: "请输入编码",
       infoTemplate
     };
   },

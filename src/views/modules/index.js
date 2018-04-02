@@ -40,6 +40,12 @@ const modules = [{
   title: "园林绿化",
   img: "./static/img/tree40.png",
   module: () => import ('./garden.vue')
+},
+{
+  id: "uva",
+  title: "无人机监控",
+  img: "./static/img/uva_40.png",
+  module: () => import ('./uva.vue')
 }];
 
 const defaultConfig = [
