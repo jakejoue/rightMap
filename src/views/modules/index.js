@@ -34,11 +34,26 @@ const modules = [{
   title: "智能部件",
   img: "./static/img/bujian.png",
   module: () => import ('./comp.vue')
+},
+{
+  id: "garden",
+  title: "园林绿化",
+  img: "./static/img/tree40.png",
+  module: () => import ('./garden.vue')
 }];
+
+const defaultConfig = [
+  "search",
+  "observer",
+  "vehicle",
+  "monitor",
+  "zone",
+  "comp"
+];
 
 export default () => {
   const params = location.search.slice(1);
-  const config = params ? params.split(',') : [];
+  const config = params ? params.split(',') : defaultConfig;
   if (config.length) {
     return modules.filter(e => config.includes(e.id));
   } else {
