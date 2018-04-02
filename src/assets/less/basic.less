@@ -1,33 +1,20 @@
 @path: '~assets/img';
 
 // ()可以避免作为css类显示
-.reset {
+.reset() {
     margin: 0;
     padding: 0;
     border: 0;
 }
 
-.full {
+.full() {
     .reset;
     height: 100%;
     width: 100%;
 }
 
-.abs {
+.abs() {
     position: absolute;
-}
-
-.loading {
-    animation: ani-demo-spin 1s linear infinite;
-    @keyframes ani-demo-spin {
-        from { transform: rotate(0deg);}
-        50%  { transform: rotate(180deg);}
-        to   { transform: rotate(360deg);}
-    }
-}
-
-.unselectable {
-    user-select: none;
 }
 
 // 对齐

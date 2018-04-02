@@ -176,3 +176,28 @@
         background-image: url('@{path}/locate_select_30.png');
     }
 }
+
+// 其他样式
+.loading {
+    animation: ani-demo-spin 1s linear infinite;
+    @keyframes ani-demo-spin {
+        from { transform: rotate(0deg);}
+        50%  { transform: rotate(180deg);}
+        to   { transform: rotate(360deg);}
+    }
+}
+
+.unselectable {
+    user-select: none;
+}
+.reset {
+    .reset();
+}
+
+.full {
+    .full();
+}
+
+.abs {
+    .abs();
+}
