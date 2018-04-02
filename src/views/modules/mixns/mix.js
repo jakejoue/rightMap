@@ -3,7 +3,6 @@ import cResult from "c/Result";
 import cSearch from "c/Search";
 import cTree from "c/Tree";
 import { Select, Option } from 'iview';
-import { isNumber } from "util";
 
 /**
  * search 模块，包含search，reset方法，placeholder变量
@@ -64,7 +63,7 @@ export default {
   watch: {
     type: {
       handler(value) {
-        if (this.refresh && isNumber(value)) {
+        if (this.refresh && value) {
           clearInterval(this.refresh);
           setInterval(this.refresh, parseInt(value) * 1000);
         }

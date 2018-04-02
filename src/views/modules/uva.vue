@@ -11,7 +11,16 @@ export default {
     return {
       field: "name",
       filterField: ["name"],
-      infoTemplate
+      infoTemplate,
+      typeLabel: "刷新间隔",
+      type: "30",
+      typeList: [
+        { value: "30", label: "30秒" },
+        { value: "10", label: "10秒" },
+        { value: "15", label: "15秒" },
+        { value: "60", label: "60秒" },
+        { value: "300", label: "300秒" }
+      ]
     };
   },
   methods: {
