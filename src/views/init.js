@@ -134,7 +134,7 @@ function initMapEvent(map) {
     event.$emit("infoWindow/show", graphic);
     if (graphic.getGeometry().getType() == 'point') {
       const id = graphic.getLayer().getId();
-      offset = configData.infoTOffset[id] || [0, 0];
+      offset = configData.infoTOffset[id] || graphic.getAttribute('offset') || [0, 0];
     }
     evt.target.setOffset(offset);
   });

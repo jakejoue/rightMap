@@ -69,7 +69,8 @@ global.interface = new Vue({
               "Location": results.location,
               "CellGridCode": results.cellgridcode,
               "WorkGridCode": results.workgridcode,
-              "Content": results.note
+              "Content": results.note,
+              "offset": [-1, -35]
             },
             infoTemplate
           });
