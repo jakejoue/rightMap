@@ -78,8 +78,8 @@ export default {
       });
       this.wmsLayer.setVisible(!!layers.length);
       layers.length
-        ? event.$on("singleClick", this.clickHandler)
-        : event.$off("singleClick", this.clickHandler);
+        ? eventBus.$on("singleClick", this.clickHandler)
+        : eventBus.$off("singleClick", this.clickHandler);
     },
     // 单击地图查询元素事件
     async clickHandler({ coordinate }) {
@@ -125,7 +125,7 @@ export default {
         })
       )
     }));
-    event.$on("clearAll", () => {
+    eventBus.$on("clearAll", () => {
       this.layer.clear();
     });
   }

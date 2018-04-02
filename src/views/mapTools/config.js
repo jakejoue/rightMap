@@ -13,7 +13,7 @@ const config = [{
   handler({ target }) {
     target.active = -1;
     map.getGraphics().clear();
-    event.$emit("clearAll")
+    eventBus.$emit("clearAll")
   }
 },
 {
@@ -51,7 +51,7 @@ const config = [{
   title: '显示街景',
   img: resolve('street_view_16'),
   handler({ target }) {
-    event.$emit("streetView/show");
+    eventBus.$emit("streetView/show");
     target.active = -1;
   }
 },

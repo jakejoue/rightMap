@@ -96,7 +96,7 @@ export default {
     }
   },
   mounted() {
-    event.$on("resize", height => {
+    eventBus.$on("resize", height => {
       this.height = 100 - height;
       this.$nextTick(function() {
         this.map.updateSize();

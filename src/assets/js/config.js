@@ -100,6 +100,6 @@ Vue.prototype.loading = function(flag = false, html = 'Loading') {
 // infoWindow/show(graphic) 窗体打开前事件
 // streetView/show(coord) 打开街景
 // interface/*(...params) 接口相关事件
-global.event = new Vue({
+global.eventBus = new Vue({
   name: "eventBus"
 });

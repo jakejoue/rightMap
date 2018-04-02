@@ -130,7 +130,7 @@ function initMapEvent(map) {
     }
     // 设置窗体偏移
     const graphic = evt.target.getSelectedFeature();
-    event.$emit("infoWindow/show", graphic);
+    eventBus.$emit("infoWindow/show", graphic);
     if (graphic.getGeometry().getType() == 'point') {
       const id = graphic.getLayer().getId();
       const offset = configData.infoTOffset[id] || graphic.getAttribute('offset');
@@ -152,7 +152,7 @@ function onMapSingleClick(e) {
       centerShow({ graphic, layer, center: false });
     }
   });
-  event.$emit('singleClick', e);
+  eventBus.$emit('singleClick', e);
 };
 // 配置项请求，地图初始化
 async function init() {

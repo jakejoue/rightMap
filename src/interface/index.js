@@ -11,7 +11,7 @@ global.interface = new Vue({
     ...mapMutations(['addLayer']),
     // 地图打点相关
     doMark() {
-      event.$emit("interface/doMark")
+      eventBus.$emit("interface/doMark")
     },
     getMapResult() {
       const graphic = getGraphicsByName("MapLocating", "resultID")[0];
@@ -24,10 +24,10 @@ global.interface = new Vue({
     },
     // 播放街景
     playStreetmap(coord) {
-      event.$emit('streetView/show', coord);
+      eventBus.$emit('streetView/show', coord);
     },
     moveCar(lon, lat, yaw) {
-      event.$emit('streetView/moveCar', lon, lat, yaw);
+      eventBus.$emit('streetView/moveCar', lon, lat, yaw);
     },
     // 定位采集员
     locateObserver(observerJson) {

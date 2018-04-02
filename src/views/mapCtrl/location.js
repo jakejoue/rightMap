@@ -26,6 +26,6 @@ function location() {
   }, "单击地图进行定位");
 };
 
-event.$on("interface/doMark", location);
+eventBus.$on("interface/doMark", location);
 
 export default location;

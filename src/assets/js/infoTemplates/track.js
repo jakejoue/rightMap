@@ -1,7 +1,7 @@
 import store from 'store/';
 
 // 窗体打开前事件
-event.$on("infoWindow/show", graphic => {
+eventBus.$on("infoWindow/show", graphic => {
   initTime();
 });
 

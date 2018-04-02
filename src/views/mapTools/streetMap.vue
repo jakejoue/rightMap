@@ -31,7 +31,7 @@ export default {
       let height = 0;
       this.show_ && (height = 50);
       this.expand && (height = 100);
-      event.$emit("resize", height);
+      eventBus.$emit("resize", height);
     }
   },
   watch: {
@@ -44,7 +44,7 @@ export default {
   },
   mounted() {
     map.addGraphicsLayer(this.layer);
-    event.$on("streetView/show", coordinate => {
+    eventBus.$on("streetView/show", coordinate => {
       this.layer.clear();
       coordinate = coordinate || map.getCenter();
       const { graphic } = newGraphic({
@@ -78,7 +78,7 @@ export default {
       });
       this.show_ = true;
     });
-    event.$on("streetView/moveCar", (lon, lat, yaw) => {
+    eventBus.$on("streetView/moveCar", (lon, lat, yaw) => {
       query.project2map(lon, lat).then(result => {
         const coord = [result.x, result.y];
         let graphic = getGraphicsByName(
