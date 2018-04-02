@@ -1,6 +1,7 @@
 <script>
 import mix from "./mixns/mix";
 import filter from "./mixns/filter";
+import { infoTemplate } from "t/garden";
 
 export default {
   moduleName: "garder",
@@ -10,7 +11,8 @@ export default {
     return {
       field: "name",
       filterField: ["name"],
-      placeholder: "请输入编码"
+      placeholder: "请输入编码",
+      infoTemplate
     };
   },
   methods: {
