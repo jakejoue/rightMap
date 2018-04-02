@@ -19,4 +19,4 @@ global.root = new Vue({
   // router
 })
 
-import './interface'
+import ('./interface')
