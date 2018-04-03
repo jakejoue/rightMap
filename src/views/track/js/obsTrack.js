@@ -110,6 +110,10 @@ class obsTrack extends Track {
     //合并和重复点删除
     this.path = [].concat(...this.path);
     this.path = simplyPath(this.path, { x: 'longitude', y: 'latitude' });
+    if (!this.path.length) {
+      this.error("未查询到轨迹数据");
+      return;
+    }
     //遍历出需要的属性
     this.path = this.path.map(ele => {
       let timeStr = "";

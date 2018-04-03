@@ -169,6 +169,13 @@ class Track {
 function simplyPath(path = null, { x = 'x', y = 'y', em = 0 }) {
   if (!path) return path;
 
+  path = path.filter(e => {
+    return !KMap.Extent.contains(configData.extent, [e[x], e[y]]);
+  });
+  if (path.length < 5) {
+    return path;
+  };
+
   var startIdx = 0;
   var endIdx = path.length - 1;
 
