@@ -41,7 +41,7 @@ Axios.defaults.transformRequest = [function(data, headers) {
 global.axios = Axios
 
 // 引入全局方法
-import './golbal'
+import './global'
 
 Vue.component('Icon', Icon)
 Vue.component('i-Input', Input)

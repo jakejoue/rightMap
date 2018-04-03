@@ -12,10 +12,10 @@ const ehourInput = "<input type='text' class='timeSet hourSet endTime' onblur=ti
 const eminuteInput = "<input type='text' class='timeSet minuteSet endTime' onblur=timePickerFunc(3,1)>";
 
 const content = "<ul InfoTag class='track hidden'>" +
-  "<li interval='oneHour' class='button' onclick='global.tf.playTrack(this, ${type})' >回放最近一小时</li>" +
-  "<li interval='today' class='button' onclick='global.tf.playTrack(this, ${type})' >回放今天所有时段</li>" +
-  "<li interval='yestoday' class='button' onclick='global.tf.playTrack(this, ${type})' >回放昨天所有时段</li>" +
-  "<li interval='custom' class='custom button' onclick='global.tf.playTrack(this, ${type})' >回放自定义时间</li>" +
+  "<li interval='oneHour' class='button' onclick='tf.playTrack(this, ${type})' >回放最近一小时</li>" +
+  "<li interval='today' class='button' onclick='tf.playTrack(this, ${type})' >回放今天所有时段</li>" +
+  "<li interval='yestoday' class='button' onclick='tf.playTrack(this, ${type})' >回放昨天所有时段</li>" +
+  "<li interval='custom' class='custom button' onclick='tf.playTrack(this, ${type})' >回放自定义时间</li>" +
   "<li>开始时间：<input class='Wdate beginTime' type='text' onblur='timePickerFunc(4)' onfocus=\"" + wdateClick + "\"/>" + "&nbsp;&nbsp;" + shourInput + "&nbsp;&nbsp;" + sminuteInput + "</li>" +
   "<li>结束时间：<input class='Wdate endTime' type='text' onblur='timePickerFunc(5)' onfocus=\"" + wdateClick + "\"/>" + "&nbsp;&nbsp;" + ehourInput + "&nbsp;&nbsp;" + eminuteInput + "</li>" +
   "</ul>";
