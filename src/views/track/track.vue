@@ -1,6 +1,6 @@
 //轨迹播放操作窗口
 <template>
-  <c-drag className="ctrack" :show="inerShow">
+  <c-drag className="ctrack" :show="inerShow" :top="50" :left="left">
     <p class="title" slot="title">
       {{ targetName }}
       <big @click.stop="$store.commit('track/close')" class="close">×</big>
@@ -87,6 +87,7 @@ export default {
   components: { cDrag, cSliderBar },
   data() {
     return {
+      left: $('body').width() - 460,
       inerShow: false,
       targetName: "",
       play: false, //是否播放

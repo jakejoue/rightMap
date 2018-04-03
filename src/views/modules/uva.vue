@@ -1,7 +1,7 @@
 <script>
 import mix from "./mixns/mix";
 import filter from "./mixns/filter";
-import { infoTemplate } from "t/garden";
+import { infoTemplate } from "t/uva";
 
 export default {
   moduleName: "uva",
