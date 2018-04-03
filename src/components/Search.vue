@@ -51,8 +51,6 @@ export default {
   }
 };
 </script>
-};
-</script>
 
 <style lang="less">
 .c-search {
