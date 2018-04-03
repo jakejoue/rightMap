@@ -102,12 +102,12 @@ class carTrack extends Track {
       this.path = [];
       this.attr = [];
       do {
-        start++;
         let results = await this.server.findTrackLogsWithParamsJson(config, start, 800).catch(err => {
           this.error();
           throw err;
         });
         this.path[results['currentPage']] = results.rows;
+        start++;
       } while (start * 800 < count);
       this.collectTrack();
     }

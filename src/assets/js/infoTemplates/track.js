@@ -38,7 +38,7 @@ global.tf.playTrack = function playTrack(item, type) {
       return;
     }
     if (timeSet.sDate !== timeSet.eDate) {
-      root.$Message.warning("暂时只支持查询同一天的车辆历史轨迹");
+      root.$Message.warning("暂时只支持查询同一天的历史轨迹");
       return;
     }
   } else {
