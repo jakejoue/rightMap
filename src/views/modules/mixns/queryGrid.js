@@ -1,3 +1,4 @@
+// 查询网格
 async function queryGrid(type, value) {
   switch (type) {
     case "兴趣点":
@@ -36,4 +37,30 @@ async function queryGrid(type, value) {
   }
 }
 
-export default queryGrid;
+// 将查询结果添加到地图上（区域查询结果专用）
+function addZoneToMap(results) {
+  clearGraphicsByName('extent');
+  if (results && results.items && results.items.length > 0) {
+    let graphic, geometry, result;
+    let graphics = [];
+    for (var i = 0; i < results.items.length; i++) {
+      result = results.items[i];
+      geometry = KMap.Geometry.fromWKT(result.geo);
+      graphic = new KMap.Graphic();
+      graphic.setId("extent" + i);
+      graphic.setGeometry(geometry);
+      graphic.setAttributes({
+        Name: "extent",
+        Code: result.code,
+        Type: result.type
+      });
+      graphic.setSymbol(MULTIPOLYGON);
+      graphics.push(graphic);
+    }
+    map.getGraphics().addAll(graphics);
+
+    centerShow({ graphic });
+  }
+}
+
+export { queryGrid, addZoneToMap };

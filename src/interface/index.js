@@ -41,7 +41,7 @@ global.interface = new Vue({
     },
     // 案件定位
     async locateEvent(eventInfos) {
-      clearGraphicsByName('caseEvent');
+      clearGraphicsByName('event');
       const { infoTemplate } = require('t/case.js');
 
       eventInfos = JSON.parse(eventInfos);
@@ -62,7 +62,7 @@ global.interface = new Vue({
               src: "./static/img/caseSymbol_1.png"
             }),
             attr: {
-              "Name": "caseEvent",
+              "Name": "event",
               "Id": Id,
               "Title": Title,
               "EventClassName": results.eventclassname,
@@ -79,6 +79,35 @@ global.interface = new Vue({
         }
         graphics.length && centerShow({ graphic: graphics[0] });
       }
+    },
+    // 查询区域
+    queryRegion(type, key, value) {
+      clearGraphicsByName('extent');
+      type = String(type);
+      key = String(key);
+      value = String(value);
+      if (key === '0') {
+        map.zoomToFullExtent();
+        return;
+      }
+      const march = configData.infoTemplateSet.filter(e => {
+        return e.hasOwnProperty(type) && e[type] == key;
+      });
+      if (march.length) {
+        const { addZoneToMap } = require("../views/modules/mixns/queryGrid");
+        const sType = march[0].type;
+        query.queryGrid(value, sType, 0, 100).then(results => {
+          addZoneToMap(results);
+        })
+      }
+    },
+    // 根据图层类型和要素编码查询区域
+    queryRegionByCode(type, code) {
+      this.queryRegion('type', type, code);
+    },
+    // 根据图层类型和要素名称查询区域
+    queryRegionByName(type, name) {
+      this.queryRegion('type', type, name);
     }
   }
 })

@@ -130,7 +130,6 @@ function initMapEvent(map) {
     }
     // 设置窗体偏移
     const graphic = evt.target.getSelectedFeature();
-    eventBus.$emit("infoWindow/show", graphic);
     if (graphic.getGeometry().getType() == 'point') {
       const id = graphic.getLayer().getId();
       const offset = configData.infoTOffset[id] || graphic.getAttribute('offset');

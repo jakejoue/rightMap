@@ -1,7 +1,7 @@
 <script>
 import getInfoTemplateByType from "t/search";
 import mix from "./mixns/mix";
-import queryGrid from "./mixns/queryGrid";
+import { queryGrid } from "./mixns/queryGrid";
 
 //样式(兴趣点，线，面样式，线面放到全局使用)
 const POINT = new KMap.PictureMarkerSymbol({

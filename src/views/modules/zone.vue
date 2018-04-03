@@ -2,7 +2,7 @@
 import mix from "./mixns/mix";
 import filter from "./mixns/filter";
 import transform from "./mixns/transform";
-import queryGrid from "./mixns/queryGrid";
+import { queryGrid, addZoneToMap } from "./mixns/queryGrid";
 
 export default {
   moduleName: "zone",
@@ -20,36 +20,13 @@ export default {
     treeClick({ name: value, layerName: type }) {
       clearGraphicsByName("extent");
       queryGrid(type, value)
-        .then(this.showQueryTaskResults)
+        .then(addZoneToMap)
         .catch(err => {
           this.loading(false);
           console.log(err);
           this.data = [];
           this.$Message.error("服务器故障无法完成查询");
         });
-    },
-    showQueryTaskResults(results) {
-      if (results && results.items && results.items.length > 0) {
-        let graphic, geometry, result;
-        let graphics = [];
-        for (var i = 0; i < results.items.length; i++) {
-          result = results.items[i];
-          geometry = KMap.Geometry.fromWKT(result.geo);
-          graphic = new KMap.Graphic();
-          graphic.setId("extent" + i);
-          graphic.setGeometry(geometry);
-          graphic.setAttributes({
-            Name: "extent",
-            Code: result.code,
-            Type: result.type
-          });
-          graphic.setSymbol(MULTIPOLYGON);
-          graphics.push(graphic);
-        }
-        map.getGraphics().addAll(graphics);
-
-        centerShow({ graphic });
-      }
     },
     select({ target }) {
       this.treeClick(target);
