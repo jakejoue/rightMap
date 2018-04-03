@@ -248,7 +248,7 @@ function simplyPath(path = null, { x = 'x', y = 'y', em = 0 }) {
  * @param {String} timeFieldName 
  * @param {Number} tdis 
  */
-function getGuseePath(pointPath, timeArray, timeFieldName = 'time', tdis = 60) {
+function getGuseePath(pointPath, timeArray, timeFieldName = 'time', tdis = 120) {
   var guessTrack = []; //所有path
   var sP = null, //path开始点
     eP = null, //path结束点
