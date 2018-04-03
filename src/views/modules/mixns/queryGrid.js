@@ -1,4 +1,4 @@
-async function query_(type, value) {
+async function queryGrid(type, value) {
   switch (type) {
     case "兴趣点":
       return query.queryPoint(value, 0, 1000).then(data => {
@@ -36,17 +36,4 @@ async function query_(type, value) {
   }
 }
 
-// 网格查询共用方法
-export default {
-  methods: {
-    queryGrid(type, value) {
-      query_(type, value).then(this.showQueryTaskResults).catch(this.queryTaskErrorResults);
-    },
-    queryTaskErrorResults(err) {
-      this.loading(false);
-      console.log(err);
-      this.data = [];
-      this.$Message.error("服务器故障无法完成查询");
-    }
-  }
-};
+export default queryGrid;

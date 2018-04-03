@@ -6,7 +6,7 @@ import queryGrid from "./mixns/queryGrid";
 
 export default {
   moduleName: "zone",
-  mixins: [mix, queryGrid, filter],
+  mixins: [mix, filter],
   data() {
     return {
       field: "name",
@@ -19,7 +19,14 @@ export default {
     },
     treeClick({ name: value, layerName: type }) {
       clearGraphicsByName("extent");
-      this.queryGrid(type, value);
+      queryGrid(type, value)
+        .then(this.showQueryTaskResults)
+        .catch(err => {
+          this.loading(false);
+          console.log(err);
+          this.data = [];
+          this.$Message.error("服务器故障无法完成查询");
+        });
     },
     showQueryTaskResults(results) {
       if (results && results.items && results.items.length > 0) {

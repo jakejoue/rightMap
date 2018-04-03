@@ -67,7 +67,7 @@ const configs = {
 export default {
   moduleName: "search",
   layerId: "search",
-  mixins: [mix, queryGrid],
+  mixins: [mix],
   data() {
     return {
       tip: "使用上面的查询框，根据名称来查询要素。",
@@ -86,7 +86,7 @@ export default {
       showTotal: true,
       hasTree: false,
       config: {},
-      resultClass: 'search'
+      resultClass: "search"
     };
   },
   methods: {
@@ -102,7 +102,14 @@ export default {
     },
     search(value) {
       this.loading(true, "正在查询...");
-      this.queryGrid(this.type, value);
+      queryGrid(this.type, value)
+        .then(this.showQueryTaskResults)
+        .catch(err => {
+          this.loading(false);
+          console.log(err);
+          this.data = [];
+          this.$Message.error("服务器故障无法完成查询");
+        });
     },
     reset() {
       this.layer.clear();
