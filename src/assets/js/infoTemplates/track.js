@@ -28,6 +28,10 @@ function getContent(type) {
 
 // 点击
 global.tf.playTrack = function playTrack(item, type) {
+  if (!['observer', 'car'].includes(type)) {
+    root.$Message.info("暂不支持选中类别的轨迹播放");
+    return;
+  }
   $(item).addClass("selected").siblings().removeClass("selected");
   var mode = $(item).attr("interval");
   var timeSet = {};
