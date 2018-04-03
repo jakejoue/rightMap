@@ -1,6 +1,7 @@
 import Vue from "vue";
 import store from "store";
 import { mapMutations, mapActions } from "vuex";
+import { isString } from "util";
 
 // 对外接口
 global.interface = new Vue({
@@ -108,6 +109,36 @@ global.interface = new Vue({
     // 根据图层类型和要素名称查询区域
     queryRegionByName(type, name) {
       this.queryRegion('type', type, name);
+    },
+    // 绘制用户绘制的越界报警边界
+    drawCustomFence(polygonJson) {
+      if (!(isString(polygonJson) && polygonJson.trim().length)) {
+        return;
+      }
+      var ringStr = polygonJson.replace(new RegExp(";", "ig"), "],[");
+      ringStr = "[[[" + ringStr + "]]]";
+      try {
+        var pathArray = JSON.parse(ringStr);
+        const { graphic } = newGraphic({
+          type: "POLYGON",
+          coord: pathArray,
+          attr: {
+            "Name": "extent"
+          },
+          symbol: KMap.SimpleFillSymbol({
+            stroke: new KMap.SimpleLineSymbol({
+              stroke: [255, 0, 0, 1],
+              width: 2
+            }),
+            fill: [0, 0, 0, 0.2]
+          })
+        });
+        map.getGraphics().add(graphic);
+        map.zoomByExtent(polygon.getExtent());
+      }
+      catch (ex) {
+        console.log(ex);
+      }
     }
   }
 })

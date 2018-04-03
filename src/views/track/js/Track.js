@@ -292,7 +292,6 @@ function getGuseePath(pointPath, timeArray, timeFieldName = 'time', tdis = 60) {
   if (guessTrack.length > 1) {
     var guessLine = new KMap.Polyline();
     guessTrack.forEach(function(path) {
-      console.log(path);
       guessLine.addPath(path);
     });
     guessGraphic.setGeometry(guessLine);

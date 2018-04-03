@@ -97,6 +97,7 @@ Vue.prototype.loading = function(flag = false, html = 'Loading') {
 // singleClick(e) 地图单击事件
 // resize(height) 地图窗口变更事件(height是街景的百分百高度)
 // clearAll() 右上角的清楚按钮的事件
+// infoWindow/show(graphic) 窗体打开前事件
 // streetView/show(coord) 打开街景
 // interface/*(...params) 接口相关事件
 global.eventBus = new Vue({
