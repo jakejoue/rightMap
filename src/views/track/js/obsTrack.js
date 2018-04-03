@@ -1,4 +1,4 @@
-import { Track, simplyPath } from './Track'
+import { Track, simplyPath, getGuseePath } from './Track'
 
 class obsTrack extends Track {
   constructor({
@@ -172,6 +172,15 @@ class obsTrack extends Track {
         width: 4
       })
     }, this.callBack));
+    const guessG = getGuseePath(path[0], this.attr);
+    guessG.setSymbol(
+      new KMap.SimpleLineSymbol({
+        stroke: [0, 255, 0],
+        width: 3,
+        lineDash: [18, 10]
+      })
+    );
+    this.layer.add(guessG);
     this.initSuccess(this);
   };
 };

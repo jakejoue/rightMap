@@ -1,4 +1,4 @@
-import { Track, simplyPath } from './Track'
+import { Track, simplyPath, getGuseePath } from './Track'
 
 class carTrack extends Track {
   constructor({
@@ -190,6 +190,15 @@ class carTrack extends Track {
         width: 5
       })
     }, this.callBack));
+    const guessG = getGuseePath(path[0], this.attr);
+    guessG.setSymbol(
+      new KMap.SimpleLineSymbol({
+        stroke: [0, 255, 0],
+        width: 5,
+        lineDash: [18, 10]
+      })
+    );
+    this.layer.add(guessG);
     this.initSuccess(this);
   };
   updateAttr() {

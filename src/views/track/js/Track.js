@@ -168,7 +168,7 @@ class Track {
  */
 function simplyPath(path = null, { x = 'x', y = 'y', em = 0 }) {
   if (!path) return path;
-
+  // 去除不在图幅范围内的点
   path = path.filter(e => {
     return !KMap.Extent.contains(configData.extent, [e[x], e[y]]);
   });
@@ -241,4 +241,62 @@ function simplyPath(path = null, { x = 'x', y = 'y', em = 0 }) {
   return line;
 };
 
-export { Track, simplyPath };
+/**
+ * 获取虚线路径
+ * @param {Array.<KMap.Point>} pointPath 
+ * @param {Array.<String>} timeArray
+ * @param {String} timeFieldName 
+ * @param {Number} tdis 
+ */
+function getGuseePath(pointPath, timeArray, timeFieldName = 'time', tdis = 60) {
+  var guessTrack = []; //所有path
+  var sP = null, //path开始点
+    eP = null, //path结束点
+    p1 = null,
+    p2 = null,
+    dis = null;
+  for (var i = 0; i < timeArray.length - 1; i++) {
+    p1 = timeArray[i][timeFieldName];
+    p2 = timeArray[i + 1][timeFieldName];
+    if (!p1 || !p2) {
+      continue;
+    }
+    if (sP == null) {
+      sP = i;
+    }
+    dis = (new Date(p2) - new Date(p1)) / 1000;
+    //判断终点
+    if (dis <= 0) {
+      continue
+    } else if (dis > tdis) {
+      eP = i + 1;
+      guessTrack.push([sP, eP]);
+      sP = i + 1;
+      eP = null;
+      continue;
+    } else {
+      sP = i + 1;
+      continue;
+    }
+  };
+  guessTrack = guessTrack.map(function(e) {
+    var start = e[0];
+    var end = e[1];
+    var path = [];
+    for (var i = start; i <= end; i++) {
+      path.push(pointPath[i]);
+    }
+    return path;
+  });
+  var guessGraphic = new KMap.Graphic();
+  if (guessTrack.length > 1) {
+    var guessLine = new KMap.Polyline();
+    guessTrack.forEach(function(path) {
+      console.log(path);
+      guessLine.addPath(path);
+    });
+    guessGraphic.setGeometry(guessLine);
+  }
+  return guessGraphic;
+};
+export { Track, simplyPath, getGuseePath };
