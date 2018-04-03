@@ -17,7 +17,7 @@ class Track {
     stop = () => {},
     defaultSpeed = 2,
     coordType = 0, //地理坐标系
-    zoomLevel = 4 //播放时缩放级别
+    zoomLevel = (configData.maxZoom - 2) //播放时缩放级别
   }) {
     this.map = map;
     this.layer = layer;
