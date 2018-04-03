@@ -78,17 +78,17 @@ export default {
             icon: `./static/img/uva25_${attr.isOnline ? "on" : "off"}.png`
           });
         }
+        this.treeData = [
+          {
+            name: `在线(${online.length})`,
+            children: online
+          },
+          {
+            name: `离线(${offline.length})`,
+            children: offline
+          }
+        ];
       });
-      this.treeData = [
-        {
-          name: `在线(${online.length})`,
-          children: online
-        },
-        {
-          name: `离线(${offline.length})`,
-          children: offline
-        }
-      ];
     }
   }
 };
