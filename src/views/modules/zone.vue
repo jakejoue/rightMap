@@ -1,7 +1,7 @@
 <script>
 import mix from "./mixns/mix";
 import filter from "./mixns/filter";
-import transform from "./mixns/transform";
+import getTreeJson from "./mixns/getTreeJson";
 import { queryGrid, addZoneToMap } from "./mixns/queryGrid";
 
 export default {
@@ -34,7 +34,7 @@ export default {
   },
   mounted() {
     this.filterData = configData.districtTree;
-    this.treeData = transform(configData.districtTree);
+    this.treeData = getTreeJson(configData.districtTree);
   }
 };
 </script>
