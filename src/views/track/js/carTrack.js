@@ -113,7 +113,7 @@ class carTrack extends Track {
     }
   };
   //获取轨迹数据
-  collectTrack(start, pageSize, opts) {
+  collectTrack() {
     //合并和重复点删除
     this.path = [].concat(...this.path);
     this.path = simplyPath(this.path, { x: 'longitude', y: 'latitude' });
