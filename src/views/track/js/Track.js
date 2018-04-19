@@ -170,7 +170,7 @@ function simplyPath(path = null, { x = 'x', y = 'y', em = 0 }) {
   if (!path) return path;
   // 去除不在图幅范围内的点
   path = path.filter(e => {
-    return !KMap.Extent.contains(configData.extent, [e[x], e[y]]);
+    return KMap.Extent.contains(configData.extent, [e[x], e[y]]);
   });
   if (path.length < 5) {
     return path;
@@ -289,7 +289,7 @@ function getGuseePath(pointPath, timeArray, timeFieldName = 'time', tdis = 120) 
     return path;
   });
   var guessGraphic = new KMap.Graphic();
-  if (guessTrack.length > 1) {
+  if (guessTrack.length > 0) {
     var guessLine = new KMap.Polyline();
     guessTrack.forEach(function(path) {
       guessLine.addPath(path);
