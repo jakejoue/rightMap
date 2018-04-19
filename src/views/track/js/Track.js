@@ -244,7 +244,7 @@ function simplyPath(path = null, { x = 'x', y = 'y', em = 0 }) {
 /**
  * 获取虚线路径
  * @param {Array.<KMap.Point>} pointPath 
- * @param {Array.<String>} timeArray
+ * @param {Array.<any>} timeArray
  * @param {String} timeFieldName 
  * @param {Number} tdis 
  */
