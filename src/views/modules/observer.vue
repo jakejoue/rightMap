@@ -25,8 +25,8 @@ export default {
         { value: "30", label: "30秒" },
         { value: "10", label: "10秒" },
         { value: "15", label: "15秒" },
-        { value: "60", label: "60秒" },
-        { value: "300", label: "300秒" }
+        { value: "60", label: "1分钟" },
+        { value: "300", label: "5分钟" }
       ],
       field: "name",
       filterField: ["name"],
