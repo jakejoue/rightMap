@@ -44,7 +44,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-section#layres {
+#layres {
   width: 140px;
   header {
     text-align: center;
