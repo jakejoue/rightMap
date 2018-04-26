@@ -94,9 +94,9 @@ async function initMap(configData) {
     const map = new KMap.Map('mapTarget', config);
     map.setFullExtent(configData.extent);
     // 矢量地图
-    global.baseMap = creatBaseLayer('矢量', configData.baseMap);
+    var baseMap = creatBaseLayer('矢量', configData.baseMap);
     // 影像地图
-    global.imageMap = creatBaseLayer('影像', configData.imageMap, false);
+    var imageMap = creatBaseLayer('影像', configData.imageMap);
     map.addBaseLayer(baseMap);
     map.addBaseLayer(imageMap);
     initMapEvent(map);

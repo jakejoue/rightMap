@@ -15,17 +15,25 @@ export default {
         { img: "./static/img/cn_canvas.jpg", title: "矢量" },
         { img: "./static/img/tempimagery.jpg", title: "影像" }
       ],
-      active: 0
+      active: -1
     };
   },
   methods: {
     switchBaseMap(i) {
       if (this.active != i) {
         this.active = i;
-        baseMap.setVisible(this.active == 0);
-        imageMap.setVisible(this.active == 1);
+        var title = this.config[i].title;
+        map
+          .getBaseLayers()
+          .getLayers()
+          .forEach(layer => {
+            layer.setVisible(layer.getId() == title);
+          });
       }
     }
+  },
+  mounted() {
+    this.switchBaseMap(0);
   }
 };
 </script>
@@ -34,6 +42,7 @@ export default {
 @import "basic.less";
 
 div#mapBase {
+  width: 255px;
   padding: 0 2px;
   font-size: 13.6px;
   > span {
