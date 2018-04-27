@@ -2,7 +2,7 @@
 class Track {
   constructor(name = "") {
     this.name = name;
-  };
+  }
   //实际上的入口
   initTrack({
     map, //地图
@@ -57,13 +57,13 @@ class Track {
     };
     //地图缩放到默认级别和中心点
     this.map.centerAndZoom(path[0][0], this.zoomLevel);
-  };
+  }
   //播放
   play() {
     this.callBack_.play(this);
     this.contrail.start();
     this.update_();
-  };
+  }
   //更新
   update_() {
     if (this.contrail) {
@@ -89,12 +89,12 @@ class Track {
         this.pause();
       }
     }
-  };
+  }
   //暂停
   pause() {
     this.callBack_.pause(this);
     this.contrail.pause();
-  };
+  }
   //停止(对象销毁)
   stop() {
     this.callBack_.stop(this);
@@ -104,7 +104,7 @@ class Track {
     this.dyLine = null;
     this.layer.clear();
     this.map.removeGraphicsLayer(this.layer);
-  };
+  }
   /**
    * 播放方向（正方或者倒放）
    * 正方为true，倒放为false
@@ -113,15 +113,15 @@ class Track {
   setDirection(dir) {
     this.backWard = !dir;
     this.contrail.setBackword(this.backWard);
-  };
+  }
   //获取当前的前进方向(path的)
   getPathDirection() {
     return this.contrail.getDirection();
-  };
+  }
   //获取速度
   getSpeed() {
     return this.speed;
-  };
+  }
   /**
    * 设置速度
    * @param {number} speed 
@@ -135,31 +135,31 @@ class Track {
       this.speed = this.forWardSpeed = speed;
     }
     this.contrail.setSpeed(speed);
-  };
+  }
   //设置百分百
   setPercent(percent) {
     this.contrail.setPercent(percent);
-  };
+  }
   //获取百分百
   getPercent() {
     return this.contrail.getPercent();
-  };
+  }
   //获取当前基准点
   getCurPoint() {
     return this.contrail.getPosition();
-  };
+  }
   getCurIndex() {
     return this.contrail.getIndex();
-  };
+  }
   //滑动条操作回掉函数
   beforeSet() {
     this.pause();
-  };
+  }
   setProgress(value) {
     this.setPercent(value);
     this.play();
-  };
-};
+  }
+}
 
 /**
  * 线段抽稀
@@ -174,7 +174,7 @@ function simplyPath(path = null, { x = 'x', y = 'y', em = 0 }) {
   });
   if (path.length < 5) {
     return path;
-  };
+  }
 
   var startIdx = 0;
   var endIdx = path.length - 1;
@@ -230,7 +230,7 @@ function simplyPath(path = null, { x = 'x', y = 'y', em = 0 }) {
       stack.push([startIndex, index]);
       stack.push([index, endIndex]);
     }
-  };
+  }
   var line = [];
   path.forEach(function(e) {
     if (e['save']) {
@@ -239,7 +239,7 @@ function simplyPath(path = null, { x = 'x', y = 'y', em = 0 }) {
     }
   });
   return line;
-};
+}
 
 /**
  * 获取虚线路径
@@ -278,7 +278,7 @@ function getGuseePath(pointPath, timeArray, timeFieldName = 'time', tdis = 120) 
       sP = i + 1;
       continue;
     }
-  };
+  }
   guessTrack = guessTrack.map(function(e) {
     var start = e[0];
     var end = e[1];
@@ -297,5 +297,5 @@ function getGuseePath(pointPath, timeArray, timeFieldName = 'time', tdis = 120) 
     guessGraphic.setGeometry(guessLine);
   }
   return guessGraphic;
-};
+}
 export { Track, simplyPath, getGuseePath };

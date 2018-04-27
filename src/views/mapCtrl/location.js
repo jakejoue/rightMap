@@ -24,7 +24,7 @@ function location() {
       root.$Message.error("地图定位：请求服务器失败，请重新尝试。");
     });
   }, "单击地图进行定位");
-};
+}
 
 eventBus.$on("interface/doMark", location);
 

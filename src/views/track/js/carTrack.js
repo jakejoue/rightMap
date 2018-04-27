@@ -58,7 +58,7 @@ class carTrack extends Track {
     this.error = error;
     //正确初始化后函数
     this.initSuccess = initSuccess;
-  };
+  }
   /**
    * @api
    * @param {KMap.Graphic} car 
@@ -66,7 +66,7 @@ class carTrack extends Track {
   setTarget(car) {
     this.car = car;
     this.isEHome = car.getAttributes('ehome_flag');
-  };
+  }
   /**
    * @api
    * @param {string} sTime 
@@ -75,7 +75,7 @@ class carTrack extends Track {
   setTime(sTime, eTime) {
     this.sTime = sTime;
     this.eTime = eTime;
-  };
+  }
   /**
    * @api
    */
@@ -86,7 +86,7 @@ class carTrack extends Track {
       carId: this.car.getAttribute('id')
     };
     this.getTrackLength(config);
-  };
+  }
   //判断轨迹存在
   async getTrackLength(config) {
     let count = await this.server.findTrackLogLength(config).catch(err => {
@@ -111,7 +111,7 @@ class carTrack extends Track {
       } while (start * 800 < count);
       this.collectTrack();
     }
-  };
+  }
   //获取轨迹数据
   collectTrack() {
     //合并和重复点删除
@@ -149,7 +149,7 @@ class carTrack extends Track {
       return [x, y];
     });
     this.handleTrack([this.path]);
-  };
+  }
   //处理轨迹数据
   handleTrack(path) {
     this.map = map;
@@ -191,7 +191,7 @@ class carTrack extends Track {
       })
     }, this.callBack));
     this.initSuccess(this);
-  };
+  }
   updateAttr() {
     let acc, bLocate, alarmStr;
     const info = this.attr[this.getCurIndex()];
@@ -210,7 +210,7 @@ class carTrack extends Track {
       alarmStr = info.alarm + "/" + this.alarmSum;
     }
     return { time: info.time, acc, bLocate, alarmStr, directionStr, speedStr };
-  };
+  }
   /**
    * 显示滞留点
    * @param {number} timeLimit 
@@ -277,7 +277,7 @@ class carTrack extends Track {
         this.layer.add(gc);
       });
     }
-  };
+  }
   /**
    * 显示报警点
    * @param {boolen} show
@@ -324,7 +324,7 @@ class carTrack extends Track {
       });
     }
   }
-};
+}
 
 function getDirectionStr(dir) {
   var result = "";
@@ -347,7 +347,7 @@ function getDirectionStr(dir) {
     result = "正北";
   }
   return result;
-};
+}
 
 function getRetentionPointInfo() {
   var content =
@@ -359,7 +359,7 @@ function getRetentionPointInfo() {
   infoTemplate.setTitle("详细信息");
   infoTemplate.setContent(content);
   return infoTemplate;
-};
+}
 
 function getAlarmPointInfo() {
   const content = "<hr>" +
@@ -379,7 +379,7 @@ function getAlarmPointInfo() {
   infoTemplate.setTitle("详细信息");
   infoTemplate.setContent(content);
   return infoTemplate;
-};
+}
 
 function getAlarmType(colValue) {
   if (colValue == 1) {
@@ -413,6 +413,6 @@ function getAlarmType(colValue) {
   } else {
     return colValue = '其它';
   }
-};
+}
 
 export default carTrack;

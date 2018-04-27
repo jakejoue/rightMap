@@ -13,6 +13,6 @@ function getInfoTemplateByType(type) {
   infoTemplate.setTitle("${name}");
   infoTemplate.setContent(content);
   return infoTemplate;
-};
+}
 
 export default getInfoTemplateByType;

@@ -35,7 +35,7 @@ function parseUrlConfig(xml) {
     alert("配置文件未正确设置");
   }
   return webConfig;
-};
+}
 // 创建地图图层组
 function creatBaseLayer(id, layers, visible = true) {
   const layerGroup = new KMap.GroupLayer(id);
@@ -45,7 +45,7 @@ function creatBaseLayer(id, layers, visible = true) {
   }
   layerGroup.setVisible(visible);
   return layerGroup;
-};
+}
 // 初始化查询相关方法
 async function initServer(configData) {
   return new Promise((resolve, reject) => {
@@ -72,7 +72,7 @@ async function initServer(configData) {
 
     resolve({ query, action, gpsService, umservice });
   });
-};
+}
 // 初始化地图
 async function initMap(configData) {
   return new Promise((resolve, reject) => {
@@ -103,7 +103,7 @@ async function initMap(configData) {
     global.map = map;
     resolve(map);
   });
-};
+}
 //初始化地图对话框
 function initMapEvent(map) {
   const mapPopup = new KMap.Popup({
@@ -141,7 +141,7 @@ function initMapEvent(map) {
   map.addOverlay(mapPopup);
   // 地图点击绑定
   map.on('singleclick', onMapSingleClick, map);
-};
+}
 //地图单击事件
 function onMapSingleClick(e) {
   const map = this;
@@ -153,7 +153,7 @@ function onMapSingleClick(e) {
     }
   });
   eventBus.$emit('singleClick', e);
-};
+}
 // 配置项请求，地图初始化
 async function init() {
   // 请求配置文件

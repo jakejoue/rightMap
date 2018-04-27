@@ -73,7 +73,7 @@ function createLayer(layerProps) {
       });
   }
   throw "unknow layer type:" + layerProps.type;
-};
+}
 global.createLayer = createLayer;
 
 /**
@@ -115,8 +115,8 @@ function centerShow({
       map.infoWindow.setSelectedFeature(graphic);
       map.infoWindow.show(centerPoint);
     }
-  };
-};
+  }
+}
 global.centerShow = centerShow;
 
 
@@ -149,13 +149,13 @@ function newGraphic({
   symbol && graphic.setSymbol(symbol);
   infoTemplate && graphic.setInfoTemplate(infoTemplate);
   return { graphic, geometry, symbol };
-};
+}
 global.newGraphic = newGraphic;
 
 // 生成时间戳
 function timestamp() {
   return new Date().getTime();
-};
+}
 global.timestamp = timestamp;
 
 // 按照名称清除默认的绘画图层
@@ -167,7 +167,7 @@ function clearGraphicsByName(value, key = "Name", layer) {
       layer.remove(g);
     }
   });
-};
+}
 global.clearGraphicsByName = clearGraphicsByName;
 
 // 按照名称获取默认的绘画图层
@@ -181,5 +181,5 @@ function getGraphicsByName(value, key = "Name", layer) {
     }
   });
   return rets;
-};
+}
 global.getGraphicsByName = getGraphicsByName;

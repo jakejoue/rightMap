@@ -24,7 +24,7 @@ export default {
       state.show = false;
       state.type = "";
       state.time = null;
-      state.target = null;;
+      state.target = null;
     }
   }
 };

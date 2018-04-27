@@ -52,14 +52,14 @@ class obsTrack extends Track {
     this.error = error;
     //正确初始化后函数
     this.initSuccess = initSuccess;
-  };
+  }
   /**
    * @api
    * @param {KMap.Graphic} obs 
    */
   setTarget(obs) {
     this.obs = obs;
-  };
+  }
   /**
    * @api
    * @param {string} sTime 
@@ -68,7 +68,7 @@ class obsTrack extends Track {
   setTime(sTime, eTime) {
     this.sTime = sTime;
     this.eTime = eTime;
-  };
+  }
   /**
    * @api
    */
@@ -79,7 +79,7 @@ class obsTrack extends Track {
       obsId: this.obs.getAttribute('id')
     };
     this.getTrackLength(config);
-  };
+  }
   //判断轨迹存在
   async getTrackLength(config) {
     let count = await this.server.findObsTrackLogLength(config).catch(err => {
@@ -104,7 +104,7 @@ class obsTrack extends Track {
       } while (start * 800 < count);
       this.collectTrack();
     }
-  };
+  }
   //获取轨迹数据
   collectTrack() {
     //合并和重复点删除
@@ -131,7 +131,7 @@ class obsTrack extends Track {
       return [x, y];
     });
     this.handleTrack([this.path]);
-  };
+  }
   //处理轨迹数据
   handleTrack(path) {
     this.map = map;
@@ -182,7 +182,7 @@ class obsTrack extends Track {
     );
     this.layer.add(guessG);
     this.initSuccess(this);
-  };
-};
+  }
+}
 
 export default obsTrack;

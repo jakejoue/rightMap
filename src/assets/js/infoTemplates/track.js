@@ -24,7 +24,7 @@ const regx = /\$\{type\}/gi;
 
 function getContent(type) {
   return content.replace(regx, '"' + type + '"');
-};
+}
 
 // 点击
 global.tf.playTrack = function playTrack(item, type) {
