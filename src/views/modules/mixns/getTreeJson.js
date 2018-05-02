@@ -17,7 +17,7 @@ function hasChildren(node) {
       hasChildren(e);
     });
   }
-};
+}
 
 export default (params) => {
   // 避免影响元数据

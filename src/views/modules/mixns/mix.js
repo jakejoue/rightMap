@@ -29,7 +29,9 @@ export default {
   components: {
     cResult,
     cSearch,
-    cTree
+    cTree,
+    Select,
+    Option
   },
   data() {
     return {
