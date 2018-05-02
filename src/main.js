@@ -4,7 +4,6 @@
 import 'assets/js/config'
 import Vue from 'vue'
 import store from './store'
-// import router from './router'
 import App from './App'
 
 Vue.config.productionTip = false
@@ -15,8 +14,7 @@ global.root = new Vue({
   el: '#app',
   components: { App },
   template: '<App/>',
-  store,
-  // router
+  store
 })
 
 import ('./interface')
