@@ -52,7 +52,7 @@ function addZoneToMap(results) {
     }
     map.getGraphics().addAll(graphics);
 
-    centerShow({ graphic });
+    centerShow({ graphics });
   }
 }
 

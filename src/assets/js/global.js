@@ -1,3 +1,4 @@
+import { isArray } from 'util';
 // 弹出框事件
 global.tf = {}
 
@@ -81,14 +82,31 @@ global.createLayer = createLayer;
  */
 function centerShow({
   graphic,
+  graphics,
   layer,
   zoom = 14,
   center = true,
   show = true
 }) {
   map.infoWindow.hide();
-  const geom = graphic.getGeometry();
-  const extent = geom.getExtent();
+  let geom, extent;
+  if (graphics) {
+    graphics.forEach(g => {
+      geom = g.getGeometry();
+      const extent_ = geom.getExtent();
+      if (!extent) extent = extent_;
+      else {
+        extent[0] = extent[0] < extent_[0] ? extent[0] : extent_[0];
+        extent[1] = extent[1] < extent_[1] ? extent[1] : extent_[1];
+        extent[2] = extent[2] > extent_[2] ? extent[2] : extent_[2];
+        extent[3] = extent[3] > extent_[3] ? extent[3] : extent_[3];
+      }
+    });
+    graphic = graphics[0];
+  } else {
+    geom = graphic.getGeometry();
+    extent = geom.getExtent();
+  }
   let centerPoint, config = {};
   if (geom.getType() == "point") {
     centerPoint = geom.getCoordinates();
@@ -96,16 +114,14 @@ function centerShow({
   } else {
     centerPoint = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
   }
-  config = Object.assign({}, config, {
-    easing(n) {
-      n >= 1 && showInfo();
-      return n;
-    }
-  });
+  config.easing = function(n) {
+    n >= 1 && showInfo();
+    return n;
+  }
   center ? map.zoomByExtent(extent, config) : showInfo();
   // 显示infowindow
   function showInfo() {
-    if(!show) return;
+    if (!show) return;
     let template = graphic.getInfoTemplate();
     if (layer && !template) {
       template = layer.getInfoTemplate();
