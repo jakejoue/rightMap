@@ -1,4 +1,6 @@
-function location() {
+import { isFunction } from 'util';
+
+function location(callback, failed) {
   clearGraphicsByName("MapLocating", "resultID");
   mapTip.getLocation(({ coordinate }) => {
     const [x, y] = coordinate;
@@ -6,6 +8,7 @@ function location() {
       const markInfo = { x, y, location: results.address };
       if (!results["workgrid"]) {
         root.$Message.info("地图定位：没有定位到工作网格，请重新定位。");
+        isFunction(failed) && failed();
       } else {
         const { graphic } = newGraphic({
           coord: [x, y],
@@ -18,10 +21,11 @@ function location() {
         });
         if (!getGraphicsByName("MapLocating", "resultID").length) {
           map.getGraphics().add(graphic);
+          isFunction(callback) && callback();
         }
       }
     }).catch(e => {
-      root.$Message.error("地图定位：请求服务器失败，请重新尝试。");
+      root.$Message.error("地图定位：请求服务器失败，请稍后重新尝试");
     });
   }, "单击地图进行定位");
 }

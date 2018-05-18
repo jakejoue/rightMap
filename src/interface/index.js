@@ -11,8 +11,8 @@ global.interface = new Vue({
     ...mapActions(['getLayer']),
     ...mapMutations(['addLayer']),
     // 地图打点相关
-    doMark() {
-      eventBus.$emit("interface/doMark")
+    doMark(callback, failed) {
+      eventBus.$emit("interface/doMark", callback, failed);
     },
     getMapResult() {
       const graphic = getGraphicsByName("MapLocating", "resultID")[0];
@@ -135,8 +135,7 @@ global.interface = new Vue({
         });
         map.getGraphics().add(graphic);
         map.zoomByExtent(polygon.getExtent());
-      }
-      catch (ex) {
+      } catch (ex) {
         console.log(ex);
       }
     }
