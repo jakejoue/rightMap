@@ -1,5 +1,21 @@
 import { isFunction } from 'util';
 
+function getBuiltEditWindow() {
+  let w;
+  top.$("div.om-dialog.om-widget.om-widget-content.om-corner-all.om-draggable").each(function() {
+    if (w) {
+      if ($(this).css("z-index") > w.css("z-index")) {
+        w = $(this);
+      }
+    } else {
+      w = $(this);
+    }
+  });
+  if (w) {
+    return w.find("iframe")[0].contentWindow;
+  }
+}
+
 function location(callback, failed) {
   clearGraphicsByName("MapLocating", "resultID");
   mapTip.getLocation(({ coordinate }) => {
@@ -22,6 +38,10 @@ function location(callback, failed) {
         if (!getGraphicsByName("MapLocating", "resultID").length) {
           map.getGraphics().add(graphic);
           isFunction(callback) && callback();
+          const builtEditWindow = getBuiltEditWindow();
+          if (builtEditWindow && isFunction(builtEditWindow.mapClick)) {
+            builtEditWindow.mapClick();
+          }
         }
       }
     }).catch(e => {
