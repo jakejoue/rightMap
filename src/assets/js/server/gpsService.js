@@ -8,7 +8,7 @@ function GpsService(proxyurl, url) {
       "Content-Type": "application/json"
     }
   });
-};
+}
 
 //获取采集员轨迹是否存在
 GpsService.prototype.findObsTrackLogLength = function({ sTime, eTime, obsId }) {

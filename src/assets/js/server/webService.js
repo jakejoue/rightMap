@@ -10,7 +10,7 @@ export default class WebService {
         "Content-Type": "application/json"
       }
     });
-  };
+  }
 
   // 采集员
   findAllOnLineObserverJson() {
@@ -27,7 +27,7 @@ export default class WebService {
       data: data
     };
     return this.invoke("/ObsBusinessService/findAllOnLineObserverJson", options);
-  };
+  }
 
   // 车辆
   getAllCarsOnlineState() {
@@ -47,7 +47,7 @@ export default class WebService {
       data: data
     };
     return this.invoke("/GpsCarQueryService/getAllCarsOnlineState", options);
-  };
+  }
 
   getMonitorPage() {
     var data =
@@ -67,7 +67,7 @@ export default class WebService {
       dataType: 'xml'
     };
     return this.invoke("/VideoService/getMonitorPage", options);
-  };
+  }
 
   getEventById(eventId) {
     var data = '<?xml version="1.0" encoding="utf-8"?>' +
@@ -85,7 +85,7 @@ export default class WebService {
       data: data
     };
     return this.invoke("/ToDoEventService/getEventById", options);
-  };
+  }
 
   // xml2json简单包装
   xml2json(xml) {
@@ -95,7 +95,7 @@ export default class WebService {
         err ? reject(err) : resolve(result['return']);
       });
     });
-  };
+  }
 
   // 查询
   invoke(url, { namespace, method, data, dataType }) {
@@ -115,5 +115,5 @@ export default class WebService {
         return [];
       }
     })
-  };
+  }
 }

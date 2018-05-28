@@ -16,7 +16,7 @@ function KQuery({ server, appKey }) {
       'Content-Type': 'text/plain;charset=UTF-8'
     }
   });
-};
+}
 
 
 /**

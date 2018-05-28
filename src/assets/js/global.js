@@ -1,4 +1,3 @@
-import { isArray } from 'util';
 // 弹出框事件
 global.tf = {}
 

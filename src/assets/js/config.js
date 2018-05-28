@@ -22,6 +22,7 @@ import '../less/animate.less'
 
 // 请求时带上cookies
 Axios.defaults.withCredentials = true
+// application/x-www-form-urlencoded和application/json格式数据的处理
 Axios.defaults.transformRequest = [function(data, headers) {
   if ((!headers['Content-Type'] || headers['Content-Type'] == 'application/x-www-form-urlencoded') && typeof data == 'object') {
     let ret = ''
