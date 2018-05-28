@@ -88,7 +88,7 @@ export default class WebService {
   }
 
   // xml2json简单包装
-  xml2json(xml) {
+  async xml2json(xml) {
     xml = xml.outerHTML;
     return new Promise((resolve, reject) => {
       parseString(xml, { explicitArray: false, ignoreAttrs: true }, function(err, result) {
