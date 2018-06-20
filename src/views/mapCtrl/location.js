@@ -11,7 +11,7 @@ function getBuiltEditWindow() {
       w = $(this);
     }
   });
-  if (w) {
+  if (w && w.find("iframe")[0]) {
     return w.find("iframe")[0].contentWindow;
   }
 }
