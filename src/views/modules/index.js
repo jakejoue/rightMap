@@ -48,7 +48,7 @@ const modules = [{
   module: () => import ('./uva.vue')
 }];
 
-const defaultConfig = [
+const defaultModules = [
   "search",
   "observer",
   "vehicle",
@@ -58,16 +58,17 @@ const defaultConfig = [
 ];
 
 export default () => {
-  const params = location.search.slice(1);
-  const config = params ? params.split(',') : defaultConfig;
+  const configStr = location.search.slice(1).toLowerCase();
+  const configArr = configStr ? configStr.split(',') : defaultModules;
   const ret = [];
-  config.forEach(e => {
-    const item = modules.find(a => a.id == e);
+  configArr.forEach(e => {
+    const item = modules.find(module => module.id == e);
     item && ret.push(item);
   });
   return {
     modules: ret,
-    noHeader: !!params.length,
-    noFooter: !!params.length
+    noHeader: configStr.includes("noheader"),
+    noFooter: configStr.includes("nofooter"),
+    noAside: configStr.includes("noaside")
   };
 };

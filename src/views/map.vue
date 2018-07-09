@@ -81,7 +81,7 @@ export default {
     return {
       height: 100,
       noHeader: config.noHeader,
-      noAside: false,
+      noAside: config.noAside,
       noFooter: config.noFooter,
       aIndex: -1,
       modules: config.modules
