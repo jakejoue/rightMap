@@ -91,6 +91,7 @@ export default {
       this.treeData = [
         {
           name: `在线(${online.length})`,
+          expand: true,
           children: online
         },
         {
