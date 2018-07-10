@@ -118,6 +118,7 @@ export default {
         onlineSize = 0;
       // 生成树和图上元素
       results.forEach(e => {
+        e.isOnLine = e.isonline || e.isOnline || e.isOnLine;
         const {
           gpsDevice,
           gpstime,

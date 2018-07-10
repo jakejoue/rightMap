@@ -47,6 +47,7 @@ export default {
       const offline = [];
       // 遍历
       data.forEach(e => {
+        e.isOnline = e.isonline || e.isOnline || e.isOnLine;
         // 用到的字段
         const {
           id,
