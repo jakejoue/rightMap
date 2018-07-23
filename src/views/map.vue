@@ -111,6 +111,8 @@ export default {
 @import "config.less";
 
 #rightmap {
+  position: relative;
+
   .full;
 
   > * {
