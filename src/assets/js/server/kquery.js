@@ -2,8 +2,8 @@ import Axios from "axios";
 
 /**
  * 服务器查询接口
- * 
- * @param {Object.<string, string>} options 
+ *
+ * @param {Object.<string, string>} options
  */
 function KQuery({ server, appKey }) {
   this.server = server;
@@ -21,8 +21,8 @@ function KQuery({ server, appKey }) {
 
 /**
  * 计算长度
- * 
- * @param {Array.<number>} arr [x1, y1, x2, y2, ...] 点数组 
+ *
+ * @param {Array.<number>} arr [x1, y1, x2, y2, ...] 点数组
  */
 KQuery.prototype.getLength = function(arr) {
   var args = {
@@ -35,8 +35,8 @@ KQuery.prototype.getLength = function(arr) {
 
 /**
  * 计算面积
- * 
- * @param {Array.<number>} arr [x1, y1, x2, y2,...] 点数组 
+ *
+ * @param {Array.<number>} arr [x1, y1, x2, y2,...] 点数组
  */
 KQuery.prototype.getArea = function(arr) {
   var args = {
@@ -44,14 +44,14 @@ KQuery.prototype.getArea = function(arr) {
     "arr": arr,
     "outputFormat": 'json'
   };
-  this.postData(args, callback);
+  return this.postData(args);
 };
 
 /**
  * 坐标转换
- * 
- * @param {number} lon 经度 
- * @param {number} lat 纬度 
+ *
+ * @param {number} lon 经度
+ * @param {number} lat 纬度
  */
 KQuery.prototype.project2map = function(lon, lat) {
   var args = {
@@ -65,9 +65,9 @@ KQuery.prototype.project2map = function(lon, lat) {
 
 /**
  * 坐标转换
- * 
- * @param {number} x 坐标x 
- * @param {number} y 坐标y 
+ *
+ * @param {number} x 坐标x
+ * @param {number} y 坐标y
  */
 KQuery.prototype.project2wgs = function(x, y) {
   var args = {
@@ -81,7 +81,7 @@ KQuery.prototype.project2wgs = function(x, y) {
 
 /**
  * 用坐标查询案件位置
- * 
+ *
  * @param {number} x 地图x坐标
  * @param {number} y 地图y坐标
  * @param {string} type 定位类型
@@ -135,7 +135,7 @@ KQuery.prototype.queryRoad = function(str, pageIndex, pageSize) {
 
 /**
  * 网格查询
- * 
+ *
  * @param {number} index 网格类型
  * @param {string} str 网格关健字
  */
@@ -153,10 +153,10 @@ KQuery.prototype.queryGrid = function(str, index, pageIndex, pageSize) {
 
 /**
  * 用编码查询部件
- * 
- * @param {string} code 
- * @param {number} pageIndex 
- * @param {number} pageSize 
+ *
+ * @param {string} code
+ * @param {number} pageIndex
+ * @param {number} pageSize
  */
 KQuery.prototype.queryComp = function(code, pageIndex, pageSize) {
   var args = {
@@ -171,11 +171,11 @@ KQuery.prototype.queryComp = function(code, pageIndex, pageSize) {
 
 /**
  * 框选部件
- * 
+ *
  * @param {string} poly WKT格式字符串
  * @param {string} layers 要框选的部件图层
- * @param {number} pageIndex 
- * @param {any} pageSize 
+ * @param {number} pageIndex
+ * @param {any} pageSize
  */
 KQuery.prototype.queryCompByPoly = function(poly, layers, pageIndex, pageSize) {
   var args = {
@@ -213,7 +213,7 @@ KQuery.prototype.getComplayerInfo = function() {
 
 /**
  * 获取图片
- * @param {function} success 
+ * @param {function} success
  */
 KQuery.prototype.getMapPic = function(opts, success) {
   var center = opts.center || [0, 0];
@@ -234,8 +234,8 @@ KQuery.prototype.getMapPic = function(opts, success) {
 
 /**
  * 生成GET连接URL
- * 
- * @param {Object.<string,Object>} args 
+ *
+ * @param {Object.<string,Object>} args
  * @returns {string}
  */
 KQuery.prototype.buildUrl = function(args) {
@@ -250,8 +250,8 @@ KQuery.prototype.buildUrl = function(args) {
 
 /**
  * 生成POST的XML数据
- * 
- * @param {Object.<string,Object>} args 
+ *
+ * @param {Object.<string,Object>} args
  * @returns {string}
  */
 KQuery.prototype.buildData = function(args) {
@@ -271,8 +271,8 @@ KQuery.prototype.buildData = function(args) {
 
 /**
  * 发送GET请求
- * 
- * @param {Object.<string, Object>} args 
+ *
+ * @param {Object.<string, Object>} args
  */
 KQuery.prototype.getData = function(args) {
   var url = this.buildUrl(args);
@@ -281,8 +281,8 @@ KQuery.prototype.getData = function(args) {
 
 /**
  * 发送POST请求
- * 
- * @param {Object.<string, Object>} args 
+ *
+ * @param {Object.<string, Object>} args
  */
 KQuery.prototype.postData = function(args) {
   var url = this.server + '/query';
