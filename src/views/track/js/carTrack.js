@@ -65,7 +65,7 @@ class carTrack extends Track {
    */
   setTarget(car) {
     this.car = car;
-    this.isEHome = car.getAttributes('ehome_flag');
+    this.isEHome = car.getAttribute('ehome_flag');
   }
   /**
    * @api

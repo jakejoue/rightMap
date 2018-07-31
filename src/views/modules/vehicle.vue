@@ -127,7 +127,8 @@ export default {
           location,
           longitude,
           latitude,
-          isOnLine
+          isOnLine,
+          ehome_flag
         } = e;
         const {
           pmidepartment: department,
@@ -135,11 +136,13 @@ export default {
           gpsName,
           person
         } = gpsDevice;
+        var deviceId = ehome_flag === "1" ? e.simid : gpsDevice.id || "";
         // 分组(树的二级菜单)
         const groupName = department.name || "其它";
         // 附加属性
         const attr = {
-          id,
+          id: deviceId,
+          ehome_flag: ehome_flag == "1",
           gpsName,
           speed,
           department: groupName,
