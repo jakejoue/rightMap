@@ -60,7 +60,7 @@ export default {
           attr.note = uav.note;
           //
           const { graphic } = newGraphic({
-            coord: [attr.longitude, attr.latitude],
+            coord: toMap([attr.longitude, attr.latitude]),
             attr,
             symbol: new KMap.PictureMarkerSymbol({
               anchor: [0.5, 1],

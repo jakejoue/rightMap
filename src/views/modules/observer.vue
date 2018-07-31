@@ -71,7 +71,7 @@ export default {
         };
         // 新建图形
         const { graphic } = newGraphic({
-          coord: [longitude, latitude],
+          coord: toMap([longitude, latitude]),
           symbol: isOnline ? onlineSymbol : offlineSymbol,
           attr,
           visible: !!isOnline

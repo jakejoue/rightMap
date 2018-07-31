@@ -19,7 +19,7 @@ function getBuiltEditWindow() {
 function location(callback, failed) {
   clearGraphicsByName("MapLocating", "resultID");
   mapTip.getLocation(({ coordinate }) => {
-    const [x, y] = coordinate;
+    const [x, y] = fromMap(coordinate);
     query.getCaseLocation(x, y, '').then(results => {
       const markInfo = { x, y, location: results.address };
       if (!results["workgrid"]) {
@@ -27,7 +27,7 @@ function location(callback, failed) {
         isFunction(failed) && failed();
       } else {
         const { graphic } = newGraphic({
-          coord: [x, y],
+          coord: coordinate,
           symbol: new KMap.PictureMarkerSymbol({
             scale: 0.6,
             anchor: [0.5, 1],

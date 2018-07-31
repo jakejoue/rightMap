@@ -1,3 +1,5 @@
+import { isArray } from "util";
+
 // 弹出框事件
 global.tf = {}
 
@@ -33,48 +35,26 @@ const MULTIPOLYGON = new KMap.SimpleFillSymbol({
 global.MULTILINESTRING = MULTILINESTRING;
 global.MULTIPOLYGON = MULTIPOLYGON;
 
-// 其他事件
+/*****************************地图坐标转换*********************************** */
 
-/**
- * 创建图层
- * @private
- * @param {*} layerProps 
- */
-function createLayer(layerProps) {
-  var layerId = layerProps.id;
-  switch (layerProps.type) {
-    case "ArcGISRest":
-      return new KMap.ArcGISRestLayer(layerId, {
-        projection: layerProps.projection,
-        url: layerProps.url,
-        extent: layerProps.extent || mapConfig.extent,
-        tile: layerProps.tile,
-        ratio: layerProps.ratio
-      });
-    case "TileWMS":
-      return new KMap.TileWMSLayer(layerId, {
-        url: layerProps.url,
-        layers: layerProps.layers,
-        format: layerProps.format,
-        srs: layerProps.srs,
-        projection: layerProps.projection
-      });
-    case "AMapLayer":
-      return new KMap.AMapLayer(layerId, {
-        url: layerProps.url,
-        projection: layerProps.projection
-      });
-    case "ArcGISTile":
-      return new KMap.ArcGISTileLayer(layerId, {
-        projection: layerProps.projection,
-        url: layerProps.url,
-        proxy: layerProps.proxy || mapConfig.proxyUrl + "?",
-        dataType: layerProps.dataType
-      });
+function fromMap(coordinate, to = configData.dataProjection) {
+  if (isArray(coordinate) && coordinate.length >= 2) {
+    return KMap.Projection.transform([+coordinate[0], +coordinate[1]], configData.projection, to);
+  } else {
+    return [0, 0];
   }
-  throw "unknow layer type:" + layerProps.type;
 }
-global.createLayer = createLayer;
+global.fromMap = fromMap;
+function toMap(coordinate, source = configData.dataProjection) {
+  if (isArray(coordinate) && coordinate.length >= 2) {
+    return KMap.Projection.transform([+coordinate[0], +coordinate[1]], source, configData.projection);
+  } else {
+    return [0, 0];
+  }
+}
+global.toMap = toMap;
+
+/*****************************地图交互相关方法(需要全局map对象已经初始化)*********************************** */
 
 /**
  * 地图缩放到目标并打开infowindow
@@ -113,7 +93,7 @@ function centerShow({
   } else {
     centerPoint = [(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2];
   }
-  config.easing = function(n) {
+  config.easing = function (n) {
     n >= 1 && showInfo();
     return n;
   }
@@ -134,6 +114,78 @@ function centerShow({
 }
 global.centerShow = centerShow;
 
+// 按照名称清除默认的绘画图层
+function clearGraphicsByName(value, key = "Name", layer) {
+  layer = layer || map.getGraphics();
+  layer.forEach(function (g) {
+    const Name = g.getAttribute(key);
+    if (Name === value) {
+      layer.remove(g);
+    }
+  });
+}
+global.clearGraphicsByName = clearGraphicsByName;
+
+// 按照名称获取默认的绘画图层
+function getGraphicsByName(value, key = "Name", layer) {
+  layer = layer || map.getGraphics();
+  const rets = [];
+  layer.forEach(function (g) {
+    const Name = g.getAttribute(key);
+    if (Name === value) {
+      rets.push(g)
+    }
+  });
+  return rets;
+}
+global.getGraphicsByName = getGraphicsByName;
+
+/*****************************其他方法*********************************** */
+
+/**
+ * 创建图层
+ * @private
+ * @param {*} layerProps
+ */
+function createLayer(layerProps) {
+  var layerId = layerProps.id;
+  switch (layerProps.type) {
+    case "ArcGISRest":
+      return new KMap.ArcGISRestLayer(layerId, {
+        projection: layerProps.projection,
+        url: layerProps.url,
+        extent: layerProps.extent || mapConfig.extent,
+        tile: layerProps.tile,
+        ratio: layerProps.ratio
+      });
+    case "TileWMS":
+      return new KMap.TileWMSLayer(layerId, {
+        url: layerProps.url,
+        layers: layerProps.layers,
+        format: layerProps.format,
+        srs: layerProps.srs,
+        projection: layerProps.projection
+      });
+    case "AMapLayer":
+      return new KMap.AMapLayer(layerId, {
+        url: layerProps.url,
+        projection: layerProps.projection
+      });
+    case "ArcGISTile":
+      return new KMap.ArcGISTileLayer(layerId, {
+        projection: layerProps.projection,
+        url: layerProps.url,
+        proxy: layerProps.proxy || mapConfig.proxyUrl + "?",
+        dataType: layerProps.dataType
+      });
+    case "BaiduLayer":
+      return new KMap.BaiduLayer(layerId, {
+        url: layerProps.url,
+      });
+  }
+  throw "unknow layer type:" + layerProps.type;
+}
+global.createLayer = createLayer;
 
 //新建Graphic对象
 function newGraphic({
@@ -143,7 +195,7 @@ function newGraphic({
   attr,
   infoTemplate,
   visible = true
-}) {
+}, dataProjection, graphicProjection) {
   let graphic = new KMap.Graphic();
   let geometry;
   switch (type) {
@@ -156,6 +208,9 @@ function newGraphic({
     case 'POLYGON':
       geometry = new KMap.Polygon(coord);
       break;
+  }
+  if (dataProjection && graphicProjection) {
+    geometry = geometry.transform(dataProjection, graphicProjection);
   }
   graphic.setGeometry(geometry);
   graphic.setVisible(visible);
@@ -172,29 +227,3 @@ function timestamp() {
   return new Date().getTime();
 }
 global.timestamp = timestamp;
-
-// 按照名称清除默认的绘画图层
-function clearGraphicsByName(value, key = "Name", layer) {
-  layer = layer || map.getGraphics();
-  layer.forEach(function(g) {
-    const Name = g.getAttribute(key);
-    if (Name === value) {
-      layer.remove(g);
-    }
-  });
-}
-global.clearGraphicsByName = clearGraphicsByName;
-
-// 按照名称获取默认的绘画图层
-function getGraphicsByName(value, key = "Name", layer) {
-  layer = layer || map.getGraphics();
-  const rets = [];
-  layer.forEach(function(g) {
-    const Name = g.getAttribute(key);
-    if (Name === value) {
-      rets.push(g)
-    }
-  });
-  return rets;
-}
-global.getGraphicsByName = getGraphicsByName;

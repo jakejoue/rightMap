@@ -55,15 +55,15 @@ class obsTrack extends Track {
   }
   /**
    * @api
-   * @param {KMap.Graphic} obs 
+   * @param {KMap.Graphic} obs
    */
   setTarget(obs) {
     this.obs = obs;
   }
   /**
    * @api
-   * @param {string} sTime 
-   * @param {string} eTime 
+   * @param {string} sTime
+   * @param {string} eTime
    */
   setTime(sTime, eTime) {
     this.sTime = sTime;
@@ -128,7 +128,7 @@ class obsTrack extends Track {
       this.attr.push({
         time: timeStr
       });
-      return [x, y];
+      return toMap([x, y]);
     });
     this.handleTrack([this.path]);
   }

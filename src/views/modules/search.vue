@@ -134,7 +134,10 @@ export default {
       this.layer.setInfoTemplate(getInfoTemplateByType(this.type));
       this.data = results.items.map(e => {
         const graphic = new KMap.Graphic();
-        const g = KMap.Geometry.fromWKT(e.geo);
+        const g = KMap.Geometry.fromWKT(e.geo, {
+          dataProjection: configData.dataProjection,
+          featureProjection: configData.projection
+        });
         graphic.setGeometry(g);
         graphic.setAttributes(e);
         e.graphic = () => graphic;
@@ -150,6 +153,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 </style>
 

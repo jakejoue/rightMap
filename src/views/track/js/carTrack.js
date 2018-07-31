@@ -61,7 +61,7 @@ class carTrack extends Track {
   }
   /**
    * @api
-   * @param {KMap.Graphic} car 
+   * @param {KMap.Graphic} car
    */
   setTarget(car) {
     this.car = car;
@@ -69,8 +69,8 @@ class carTrack extends Track {
   }
   /**
    * @api
-   * @param {string} sTime 
-   * @param {string} eTime 
+   * @param {string} sTime
+   * @param {string} eTime
    */
   setTime(sTime, eTime) {
     this.sTime = sTime;
@@ -146,7 +146,7 @@ class carTrack extends Track {
         longitude: x,
         latitude: y
       });
-      return [x, y];
+      return toMap([x, y]);
     });
     this.handleTrack([this.path]);
   }
@@ -213,7 +213,7 @@ class carTrack extends Track {
   }
   /**
    * 显示滞留点
-   * @param {number} timeLimit 
+   * @param {number} timeLimit
    */
   showRetentionPoint(timeLimit) {
     this.layer.forEach(g => {
@@ -268,7 +268,7 @@ class carTrack extends Track {
           startTime: startTimeStr,
           endTime: endTimeStr
         };
-        geometry = new KMap.Point([lon, lat]);
+        geometry = new KMap.Point(toMap([lon, lat]));
         gc = new KMap.Graphic();
         gc.setGeometry(geometry);
         gc.setSymbol(eventSymbol);
@@ -302,7 +302,7 @@ class carTrack extends Track {
           lat = parseFloat(alarm.latitude) || 0;
           alarm.alarmType = getAlarmType(alarm.alarmType);
           gc = newGraphic({
-            coord: [lon, lat],
+            coord: toMap([lon, lat]),
             symbol: eventSymbol,
             infoTemp: infoTemplate,
             attr: alarm

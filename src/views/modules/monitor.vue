@@ -49,7 +49,7 @@ export default {
       const sicon = getNodeIcon(type, true);
 
       const { graphic } = newGraphic({
-        coord: [x, y],
+        coord: toMap([x, y]),
         symbol: new KMap.PictureMarkerSymbol({
           src: icon
         }),

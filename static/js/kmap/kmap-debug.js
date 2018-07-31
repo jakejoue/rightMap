@@ -1,6 +1,6 @@
 // OpenLayers. See https://openlayers.org/
 // License: https://raw.githubusercontent.com/openlayers/openlayers/master/LICENSE.md
-// Version: 0.1-19-gfd2f95a
+// Version: 0.1-32-gfdc8217
 ;(function (root, factory) {
   if (typeof exports === "object") {
     module.exports = factory();
@@ -78981,6 +78981,8 @@ KMap.Layer.fromLayer = function (layer) {
       return KMap.WMTSLayer.fromLayer(layer);
     case KMap.Layer.Type.AMapLayer:
       return KMap.AMapLayer.fromLayer(layer);
+    case KMap.Layer.Type.ClusterLayer:
+      return KMap.ClusterLayer.fromLayer(layer);
   };
   throw 'invalid layer type';
 };
@@ -79009,7 +79011,8 @@ KMap.Layer.Type = {
   WMSLayer: 'WMSLayer',
   WMTSLayer: 'WMTSLayer',
   AMapLayer: 'AMapLayer',
-  TdtLayer: 'TdtLayer'
+  TdtLayer: 'TdtLayer',
+  ClusterLayer: 'ClusterLayer'
 };
 
 /**
@@ -80727,7 +80730,7 @@ KMap.Geometry = function (geometry) {
 };
 
 /**
- * @return {ol.geom.Geometry} 
+ * @return {ol.geom.Geometry}
  * @api
  */
 KMap.Geometry.prototype.getGeometry = function () {
@@ -80743,7 +80746,7 @@ KMap.Geometry.prototype.setGeometry = function (geometry) {
 };
 
 /**
- * @return {ol.Extent} 
+ * @return {ol.Extent}
  * @api
  */
 KMap.Geometry.prototype.getExtent = function () {
@@ -80785,7 +80788,7 @@ KMap.Geometry.prototype.contains = function(point) {
 
 /**
  * @param {ol.Extent} extent
- * @return {KMap.Geometry} 
+ * @return {KMap.Geometry}
  * @api
  */
 KMap.Geometry.fromExtent = function (extent) {
@@ -80795,74 +80798,74 @@ KMap.Geometry.fromExtent = function (extent) {
 
 /**
  * @param {string} json
- * @return {KMap.Geometry} 
+ * @return {KMap.Geometry}
  * @api
  */
-KMap.Geometry.fromGeoJson = function (json) {
+KMap.Geometry.fromGeoJson = function (json, opt_options) {
     var format = new ol.format.GeoJSON();
-    var geometry = format.readGeometry(json);
+    var geometry = format.readGeometry(json, opt_options);
     return KMap.Geometry.fromGeometry(geometry);
 };
 
 /**
  * @param {KMap.Geometry} geometry
- * @return {string} 
+ * @return {string}
  * @api
  */
-KMap.Geometry.toGeoJson = function (geometry) {
+KMap.Geometry.toGeoJson = function (geometry, opt_options) {
     var geom = geometry.getGeometry();
     var format = new ol.format.GeoJSON();
-    return format.writeGeometry(geom);
+    return format.writeGeometry(geom, opt_options);
 };
 
 /**
  * @param {string} json
- * @return {KMap.Geometry} 
+ * @return {KMap.Geometry}
  * @api
  */
-KMap.Geometry.fromEsriJson = function (json) {
+KMap.Geometry.fromEsriJson = function (json, opt_options) {
     var format = new ol.format.EsriJSON();
-    var geometry = format.readGeometry(json);
+    var geometry = format.readGeometry(json, opt_options);
     return KMap.Geometry.fromGeometry(geometry);
 };
 
 /**
  * @param {KMap.Geometry} geometry
- * @return {string} 
+ * @return {string}
  * @api
  */
-KMap.Geometry.toEsriJson = function (geometry) {
+KMap.Geometry.toEsriJson = function (geometry, opt_options) {
     var geom = geometry.getGeometry();
     var format = new ol.format.EsriJSON();
-    return format.writeGeometry(geom);
+    return format.writeGeometry(geom, opt_options);
 };
 
 /**
  * @param {string} wkt
- * @return {KMap.Geometry} 
+ * @return {KMap.Geometry}
  * @api
  */
-KMap.Geometry.fromWKT = function (wkt) {
+KMap.Geometry.fromWKT = function (wkt, opt_options) {
     var format = new ol.format.WKT();
-    var geometry = format.readGeometry(wkt);
+    var geometry = format.readGeometry(wkt, opt_options);
 
     return KMap.Geometry.fromGeometry(geometry);
 };
 
 /**
  * @param {KMap.Geometry} geometry
- * @return {string} 
+ * @return {string}
  * @api
  */
-KMap.Geometry.toWKT = function (geometry) {
+KMap.Geometry.toWKT = function (geometry, opt_options) {
     var geom = geometry.getGeometry();
     var format = new ol.format.WKT();
-    return format.writeGeometry(geom);
+    return format.writeGeometry(geom, opt_options);
 };
 
 /**
  * @param {ol.geom.Geometry} geometry
- * @return {KMap.Geometry} 
+ * @return {KMap.Geometry}
  * @api
  */
 KMap.Geometry.fromGeometry = function (geometry) {
@@ -80916,6 +80919,27 @@ KMap.Geometry.prototype.getCoordinates = function () {
     }
     return null;
 };
+
+/**
+ * Transform each coordinate of the geometry from one coordinate reference
+ * system to another. The geometry is modified in place.
+ * For example, a line will be transformed to a line and a circle to a circle.
+ * If you do not want the geometry modified in place, first `clone()` it and
+ * then use this function on the clone.
+ *
+ * @param {ol.ProjectionLike} source The current projection.  Can be a
+ *     string identifier or a {@link ol.proj.Projection} object.
+ * @param {ol.ProjectionLike} destination The desired projection.  Can be a
+ *     string identifier or a {@link ol.proj.Projection} object.
+ * @return {KMap.Geometry} This geometry.  Note that original geometry is
+ *     modified in place.
+ * @api
+ */
+KMap.Geometry.prototype.transform = function (source, destination) {
+    var geom = this.geometry_.transform(source, destination);
+    return KMap.Geometry.fromGeometry(geom);
+}
+
 goog.provide('KMap.Symbol');
 
 goog.require('ol.style.Style');
@@ -80998,7 +81022,8 @@ KMap.Symbol.Type = {
     SimpleMarkerSymbol: 'SimpleMarkerSymbol',
     SimpleLineSymbol: 'SimpleLineSymbol',
     SimpleFillSymbol: 'SimpleFillSymbol',
-    SimpleTextSymbol: 'SimpleTextSymbol'
+    SimpleTextSymbol: 'SimpleTextSymbol',
+    MultiSymbol: 'MultiSymbol'
 };
 goog.provide('KMap.Graphic');
 
@@ -81276,6 +81301,90 @@ KMap.Graphic.Properties = [
     KMap.Graphic.Property.INFOTEMPLATE,
     KMap.Graphic.Property.SYMBOL
 ];
+
+/**
+ * 读取graphics
+ * @api
+ * @param {string} type 
+ * @param {Document | Node | Object | string} source 
+ * @param {olx.format.ReadOptions=} opt_options
+ * @return {Array.<KMap.Graphic>}
+ */
+KMap.Graphic.readGraphics = function (type, source, opt_options) {
+    var format;
+    switch (type) {
+        case 'esrijson':
+            format = new ol.format.EsriJSON();
+            break;
+        case 'geojson':
+            format = new ol.format.GeoJSON();
+            break;
+        case 'kml':
+            format = new ol.format.KML();
+            break;
+        case 'wkt':
+            format = new ol.format.WKT();
+            break;
+        case 'gml':
+            format = new ol.format.GML();
+            break;
+        case 'gml2':
+            format = new ol.format.GML2();
+            break;
+        case 'gml3':
+            format = new ol.format.GML3();
+            break;
+        default:
+            throw "暂未支持的类型";
+    }
+    var features = format.readFeatures(source, opt_options);
+    return features.map(function (feature) {
+        return new KMap.Graphic(feature);
+    });
+}
+
+/**
+ * graphics转目标格式字符串
+ * @api
+ * @param {string} type 
+ * @param {Array.<KMap.Graphic>} graphics 
+ * @param {olx.format.ReadOptions=} opt_options
+ * @return {string}
+ */
+KMap.Graphic.writeGraphics = function (type, graphics, opt_options) {
+    var format;
+    switch (type) {
+        case 'esrijson':
+            format = new ol.format.EsriJSON();
+            break;
+        case 'geojson':
+            format = new ol.format.GeoJSON();
+            break;
+        case 'kml':
+            format = new ol.format.KML();
+            break;
+        case 'wkt':
+            format = new ol.format.WKT();
+            break;
+        case 'gml':
+            format = new ol.format.GML();
+            break;
+        case 'gml2':
+            format = new ol.format.GML2();
+            break;
+        case 'gml3':
+            format = new ol.format.GML3();
+            break;
+        default:
+            throw "暂未支持的类型";
+    }
+    var features = graphics.map(function (g) {
+        var feature = new ol.Feature(g.feature_.getGeometry());
+        feature.setProperties(g.getAttributes());
+        return feature;
+    });
+    return format.writeFeatures(features, opt_options);
+}
 goog.provide('KMap.Renderer');
 
 goog.require('KMap.Symbol');
@@ -82006,74 +82115,74 @@ KMap.Transform = function () {
             if (!cQ) {
                 return 0;
             }
-            cM = this.toRadians(cQ.lng);
-            cP = this.toRadians(cQ.lat);
+            cM = this.toRadians(cQ["lng"]);
+            cP = this.toRadians(cQ["lat"]);
             cO = this.convertMC2LL(cO);
             if (!cO) {
                 return 0;
             }
-            T = this.toRadians(cO.lng);
-            cN = this.toRadians(cO.lat);
+            T = this.toRadians(cO["lng"]);
+            cN = this.toRadians(cO["lat"]);
             return this.getDistance(cM, T, cP, cN);
         },
         getDistanceByLL: function (cQ, cO) {
             if (!cQ || !cO) {
                 return 0;
             }
-            cQ.lng = this.getLoop(cQ.lng, -180, 180);
-            cQ.lat = this.getRange(cQ.lat, -74, 74);
-            cO.lng = this.getLoop(cO.lng, -180, 180);
-            cO.lat = this.getRange(cO.lat, -74, 74);
+            cQ["lng"] = this.getLoop(cQ["lng"], -180, 180);
+            cQ["lat"] = this.getRange(cQ["lat"], -74, 74);
+            cO["lng"] = this.getLoop(cO["lng"], -180, 180);
+            cO["lat"] = this.getRange(cO["lat"], -74, 74);
             var cM, T, cP, cN;
-            cM = this.toRadians(cQ.lng);
-            cP = this.toRadians(cQ.lat);
-            T = this.toRadians(cO.lng);
-            cN = this.toRadians(cO.lat);
+            cM = this.toRadians(cQ["lng"]);
+            cP = this.toRadians(cQ["lat"]);
+            T = this.toRadians(cO["lng"]);
+            cN = this.toRadians(cO["lat"]);
             return this.getDistance(cM, T, cP, cN);
         },
         convertMC2LL: function (cM) {
             var cN, cP;
-            cN = new ce(Math.abs(cM.lng), Math.abs(cM.lat));
+            cN = new ce(Math.abs(cM["lng"]), Math.abs(cM["lat"]));
             for (var cO = 0; cO < this.MCBAND.length; cO++) {
-                if (cN.lat >= this.MCBAND[cO]) {
+                if (cN["lat"] >= this.MCBAND[cO]) {
                     cP = this.MC2LL[cO];
                     break;
                 }
             }
             var T = this.convertor(cM, cP);
-            cM = new ce(T.lng/*.toFixed(6)*/, T.lat/*.toFixed(6)*/);
+            cM = new ce(T["lng"]/*.toFixed(6)*/, T["lat"]/*.toFixed(6)*/);
             return cM;
         },
         convertLL2MC: function (T) {
             var cM, cO;
-            T.lng = this.getLoop(T.lng, -180, 180);
-            T.lat = this.getRange(T.lat, -74, 74);
-            cM = new ce(T.lng, T.lat);
+            T["lng"] = this.getLoop(T["lng"], -180, 180);
+            T["lat"] = this.getRange(T["lat"], -74, 74);
+            cM = new ce(T["lng"], T["lat"]);
             for (var cN = 0; cN < this.LLBAND.length; cN++) {
-                if (cM.lat >= this.LLBAND[cN]) {
+                if (cM["lat"] >= this.LLBAND[cN]) {
                     cO = this.LL2MC[cN];
                     break;
                 }
             }
             if (!cO) {
                 for (var cN = this.LLBAND.length - 1; cN >= 0; cN--) {
-                    if (cM.lat <= -this.LLBAND[cN]) {
+                    if (cM["lat"] <= -this.LLBAND[cN]) {
                         cO = this.LL2MC[cN];
                         break;
                     }
                 }
             }
             var cP = this.convertor(T, cO);
-            T = new ce(cP.lng/*.toFixed(2)*/, cP.lat/*.toFixed(2)*/);
+            T = new ce(cP["lng"]/*.toFixed(2)*/, cP["lat"]/*.toFixed(2)*/);
             return T;
         },
         convertor: function (cN, cO) {
             if (!cN || !cO) {
                 return;
             }
-            var T = cO[0] + cO[1] * Math.abs(cN.lng);
-            var cM = Math.abs(cN.lat) / cO[9];
-            var cP = cO[2] + cO[3] * cM + cO[4] * cM * cM + cO[5] * cM * cM * cM + cO[6] * cM * cM * cM * cM + cO[7] * cM * cM * cM * cM * cM + cO[8] * cM * cM * cM * cM * cM * cM; T *= (cN.lng < 0 ? -1 : 1); cP *= (cN.lat < 0 ? -1 : 1);
+            var T = cO[0] + cO[1] * Math.abs(cN["lng"]);
+            var cM = Math.abs(cN["lat"]) / cO[9];
+            var cP = cO[2] + cO[3] * cM + cO[4] * cM * cM + cO[5] * cM * cM * cM + cO[6] * cM * cM * cM * cM + cO[7] * cM * cM * cM * cM * cM + cO[8] * cM * cM * cM * cM * cM * cM; T *= (cN["lng"] < 0 ? -1 : 1); cP *= (cN["lat"] < 0 ? -1 : 1);
             return new ce(T, cP);
         },
         getDistance: function (cM, T, cO, cN) {
@@ -82127,9 +82236,9 @@ KMap.Transform.prototype.delta = function (lat, lon) {
 
 /**
  * WGS-84 to GCJ-02
- * 
- * @param {number} wgsLat 
- * @param {number} wgsLon 
+ *
+ * @param {number} wgsLat
+ * @param {number} wgsLon
  * @returns {Object}
  * @api
  */
@@ -82138,13 +82247,13 @@ KMap.Transform.prototype.gcj_encrypt = function (wgsLat, wgsLon) {
         return { 'lat': wgsLat, 'lon': wgsLon };
 
     var d = this.delta(wgsLat, wgsLon);
-    return { 'lat': wgsLat + d.lat, 'lon': wgsLon + d.lon };
+    return { 'lat': wgsLat + d["lat"], 'lon': wgsLon + d["lon"] };
 };
 /**
  * GCJ-02 to WGS-84
- * 
- * @param {number} gcjLat 
- * @param {number} gcjLon 
+ *
+ * @param {number} gcjLat
+ * @param {number} gcjLon
  * @returns {Object}
  * @api
  */
@@ -82153,13 +82262,13 @@ KMap.Transform.prototype.gcj_decrypt = function (gcjLat, gcjLon) {
         return { 'lat': gcjLat, 'lon': gcjLon };
 
     var d = this.delta(gcjLat, gcjLon);
-    return { 'lat': gcjLat - d.lat, 'lon': gcjLon - d.lon };
+    return { 'lat': gcjLat - d["lat"], 'lon': gcjLon - d["lon"] };
 };
 /**
  * GCJ-02 to WGS-84 exactly
- * 
- * @param {number} gcjLat 
- * @param {number} gcjLon 
+ *
+ * @param {number} gcjLat
+ * @param {number} gcjLon
  * @returns {Object}
  * @api
  */
@@ -82174,8 +82283,8 @@ KMap.Transform.prototype.gcj_decrypt_exact = function (gcjLat, gcjLon) {
         wgsLat = (mLat + pLat) / 2;
         wgsLon = (mLon + pLon) / 2;
         var tmp = this.gcj_encrypt(wgsLat, wgsLon)
-        dLat = tmp.lat - gcjLat;
-        dLon = tmp.lon - gcjLon;
+        dLat = tmp["lat"] - gcjLat;
+        dLon = tmp["lon"] - gcjLon;
         if ((Math.abs(dLat) < threshold) && (Math.abs(dLon) < threshold))
             break;
 
@@ -82189,9 +82298,9 @@ KMap.Transform.prototype.gcj_decrypt_exact = function (gcjLat, gcjLon) {
 };
 /**
  * GCJ-02 to BD-09
- * 
- * @param {number} gcjLat 
- * @param {number} gcjLon 
+ * @api
+ * @param {number} gcjLat
+ * @param {number} gcjLon
  * @returns {Object}
  */
 KMap.Transform.prototype.bd_encrypt = function (gcjLat, gcjLon) {
@@ -82204,9 +82313,9 @@ KMap.Transform.prototype.bd_encrypt = function (gcjLat, gcjLon) {
 };
 /**
  * BD-09 to GCJ-02
- * 
- * @param {number} bdLat 
- * @param {number} bdLon 
+ * @api
+ * @param {number} bdLat
+ * @param {number} bdLon
  * @returns {Object}
  */
 KMap.Transform.prototype.bd_decrypt = function (bdLat, bdLon) {
@@ -82219,31 +82328,31 @@ KMap.Transform.prototype.bd_decrypt = function (bdLat, bdLon) {
 };
 /**
  * BD-09 to BD-MC
- * 
- * @param {number} bdLat 
- * @param {number} bdLon 
+ * @api
+ * @param {number} bdLat
+ * @param {number} bdLon
  * @returns {Object}
  */
 KMap.Transform.prototype.bdmc_encrypt = function (bdLat, bdLon) {
     var mc = this.BDMC.convertLL2MC(new ce(bdLon, bdLat));
-    return { 'lat': mc.lat, 'lon': mc.lng };
+    return { 'lat': mc["lat"], 'lon': mc["lng"] };
 };
 /**
  * BD-MC to BD-09
- * 
- * @param {number} mcLat 
- * @param {number} mcLon 
+ * @api
+ * @param {number} mcLat
+ * @param {number} mcLon
  * @returns {Object}
  */
 KMap.Transform.prototype.bdmc_decrypt = function (mcLat, mcLon) {
     var bd = this.BDMC.convertMC2LL(new ce(mcLon, mcLat));
-    return { 'lat': bd.lat, 'lon': bd.lng };
+    return { 'lat': bd["lat"], 'lon': bd["lng"] };
 };
 /**
  * WGS-84 to Web mercator
  * mercatorLat -> y mercatorLon -> x
- * @param {number} wgsLat 
- * @param {number} wgsLon 
+ * @param {number} wgsLat
+ * @param {number} wgsLon
  * @returns {Object}
  */
 KMap.Transform.prototype.mercator_encrypt = function (wgsLat, wgsLon) {
@@ -82255,8 +82364,8 @@ KMap.Transform.prototype.mercator_encrypt = function (wgsLat, wgsLon) {
 /**
  * Web mercator to WGS-84
  * mercatorLat -> y mercatorLon -> x
- * @param {number} mercatorLat 
- * @param {number} mercatorLon 
+ * @param {number} mercatorLat
+ * @param {number} mercatorLon
  * @returns {Object}
  */
 KMap.Transform.prototype.mercator_decrypt = function (mercatorLat, mercatorLon) {
@@ -82320,8 +82429,8 @@ function ce(lng, lat) {
         lat = parseFloat(lat)
     }
 
-    this.lng = lng;
-    this.lat = lat;
+    this["lng"] = lng;
+    this["lat"] = lat;
 }
 ce.bW = function (cO) {
     var cM = "";
@@ -82358,11 +82467,12 @@ ce.b4 = function (T) {
     return typeof T == "string";
 };
 ce.isInRange = function (T) {
-    return T && T.lng <= 180 && T.lng >= -180 && T.lat <= 74 && T.lat >= -74;
+    return T && T["lng"] <= 180 && T["lng"] >= -180 && T["lat"] <= 74 && T["lat"] >= -74;
 };
 ce.prototype.equals = function (T) {
-    return T && this.lat == T.lat && this.lng == T.lng;
+    return T && this["lat"] == T["lat"] && this["lng"] == T["lng"];
 };
+
 goog.provide('KMap.Polyline');
 
 goog.require('KMap');
@@ -83793,6 +83903,349 @@ KMap.AMapLayer.prototype.getType = function () {
     return KMap.Layer.Type.AMapLayer;
 };
 
+goog.provide('KMap.SimpleMarkerSymbol');
+
+goog.require('KMap.Symbol');
+goog.require('ol.style.Icon');
+goog.require('ol.style.Circle');
+goog.require('ol.style.Fill');
+
+/**
+ * @api
+ * @constructor
+ * @extends {KMap.Symbol}
+ * @param {MapX.MarkerSymbolOptions|ol.style.Style} options
+ */
+KMap.SimpleMarkerSymbol = function (options) {
+    KMap.Symbol.call(this, options);
+};
+ol.inherits(KMap.SimpleMarkerSymbol, KMap.Symbol);
+
+/**
+ * @param {ol.style.Style} style
+ * @param {Object} options
+ */
+KMap.SimpleMarkerSymbol.prototype.init = function (style, options) {
+    var markerOptions = /** @type {MapX.MarkerSymbolOptions} */ (options);
+    var circleOptions = /** @type {olx.style.CircleOptions} */ ({
+        radius: markerOptions.radius,
+        anchor: markerOptions.anchor,
+        opacity: markerOptions.opacity,
+        offset: markerOptions.offset,
+        scale: markerOptions.scale,
+        stroke: new ol.style.Stroke({
+            color: markerOptions.stroke,
+            width: markerOptions.width
+        }),
+        fill: new ol.style.Fill({
+            color: markerOptions.fill
+        })
+    });
+    var image = new ol.style.Circle(circleOptions);
+    style.setImage(image);
+};
+
+/**
+ * @return {KMap.Symbol.Type}
+ */
+KMap.SimpleMarkerSymbol.prototype.getType = function () {
+    return KMap.Symbol.Type.SimpleMarkerSymbol;
+};
+
+/**
+ * 
+ * @param {number} opacity 
+ * @api
+ */
+KMap.SimpleMarkerSymbol.prototype.setOpacity = function (opacity) {
+    var style = this.getStyle();
+    var image = style.getImage();
+    image.setOpacity(opacity);
+};
+
+/**
+ * 
+ * @param {number} rotation 
+ * @api
+ */
+KMap.SimpleMarkerSymbol.prototype.setRotation = function (rotation) {
+    var style = this.getStyle();
+    var image = style.getImage();
+    image.setRotation(rotation);
+};
+
+/**
+ * 
+ * @param {number} angle 
+ * @api
+ */
+KMap.SimpleMarkerSymbol.prototype.setAngle = function (angle) {
+    var style = this.getStyle();
+    var image = style.getImage();
+    image.setRotation(angle * Math.PI / 180);
+};
+
+/**
+ * 
+ * @param {number} scale 
+ * @api
+ */
+KMap.SimpleMarkerSymbol.prototype.setScale = function (scale) {
+    var style = this.getStyle();
+    var image = style.getImage();
+    image.setScale(scale);
+};
+goog.provide('KMap.SimpleFillSymbol');
+
+goog.require('KMap.Symbol');
+goog.require('ol.style.Fill');
+goog.require('ol.style.Stroke');
+
+/**
+ * @api
+ * @constructor
+ * @extends {KMap.Symbol}
+ * @param {MapX.FillSymbolOptions|ol.style.Style} options
+ */
+KMap.SimpleFillSymbol = function (options) {
+    KMap.Symbol.call(this, options);
+};
+ol.inherits(KMap.SimpleFillSymbol, KMap.Symbol);
+
+/**
+ * @param {ol.style.Style} style
+ * @param {Object} options
+ */
+KMap.SimpleFillSymbol.prototype.init = function (style, options) {
+    var fillOptions = /** @type {MapX.FillSymbolOptions} */ (ol.obj.assign({}, options));
+    if (options.stroke) {
+        var stroke = options.stroke;
+        style.setStroke(stroke.getStyle().getStroke());
+    }
+    if (options.fill) {
+        var fill = new ol.style.Fill({
+            color: fillOptions.fill
+        });
+        style.setFill(fill);
+    }
+};
+
+/**
+ * @return {KMap.Symbol.Type}
+ */
+KMap.SimpleFillSymbol.prototype.getType = function () {
+    return KMap.Symbol.Type.SimpleFillSymbol;
+};
+goog.provide('KMap.SimpleLineSymbol');
+
+goog.require('KMap.Symbol');
+goog.require('ol.style.Stroke');
+
+/**
+ * @api
+ * @constructor
+ * @extends {KMap.Symbol}
+ * @param {MapX.LineSymbolOptions|ol.style.Style} options
+ */
+KMap.SimpleLineSymbol = function (options) {
+    KMap.Symbol.call(this, options);
+};
+ol.inherits(KMap.SimpleLineSymbol, KMap.Symbol);
+
+
+/**
+ * @param {ol.style.Style} style
+ * @param {Object} options
+ */
+KMap.SimpleLineSymbol.prototype.init = function(style, options) {
+    var lineOptions = /** @type {MapX.LineSymbolOptions} */ (ol.obj.assign({}, options));
+    var stroke = new ol.style.Stroke({
+        color: lineOptions.stroke,
+        width: lineOptions.width,
+        lineCap: lineOptions.lineCap,
+        lineJoin: lineOptions.lineJoin,
+        lineDash: lineOptions.lineDash,
+        lineDashOffset: lineOptions.lineDashOffset,
+        miterLimit: lineOptions.miterLimit
+    });
+    style.setStroke(stroke);
+};
+
+/**
+ * @return {KMap.Symbol.Type}
+ */
+KMap.SimpleLineSymbol.prototype.getType = function () {
+    return KMap.Symbol.Type.SimpleLineSymbol;
+};
+﻿goog.provide('KMap.FeatureLayer');
+
+goog.require('KMap');
+goog.require('KMap.GraphicsLayer');
+goog.require('KMap.SimpleMarkerSymbol');
+goog.require('KMap.SimpleFillSymbol');
+goog.require('KMap.SimpleLineSymbol');
+goog.require('ol.loadingstrategy');
+
+/**
+ * @api
+ * @constructor
+ * @extends {KMap.GraphicsLayer}
+ * @param {string} id
+ * @param {MapX.FeatureLayerOptions|ol.layer.Base} options
+ */
+KMap.FeatureLayer = function(id, options) {
+    KMap.GraphicsLayer.call(this, id, options);
+};
+ol.inherits(KMap.FeatureLayer, KMap.GraphicsLayer);
+
+/**
+ * @param {Object} options 
+ * @returns {ol.layer.Base}
+ */
+KMap.FeatureLayer.prototype.createLayer = function(options) {
+    var featureOptions = /** @type {MapX.FeatureLayerOptions} */ (ol.obj.assign({}, options));
+    var format = null;
+    switch (featureOptions.format) {
+        case 'esrijson':
+            format = new ol.format.EsriJSON();
+            break;
+        case 'geojson':
+            format = new ol.format.GeoJSON();
+            break;
+        case 'kml':
+            format = new ol.format.KML();
+            break;
+        case 'wkt':
+            format = new ol.format.WKT();
+            break;
+        default:
+            format = new ol.format.GML();
+            break;
+    }
+
+    var self = this;
+
+    var source = new ol.source.Vector({
+        url: featureOptions.url,
+        loader: featureOptions.loader,
+        format: format,
+        strategy: featureOptions.strategy || ol.loadingstrategy.bbox
+    });
+    /**
+     * 添加要素和图层之间的关系
+     */
+    source.on("addfeature", function(e) {
+        var graphic = new KMap.Graphic(e.feature);
+        graphic.setLayer(self);
+    });
+    source.on("removefeature", function(e) {
+        var graphic = new KMap.Graphic(e.feature);
+        graphic.setLayer(null);
+    });
+
+    var vector_layer = new ol.layer.Vector({
+        source: source,
+        style: function(feature) {
+            var style = null;
+            var graphic = new KMap.Graphic(feature);
+            var symbol = graphic.getSymbol();
+            if (!symbol) {
+                var renderer = self.getRenderer();
+                if (renderer) {
+                    symbol = renderer.getSymbol(graphic);
+                }
+            }
+            if (symbol) {
+                style = symbol.getStyle();
+            }
+            return style;
+        }
+    });
+    return vector_layer;
+};
+
+/**
+ * @api
+ * @param {ol.layer.Base} layer 
+ * @returns {KMap.Layer}
+ */
+KMap.FeatureLayer.fromLayer = function(layer) {
+    var layerId = /**@type {string}*/ (layer.get(KMap.Layer.Property.ID));
+    return new KMap.FeatureLayer(layerId, layer);
+};
+
+/**
+ * 返回图层的类型
+ * @return {KMap.Layer.Type}
+ * @api
+ */
+KMap.FeatureLayer.prototype.getType = function() {
+    return KMap.Layer.Type.FeatureLayer;
+};
+
+/**
+ * @api
+ */
+KMap.FeatureLayer.prototype.add = KMap.FeatureLayer.NOTALLOW;
+/**
+ * @api
+ */
+KMap.FeatureLayer.prototype.remove = KMap.FeatureLayer.NOTALLOW;
+/**
+ * @api
+ */
+KMap.FeatureLayer.prototype.clear = KMap.FeatureLayer.NOTALLOW;
+/**
+ * @api
+ */
+KMap.FeatureLayer.prototype.addAll = KMap.FeatureLayer.NOTALLOW;
+
+KMap.FeatureLayer.NOTALLOW = function() {
+    throw 'Layer is not allowed to opearte';
+}
+
+goog.provide('KMap.ArcGISQueryLayer')
+goog.require('KMap');
+goog.require('KMap.FeatureLayer');
+
+/**
+ * ArcGisQuery 图层
+ * @api
+ * @constructor
+ * @extends {KMap.FeatureLayer}
+ * @param {string} id
+ * @param {MapX.FeatureLayerOptions|ol.layer.Base} options
+ */
+KMap.ArcGISQueryLayer = function(id, options) {
+    KMap.FeatureLayer.call(this, id, options);
+}
+
+ol.inherits(KMap.ArcGISQueryLayer, KMap.FeatureLayer);
+
+/**
+ * @override
+ * @param {Object=} options options
+ * @returns {ol.layer.Base}
+ */
+KMap.ArcGISQueryLayer.prototype.createLayer = function(options) {
+    var url = options.url;
+    var param = options.param || 'f=pjson&where=1%3D1&outFields=*';
+
+    var url_ = '';
+    if (options['proxyUrl']) { url_ = options['proxyUrl'] + '?'; }
+    if (url) {
+        url_ += url + '?' + param;
+    } else {
+        throw 'ArcGISQueryLayer: url is requried';
+    }
+
+    return KMap.FeatureLayer.prototype.createLayer.call(this, {
+        format: 'esrijson',
+        url: url_,
+        strategy: ol.loadingstrategy.all
+    });
+};
+
 ﻿goog.provide('KMap.ArcGISRestLayer');
 
 goog.require('KMap');
@@ -84102,17 +84555,14 @@ goog.require('ol.proj');
  */
 KMap.BaiduLayer = function (id, options) {
     KMap.Layer.call(this, id, options);
-
-    this.transform = new KMap.Transform();
 };
 ol.inherits(KMap.BaiduLayer, KMap.Layer);
 
 /**
- * @param {Object} options 
+ * @param {Object} options
  * @returns {ol.layer.Base}
  */
 KMap.BaiduLayer.prototype.createLayer = function (options) {
-    var projection = ol.proj.get("EPSG:3857");
     var resolutions = [];
     for (var i = 0; i <= 19; i++) {
         resolutions[i] = Math.pow(2, 18 - i);
@@ -84123,7 +84573,7 @@ KMap.BaiduLayer.prototype.createLayer = function (options) {
         minZoom: 3
     });
     var baidu_source = new ol.source.TileImage({
-        projection: projection,
+        projection: ol.proj.get("EPSG:BDMC") || "EPSG:3857",
         tileGrid: tilegrid,
         url: options["url"],
         crossOrigin: 'anonymous'
@@ -84137,7 +84587,7 @@ KMap.BaiduLayer.prototype.createLayer = function (options) {
 
 /**
  * @api
- * @param {ol.layer.Base} layer 
+ * @param {ol.layer.Base} layer
  * @returns {KMap.Layer}
  */
 KMap.BaiduLayer.fromLayer = function (layer) {
@@ -84154,284 +84604,181 @@ KMap.BaiduLayer.prototype.getType = function () {
     return KMap.Layer.Type.BaiduLayer;
 };
 
-goog.provide('KMap.SimpleMarkerSymbol');
-
-goog.require('KMap.Symbol');
-goog.require('ol.style.Icon');
-goog.require('ol.style.Circle');
-goog.require('ol.style.Fill');
-
-/**
- * @api
- * @constructor
- * @extends {KMap.Symbol}
- * @param {MapX.MarkerSymbolOptions|ol.style.Style} options
- */
-KMap.SimpleMarkerSymbol = function (options) {
-    KMap.Symbol.call(this, options);
-};
-ol.inherits(KMap.SimpleMarkerSymbol, KMap.Symbol);
-
-/**
- * @param {ol.style.Style} style
- * @param {Object} options
- */
-KMap.SimpleMarkerSymbol.prototype.init = function (style, options) {
-    var markerOptions = /** @type {MapX.MarkerSymbolOptions} */ (options);
-    var circleOptions = /** @type {olx.style.CircleOptions} */ ({
-        radius: markerOptions.radius,
-        anchor: markerOptions.anchor,
-        opacity: markerOptions.opacity,
-        offset: markerOptions.offset,
-        scale: markerOptions.scale,
-        stroke: new ol.style.Stroke({
-            color: markerOptions.stroke,
-            width: markerOptions.width
-        }),
-        fill: new ol.style.Fill({
-            color: markerOptions.fill
-        })
-    });
-    var image = new ol.style.Circle(circleOptions);
-    style.setImage(image);
-};
-
-/**
- * @return {KMap.Symbol.Type}
- */
-KMap.SimpleMarkerSymbol.prototype.getType = function () {
-    return KMap.Symbol.Type.SimpleMarkerSymbol;
-};
-
-/**
- * 
- * @param {number} opacity 
- * @api
- */
-KMap.SimpleMarkerSymbol.prototype.setOpacity = function (opacity) {
-    var style = this.getStyle();
-    var image = style.getImage();
-    image.setOpacity(opacity);
-};
-
-/**
- * 
- * @param {number} rotation 
- * @api
- */
-KMap.SimpleMarkerSymbol.prototype.setRotation = function (rotation) {
-    var style = this.getStyle();
-    var image = style.getImage();
-    image.setRotation(rotation);
-};
-
-/**
- * 
- * @param {number} angle 
- * @api
- */
-KMap.SimpleMarkerSymbol.prototype.setAngle = function (angle) {
-    var style = this.getStyle();
-    var image = style.getImage();
-    image.setRotation(angle * Math.PI / 180);
-};
-
-/**
- * 
- * @param {number} scale 
- * @api
- */
-KMap.SimpleMarkerSymbol.prototype.setScale = function (scale) {
-    var style = this.getStyle();
-    var image = style.getImage();
-    image.setScale(scale);
-};
-goog.provide('KMap.SimpleFillSymbol');
-
-goog.require('KMap.Symbol');
-goog.require('ol.style.Fill');
-goog.require('ol.style.Stroke');
-
-/**
- * @api
- * @constructor
- * @extends {KMap.Symbol}
- * @param {MapX.FillSymbolOptions|ol.style.Style} options
- */
-KMap.SimpleFillSymbol = function (options) {
-    KMap.Symbol.call(this, options);
-};
-ol.inherits(KMap.SimpleFillSymbol, KMap.Symbol);
-
-/**
- * @param {ol.style.Style} style
- * @param {Object} options
- */
-KMap.SimpleFillSymbol.prototype.init = function (style, options) {
-    var fillOptions = /** @type {MapX.FillSymbolOptions} */ (ol.obj.assign({}, options));
-    if (options.stroke) {
-        var stroke = options.stroke;
-        style.setStroke(stroke.getStyle().getStroke());
-    }
-    if (options.fill) {
-        var fill = new ol.style.Fill({
-            color: fillOptions.fill
-        });
-        style.setFill(fill);
-    }
-};
-
-/**
- * @return {KMap.Symbol.Type}
- */
-KMap.SimpleFillSymbol.prototype.getType = function () {
-    return KMap.Symbol.Type.SimpleFillSymbol;
-};
-goog.provide('KMap.SimpleLineSymbol');
-
-goog.require('KMap.Symbol');
-goog.require('ol.style.Stroke');
-
-/**
- * @api
- * @constructor
- * @extends {KMap.Symbol}
- * @param {MapX.LineSymbolOptions|ol.style.Style} options
- */
-KMap.SimpleLineSymbol = function (options) {
-    KMap.Symbol.call(this, options);
-};
-ol.inherits(KMap.SimpleLineSymbol, KMap.Symbol);
-
-
-/**
- * @param {ol.style.Style} style
- * @param {Object} options
- */
-KMap.SimpleLineSymbol.prototype.init = function(style, options) {
-    var lineOptions = /** @type {MapX.LineSymbolOptions} */ (ol.obj.assign({}, options));
-    var stroke = new ol.style.Stroke({
-        color: lineOptions.stroke,
-        width: lineOptions.width,
-        lineCap: lineOptions.lineCap,
-        lineJoin: lineOptions.lineJoin,
-        lineDash: lineOptions.lineDash,
-        lineDashOffset: lineOptions.lineDashOffset,
-        miterLimit: lineOptions.miterLimit
-    });
-    style.setStroke(stroke);
-};
-
-/**
- * @return {KMap.Symbol.Type}
- */
-KMap.SimpleLineSymbol.prototype.getType = function () {
-    return KMap.Symbol.Type.SimpleLineSymbol;
-};
-﻿goog.provide('KMap.FeatureLayer');
+goog.provide('KMap.ClusterLayer');
 
 goog.require('KMap');
+goog.require('KMap.Layer');
+goog.require('KMap.Graphic');
 goog.require('KMap.GraphicsLayer');
-goog.require('KMap.SimpleMarkerSymbol');
-goog.require('KMap.SimpleFillSymbol');
-goog.require('KMap.SimpleLineSymbol');
-goog.require('ol.loadingstrategy');
 
 /**
  * @api
  * @constructor
  * @extends {KMap.GraphicsLayer}
- * @param {string} id
- * @param {MapX.FeatureLayerOptions|ol.layer.Base} options
+ * @param {string} id id.
+ * @param {Object|ol.layer.Base} options options.
  */
-KMap.FeatureLayer = function (id, options) {
+KMap.ClusterLayer = function(id, options) {
+    this.features = new ol.Collection();
+    /**
+     * @type {ol.source.Cluster}
+     */
+    this.source = null;
+
     KMap.GraphicsLayer.call(this, id, options);
 };
-ol.inherits(KMap.FeatureLayer, KMap.GraphicsLayer);
+ol.inherits(KMap.ClusterLayer, KMap.GraphicsLayer);
 
 /**
  * @param {Object} options 
  * @returns {ol.layer.Base}
  */
-KMap.FeatureLayer.prototype.createLayer = function (options) {
-    var featureOptions = /** @type {MapX.FeatureLayerOptions} */ (ol.obj.assign({}, options));
-    var format = null;
-    switch (featureOptions.format) {
-        case 'esrijson':
-            format = new ol.format.EsriJSON();
-            break;
-        case 'geojson':
-            format = new ol.format.GeoJSON();
-            break;
-        case 'kml':
-            format = new ol.format.KML();
-            break;
-        case 'wkt':
-            format = new ol.format.WKT();
-            break;
-        default:
-            format = new ol.format.GML();
-            break;
-    }
-
+KMap.ClusterLayer.prototype.createLayer = function(options) {
+    options = options || {};
+    
     var self = this;
 
     var source = new ol.source.Vector({
-        url: featureOptions.url,
-        loader: featureOptions.loader,
-        format: format,
-        strategy: ol.loadingstrategy.bbox
+        features: this.features
     });
     /**
      * 添加要素和图层之间的关系
      */
-    source.on("addfeature", function (e) {
+    source.on("addfeature", function(e) {
         var graphic = new KMap.Graphic(e.feature);
         graphic.setLayer(self);
     });
-    source.on("removefeature", function (e) {
+    source.on("removefeature", function(e) {
         var graphic = new KMap.Graphic(e.feature);
         graphic.setLayer(null);
     });
+    this.source = new ol.source.Cluster({
+        distance: options.distance || 0,
+        source: source
+    });
 
-    var vector_layer = new ol.layer.Vector({
-        source: source,
-        style: function (feature) {
+    var clusterLayer = new ol.layer.Vector({
+        source: this.source,
+        style: function(feature) {
             var style = null;
+
+            var graphics = /**@type {Array.<ol.Feature>}*/ (feature.get("features")).map(function(feature) {
+                return new KMap.Graphic(feature);
+            });
             var graphic = new KMap.Graphic(feature);
-            var symbol = graphic.getSymbol();
-            if (!symbol) {
-                var renderer = self.getRenderer();
-                if (renderer) {
-                    symbol = renderer.getSymbol(graphic);
-                }
-            }
-            if (symbol) {
+            graphic.setAttribute("graphics", graphics);
+
+            var renderer = self.getRenderer();
+            if (renderer) {
+                var symbol = renderer.getSymbol(graphic);
                 style = symbol.getStyle();
             }
             return style;
         }
     });
-    return vector_layer;
+    return clusterLayer;
 };
 
-/**
- * @api
- * @param {ol.layer.Base} layer 
- * @returns {KMap.Layer}
- */
-KMap.FeatureLayer.fromLayer = function (layer) {
-    var layerId = /**@type {string}*/ (layer.get(KMap.Layer.Property.ID));
-    return new KMap.FeatureLayer(layerId, layer);
-};
 
 /**
  * 返回图层的类型
  * @return {KMap.Layer.Type}
  * @api
  */
-KMap.FeatureLayer.prototype.getType = function () {
-    return KMap.Layer.Type.FeatureLayer;
+KMap.ClusterLayer.prototype.getType = function() {
+    return KMap.Layer.Type.ClusterLayer;
+};
+
+
+/**
+ * @api
+ * @param {KMap.Graphic} graphic
+ */
+KMap.ClusterLayer.prototype.add = function(graphic) {
+    this.features.push(graphic.getFeature());
+};
+
+/**
+ * @api
+ */
+KMap.ClusterLayer.prototype.remove = function(graphic) {
+    this.features.remove(graphic.getFeature());
+};
+
+/**
+ * @api
+ */
+KMap.ClusterLayer.prototype.clear = function() {
+    this.features.clear();
+};
+
+/**
+ * 添加多个图形到图层
+ * @api
+ * @param {Array.<KMap.Graphic>} graphicArray
+ */
+KMap.ClusterLayer.prototype.addAll = function(graphicArray) {
+    for (var i = 0; i < graphicArray.length; i++) {
+        this.features.push(graphicArray[i].getFeature());
+    }
+};
+
+/**
+ * 添加多个图形到图层
+ * @api
+ * @param {string} id
+ * @return {KMap.Graphic}
+ */
+KMap.ClusterLayer.prototype.get = function(id) {
+    return null;
+};
+
+/**
+ * 返回图形的总数
+ * @api
+ * @return {number} 图形的总数
+ */
+KMap.ClusterLayer.prototype.getLength = function() {
+    return this.features.getLength();
+};
+
+/**
+ * 遍历图层所有图形
+ * @api
+ * @param {function(this: T, KMap.Graphic): S} callback 
+ * @param {T=} opt_this The object to use as `this` in the callback
+ * @return {S|undefined} The return value from the last call to the callback. 
+ * @template T,S 
+ */
+KMap.ClusterLayer.prototype.forEach = function(callback, opt_this) {
+    return this.features.forEach(function(feature) {
+        return callback.call(opt_this, new KMap.Graphic(feature))
+    });
+};
+
+/**
+ * @api
+ */
+KMap.ClusterLayer.prototype.getDistance = function() {
+    return this.source.getDistance();
+}
+
+/**
+ * @api
+ * @param {number} distance 
+ */
+KMap.ClusterLayer.prototype.setDistance = function(distance) {
+    return this.source.setDistance(distance);
+}
+
+/**
+ * @api
+ * @param {ol.layer.Base} layer 
+ * @returns {KMap.Layer}
+ */
+KMap.ClusterLayer.fromLayer = function(layer) {
+    var layerId = /**@type {string}*/ (layer.get(KMap.Layer.Property.ID));
+    return new KMap.ClusterLayer(layerId, layer);
 };
 goog.provide('KMap.TdtLayer');
 
@@ -84479,9 +84826,11 @@ KMap.TdtLayer.prototype.createLayer = function(options) {
         matrixSet: options.matrixSet,
         url: options.url,
         format: options.format || 'tiles',
-        layer: options.layer,
-        crossOrigin: 'anonymous'
+        layer: options.layer
     };
+    if (options.crossOrigin == true) {
+        opts.crossOrigin = 'anonymous';
+    }
     return new ol.layer.Tile({
         source: new ol.source.WMTS( /** @type {!olx.source.WMTSOptions} */ (opts))
     });
@@ -85180,6 +85529,7 @@ ol.inherits(KMap.Popup.Event, ol.events.Event);
 goog.provide('KMap.Projection');
 
 goog.require('KMap');
+goog.require('KMap.Transform')
 goog.require('ol.proj');
 goog.require('ol.proj.Projection');
 
@@ -85202,7 +85552,7 @@ KMap.Projection = function (options) {
             ol.proj.addProjection(projection);
         }
     }
-    
+
     /**
      * @type {ol.proj.Projection}
      */
@@ -85211,8 +85561,8 @@ KMap.Projection = function (options) {
 
 /**
  * 定义一系列与当前坐标系相等的坐标系
- * 
- * @param {Array.<string>} codes 
+ *
+ * @param {Array.<string>} codes
  * @api
  */
 KMap.Projection.prototype.addEquivalentProjections = function (codes) {
@@ -85243,7 +85593,7 @@ KMap.Projection.prototype.addEquivalentProjections = function (codes) {
  * @api
  * @return {number|undefined}
  */
-KMap.Projection.prototype.getMetersPerUnit = function(){
+KMap.Projection.prototype.getMetersPerUnit = function () {
     return this.projection.getMetersPerUnit();
 };
 
@@ -85261,7 +85611,7 @@ KMap.Projection.prototype.getMetersPerUnit = function(){
  * @return {ol.Coordinate} Coordinate.
  * @api
  */
-KMap.Projection.transform = function(coordinate, source, destination) {
+KMap.Projection.transform = function (coordinate, source, destination) {
     return ol.proj.transform(coordinate, source, destination);
 };
 
@@ -85270,9 +85620,106 @@ KMap.Projection.transform = function(coordinate, source, destination) {
 * @return {KMap.Projection} projection.
 * @api
 */
-KMap.Projection.get = function(options){
+KMap.Projection.get = function (options) {
     return new KMap.Projection(options);
 };
+
+/**
+ * Registers coordinate transform functions to convert coordinates between the
+ * source projection and the destination projection.
+ * The forward and inverse functions convert coordinate pairs; this function
+ * converts these into the functions used internally which also handle
+ * extents and coordinate arrays.
+ *
+ * @param {ol.ProjectionLike} source Source projection.
+ * @param {ol.ProjectionLike} destination Destination projection.
+ * @param {function(ol.Coordinate): ol.Coordinate} forward The forward transform
+ *     function (that is, from the source projection to the destination
+ *     projection) that takes a {@link ol.Coordinate} as argument and returns
+ *     the transformed {@link ol.Coordinate}.
+ * @param {function(ol.Coordinate): ol.Coordinate} inverse The inverse transform
+ *     function (that is, from the destination projection to the source
+ *     projection) that takes a {@link ol.Coordinate} as argument and returns
+ *     the transformed {@link ol.Coordinate}.
+ * @api
+ */
+KMap.Projection.addCoordinateTransforms = function (source, destination, forward, inverse) {
+    ol.proj.addCoordinateTransforms(source, destination, forward, inverse);
+};
+
+/**
+ * @api
+ * 初始化bdmc坐标和坐标间转换
+ */
+KMap.Projection.initBDMCProj = function () {
+    var transform = new KMap.Transform();
+
+    var porj_3857 = new KMap.Projection("EPSG:3857");
+    porj_3857.addEquivalentProjections(["EPSG:BDMC"]);
+
+    ol.proj.addCoordinateTransforms("EPSG:4326", "EPSG:BDMC",
+        function (coordinate) {
+            var ll = transform.gcj_encrypt(coordinate[1], coordinate[0]);
+            ll = transform.bd_encrypt(ll["lat"], ll["lon"]);
+            ll = transform.bdmc_encrypt(ll["lat"], ll["lon"]);
+            return [ll["lon"], ll["lat"]];
+        },
+        function (coordinate) {
+            var ll = transform.bdmc_decrypt(coordinate[1], coordinate[0]);
+            ll = transform.bd_decrypt(ll["lat"], ll["lon"]);
+            ll = transform.gcj_decrypt(ll["lat"], ll["lon"]);
+            return [ll["lon"], ll["lat"]];
+        }
+    );
+    ol.proj.addCoordinateTransforms("EPSG:3857", "EPSG:BDMC",
+        function (coordinate) {
+            coordinate = ol.proj.toLonLat(coordinate);
+            return ol.proj.transform(coordinate, "EPSG:4326", "EPSG:BDMC");
+        },
+        function (coordinate) {
+            coordinate = ol.proj.transform(coordinate, "EPSG:BDMC", "EPSG:4326");
+            return ol.proj.transform(coordinate, "EPSG:4326", "EPSG:3857");
+        }
+    );
+};
+
+goog.provide('KMap.DynamicRenderer');
+
+goog.require('KMap');
+goog.require('KMap.Symbol');
+
+/**
+ * @constructor
+ * @extends {KMap.Renderer}
+ * @param {Function} getSymbol
+ * @param {KMap.Symbol} defaultSymbol
+ * @api
+ */
+KMap.DynamicRenderer = function(getSymbol, defaultSymbol) {
+    KMap.Renderer.call(this);
+
+    /**
+     * @type {KMap.Symbol}
+     */
+    this.defaultSymbol_ = defaultSymbol;
+    /**
+     * @type {Function}
+     */
+    this.getSymbol_ = getSymbol;
+};
+ol.inherits(KMap.DynamicRenderer, KMap.Renderer);
+
+/**
+ * 
+ * @param {KMap.Graphic} graphic
+ * @return {KMap.Symbol}
+ * @api
+ */
+KMap.DynamicRenderer.prototype.getSymbol = function(graphic) {
+    var symbol = /**@type {KMap.Symbol}*/ (this.getSymbol_(graphic)) || this.defaultSymbol_;
+    return symbol;
+};
+
 goog.provide('KMap.SimpleRenderer');
 
 goog.require('KMap');
@@ -85377,6 +85824,49 @@ KMap.UniqueValueRenderer.prototype.removeValue = function (value) {
         delete this.symbols_[value];
     }
 };
+goog.provide('KMap.MultiSymbol');
+
+goog.require('KMap.Symbol');
+goog.require('ol.style.Fill');
+goog.require('ol.style.Stroke');
+goog.require('ol.style.Text');
+
+/**
+ * @api
+ * @constructor
+ * @extends {KMap.Symbol}
+ * @param {Object|ol.style.Style} options
+ */
+KMap.MultiSymbol = function(options) {
+    KMap.Symbol.call(this, options);
+};
+ol.inherits(KMap.MultiSymbol, KMap.Symbol);
+
+/**
+ * @param {ol.style.Style} style
+ * @param {Object} options
+ */
+KMap.MultiSymbol.prototype.init = function(style, options) {
+    if (options.Fill) {
+        style.setFill(options.Fill.getStyle().getFill());
+    }
+    if (options.Image) {
+        style.setImage(options.Image.getStyle().getImage());
+    }
+    if (options.Stroke) {
+        style.setFill(options.Stroke.getStyle().getStroke());
+    }
+    if (options.Text) {
+        style.setText(options.Text.getStyle().getText());
+    }
+};
+
+/**
+ * @api
+ */
+KMap.MultiSymbol.prototype.getType = function() {
+    return KMap.Symbol.Type.MultiSymbol;
+}
 goog.provide('KMap.PictureMarkerSymbol');
 
 goog.require('KMap.Symbol');
@@ -85750,15 +86240,18 @@ goog.require('KMap.Action.MeasureArea');
 goog.require('KMap.Action.MeasureLength');
 goog.require('KMap.Action.SelectByBox');
 goog.require('KMap.Action.SelectByCircle');
+goog.require('KMap.ArcGISQueryLayer');
 goog.require('KMap.ArcGISRestLayer');
 goog.require('KMap.ArcGISTileLayer');
 goog.require('KMap.BaiduLayer');
 goog.require('KMap.Basemap');
 goog.require('KMap.BasemapGallery');
 goog.require('KMap.Circle');
+goog.require('KMap.ClusterLayer');
 goog.require('KMap.Collection');
 goog.require('KMap.Contrail');
 goog.require('KMap.DrawTool');
+goog.require('KMap.DynamicRenderer');
 goog.require('KMap.Extent');
 goog.require('KMap.FeatureLayer');
 goog.require('KMap.Geometry');
@@ -85779,6 +86272,7 @@ goog.require('KMap.Layer');
 goog.require('KMap.Map');
 goog.require('KMap.MultiPoint');
 goog.require('KMap.MultiPolygon');
+goog.require('KMap.MultiSymbol');
 goog.require('KMap.OverViewMap');
 goog.require('KMap.Overlay');
 goog.require('KMap.PictureMarkerSymbol');
@@ -85992,6 +86486,11 @@ goog.exportProperty(
     KMap.Geometry.prototype,
     'getCoordinates',
     KMap.Geometry.prototype.getCoordinates);
+
+goog.exportProperty(
+    KMap.Geometry.prototype,
+    'transform',
+    KMap.Geometry.prototype.transform);
 
 goog.exportSymbol(
     'KMap.MultiPoint',
@@ -86304,6 +86803,16 @@ goog.exportProperty(
     KMap.Graphic.prototype.getTitle);
 
 goog.exportSymbol(
+    'KMap.Graphic.readGraphics',
+    KMap.Graphic.readGraphics,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'KMap.Graphic.writeGraphics',
+    KMap.Graphic.writeGraphics,
+    OPENLAYERS);
+
+goog.exportSymbol(
     'KMap.Graphics.fromGeoJSON',
     KMap.Graphics.fromGeoJSON,
     OPENLAYERS);
@@ -86544,6 +87053,11 @@ goog.exportProperty(
     KMap.AMapLayer.prototype.getType);
 
 goog.exportSymbol(
+    'KMap.ArcGISQueryLayer',
+    KMap.ArcGISQueryLayer,
+    OPENLAYERS);
+
+goog.exportSymbol(
     'KMap.ArcGISRestLayer',
     KMap.ArcGISRestLayer,
     OPENLAYERS);
@@ -86599,6 +87113,66 @@ goog.exportProperty(
     KMap.BaiduLayer.prototype.getType);
 
 goog.exportSymbol(
+    'KMap.ClusterLayer',
+    KMap.ClusterLayer,
+    OPENLAYERS);
+
+goog.exportProperty(
+    KMap.ClusterLayer.prototype,
+    'getType',
+    KMap.ClusterLayer.prototype.getType);
+
+goog.exportProperty(
+    KMap.ClusterLayer.prototype,
+    'add',
+    KMap.ClusterLayer.prototype.add);
+
+goog.exportProperty(
+    KMap.ClusterLayer.prototype,
+    'remove',
+    KMap.ClusterLayer.prototype.remove);
+
+goog.exportProperty(
+    KMap.ClusterLayer.prototype,
+    'clear',
+    KMap.ClusterLayer.prototype.clear);
+
+goog.exportProperty(
+    KMap.ClusterLayer.prototype,
+    'addAll',
+    KMap.ClusterLayer.prototype.addAll);
+
+goog.exportProperty(
+    KMap.ClusterLayer.prototype,
+    'get',
+    KMap.ClusterLayer.prototype.get);
+
+goog.exportProperty(
+    KMap.ClusterLayer.prototype,
+    'getLength',
+    KMap.ClusterLayer.prototype.getLength);
+
+goog.exportProperty(
+    KMap.ClusterLayer.prototype,
+    'forEach',
+    KMap.ClusterLayer.prototype.forEach);
+
+goog.exportProperty(
+    KMap.ClusterLayer.prototype,
+    'getDistance',
+    KMap.ClusterLayer.prototype.getDistance);
+
+goog.exportProperty(
+    KMap.ClusterLayer.prototype,
+    'setDistance',
+    KMap.ClusterLayer.prototype.setDistance);
+
+goog.exportSymbol(
+    'KMap.ClusterLayer.fromLayer',
+    KMap.ClusterLayer.fromLayer,
+    OPENLAYERS);
+
+goog.exportSymbol(
     'KMap.FeatureLayer',
     KMap.FeatureLayer,
     OPENLAYERS);
@@ -86612,6 +87186,26 @@ goog.exportProperty(
     KMap.FeatureLayer.prototype,
     'getType',
     KMap.FeatureLayer.prototype.getType);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'add',
+    KMap.FeatureLayer.prototype.add);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'remove',
+    KMap.FeatureLayer.prototype.remove);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'clear',
+    KMap.FeatureLayer.prototype.clear);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'addAll',
+    KMap.FeatureLayer.prototype.addAll);
 
 goog.exportSymbol(
     'KMap.GraphicsLayer',
@@ -87289,6 +87883,16 @@ goog.exportSymbol(
     OPENLAYERS);
 
 goog.exportSymbol(
+    'KMap.Projection.addCoordinateTransforms',
+    KMap.Projection.addCoordinateTransforms,
+    OPENLAYERS);
+
+goog.exportSymbol(
+    'KMap.Projection.initBDMCProj',
+    KMap.Projection.initBDMCProj,
+    OPENLAYERS);
+
+goog.exportSymbol(
     'KMap.Transform',
     KMap.Transform,
     OPENLAYERS);
@@ -87310,8 +87914,38 @@ goog.exportProperty(
 
 goog.exportProperty(
     KMap.Transform.prototype,
+    'bd_encrypt',
+    KMap.Transform.prototype.bd_encrypt);
+
+goog.exportProperty(
+    KMap.Transform.prototype,
+    'bd_decrypt',
+    KMap.Transform.prototype.bd_decrypt);
+
+goog.exportProperty(
+    KMap.Transform.prototype,
+    'bdmc_encrypt',
+    KMap.Transform.prototype.bdmc_encrypt);
+
+goog.exportProperty(
+    KMap.Transform.prototype,
+    'bdmc_decrypt',
+    KMap.Transform.prototype.bdmc_decrypt);
+
+goog.exportProperty(
+    KMap.Transform.prototype,
     'distance',
     KMap.Transform.prototype.distance);
+
+goog.exportSymbol(
+    'KMap.DynamicRenderer',
+    KMap.DynamicRenderer,
+    OPENLAYERS);
+
+goog.exportProperty(
+    KMap.DynamicRenderer.prototype,
+    'getSymbol',
+    KMap.DynamicRenderer.prototype.getSymbol);
 
 goog.exportSymbol(
     'KMap.Renderer',
@@ -87352,6 +87986,16 @@ goog.exportProperty(
     KMap.UniqueValueRenderer.prototype,
     'removeValue',
     KMap.UniqueValueRenderer.prototype.removeValue);
+
+goog.exportSymbol(
+    'KMap.MultiSymbol',
+    KMap.MultiSymbol,
+    OPENLAYERS);
+
+goog.exportProperty(
+    KMap.MultiSymbol.prototype,
+    'getType',
+    KMap.MultiSymbol.prototype.getType);
 
 goog.exportSymbol(
     'KMap.PictureMarkerSymbol',
@@ -87729,6 +88373,11 @@ goog.exportProperty(
     KMap.Circle.prototype.getCoordinates);
 
 goog.exportProperty(
+    KMap.Circle.prototype,
+    'transform',
+    KMap.Circle.prototype.transform);
+
+goog.exportProperty(
     KMap.MultiPoint.prototype,
     'getGeometry',
     KMap.MultiPoint.prototype.getGeometry);
@@ -87757,6 +88406,11 @@ goog.exportProperty(
     KMap.MultiPoint.prototype,
     'getCoordinates',
     KMap.MultiPoint.prototype.getCoordinates);
+
+goog.exportProperty(
+    KMap.MultiPoint.prototype,
+    'transform',
+    KMap.MultiPoint.prototype.transform);
 
 goog.exportProperty(
     KMap.MultiPolygon.prototype,
@@ -87789,6 +88443,11 @@ goog.exportProperty(
     KMap.MultiPolygon.prototype.getCoordinates);
 
 goog.exportProperty(
+    KMap.MultiPolygon.prototype,
+    'transform',
+    KMap.MultiPolygon.prototype.transform);
+
+goog.exportProperty(
     KMap.Point.prototype,
     'getGeometry',
     KMap.Point.prototype.getGeometry);
@@ -87817,6 +88476,11 @@ goog.exportProperty(
     KMap.Point.prototype,
     'getCoordinates',
     KMap.Point.prototype.getCoordinates);
+
+goog.exportProperty(
+    KMap.Point.prototype,
+    'transform',
+    KMap.Point.prototype.transform);
 
 goog.exportProperty(
     KMap.Polygon.prototype,
@@ -87849,6 +88513,11 @@ goog.exportProperty(
     KMap.Polygon.prototype.getCoordinates);
 
 goog.exportProperty(
+    KMap.Polygon.prototype,
+    'transform',
+    KMap.Polygon.prototype.transform);
+
+goog.exportProperty(
     KMap.Polyline.prototype,
     'getGeometry',
     KMap.Polyline.prototype.getGeometry);
@@ -87877,6 +88546,11 @@ goog.exportProperty(
     KMap.Polyline.prototype,
     'getCoordinates',
     KMap.Polyline.prototype.getCoordinates);
+
+goog.exportProperty(
+    KMap.Polyline.prototype,
+    'transform',
+    KMap.Polyline.prototype.transform);
 
 goog.exportProperty(
     KMap.AMapLayer.prototype,
@@ -87937,6 +88611,286 @@ goog.exportProperty(
     KMap.AMapLayer.prototype,
     'setMinResolution',
     KMap.AMapLayer.prototype.setMinResolution);
+
+goog.exportProperty(
+    KMap.GraphicsLayer.prototype,
+    'getId',
+    KMap.GraphicsLayer.prototype.getId);
+
+goog.exportProperty(
+    KMap.GraphicsLayer.prototype,
+    'setId',
+    KMap.GraphicsLayer.prototype.setId);
+
+goog.exportProperty(
+    KMap.GraphicsLayer.prototype,
+    'getLayer',
+    KMap.GraphicsLayer.prototype.getLayer);
+
+goog.exportProperty(
+    KMap.GraphicsLayer.prototype,
+    'setLayer',
+    KMap.GraphicsLayer.prototype.setLayer);
+
+goog.exportProperty(
+    KMap.GraphicsLayer.prototype,
+    'getVisible',
+    KMap.GraphicsLayer.prototype.getVisible);
+
+goog.exportProperty(
+    KMap.GraphicsLayer.prototype,
+    'setVisible',
+    KMap.GraphicsLayer.prototype.setVisible);
+
+goog.exportProperty(
+    KMap.GraphicsLayer.prototype,
+    'setExtent',
+    KMap.GraphicsLayer.prototype.setExtent);
+
+goog.exportProperty(
+    KMap.GraphicsLayer.prototype,
+    'getMaxResolution',
+    KMap.GraphicsLayer.prototype.getMaxResolution);
+
+goog.exportProperty(
+    KMap.GraphicsLayer.prototype,
+    'setMaxResolution',
+    KMap.GraphicsLayer.prototype.setMaxResolution);
+
+goog.exportProperty(
+    KMap.GraphicsLayer.prototype,
+    'getMinResolution',
+    KMap.GraphicsLayer.prototype.getMinResolution);
+
+goog.exportProperty(
+    KMap.GraphicsLayer.prototype,
+    'setMinResolution',
+    KMap.GraphicsLayer.prototype.setMinResolution);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'getSource',
+    KMap.FeatureLayer.prototype.getSource);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'getExtent',
+    KMap.FeatureLayer.prototype.getExtent);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'get',
+    KMap.FeatureLayer.prototype.get);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'getLength',
+    KMap.FeatureLayer.prototype.getLength);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'forEach',
+    KMap.FeatureLayer.prototype.forEach);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'setRenderer',
+    KMap.FeatureLayer.prototype.setRenderer);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'getRenderer',
+    KMap.FeatureLayer.prototype.getRenderer);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'setInfoTemplate',
+    KMap.FeatureLayer.prototype.setInfoTemplate);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'getInfoTemplate',
+    KMap.FeatureLayer.prototype.getInfoTemplate);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'getId',
+    KMap.FeatureLayer.prototype.getId);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'setId',
+    KMap.FeatureLayer.prototype.setId);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'getLayer',
+    KMap.FeatureLayer.prototype.getLayer);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'setLayer',
+    KMap.FeatureLayer.prototype.setLayer);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'getVisible',
+    KMap.FeatureLayer.prototype.getVisible);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'setVisible',
+    KMap.FeatureLayer.prototype.setVisible);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'setExtent',
+    KMap.FeatureLayer.prototype.setExtent);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'getMaxResolution',
+    KMap.FeatureLayer.prototype.getMaxResolution);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'setMaxResolution',
+    KMap.FeatureLayer.prototype.setMaxResolution);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'getMinResolution',
+    KMap.FeatureLayer.prototype.getMinResolution);
+
+goog.exportProperty(
+    KMap.FeatureLayer.prototype,
+    'setMinResolution',
+    KMap.FeatureLayer.prototype.setMinResolution);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'getType',
+    KMap.ArcGISQueryLayer.prototype.getType);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'add',
+    KMap.ArcGISQueryLayer.prototype.add);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'remove',
+    KMap.ArcGISQueryLayer.prototype.remove);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'clear',
+    KMap.ArcGISQueryLayer.prototype.clear);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'addAll',
+    KMap.ArcGISQueryLayer.prototype.addAll);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'getSource',
+    KMap.ArcGISQueryLayer.prototype.getSource);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'getExtent',
+    KMap.ArcGISQueryLayer.prototype.getExtent);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'get',
+    KMap.ArcGISQueryLayer.prototype.get);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'getLength',
+    KMap.ArcGISQueryLayer.prototype.getLength);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'forEach',
+    KMap.ArcGISQueryLayer.prototype.forEach);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'setRenderer',
+    KMap.ArcGISQueryLayer.prototype.setRenderer);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'getRenderer',
+    KMap.ArcGISQueryLayer.prototype.getRenderer);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'setInfoTemplate',
+    KMap.ArcGISQueryLayer.prototype.setInfoTemplate);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'getInfoTemplate',
+    KMap.ArcGISQueryLayer.prototype.getInfoTemplate);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'getId',
+    KMap.ArcGISQueryLayer.prototype.getId);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'setId',
+    KMap.ArcGISQueryLayer.prototype.setId);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'getLayer',
+    KMap.ArcGISQueryLayer.prototype.getLayer);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'setLayer',
+    KMap.ArcGISQueryLayer.prototype.setLayer);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'getVisible',
+    KMap.ArcGISQueryLayer.prototype.getVisible);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'setVisible',
+    KMap.ArcGISQueryLayer.prototype.setVisible);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'setExtent',
+    KMap.ArcGISQueryLayer.prototype.setExtent);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'getMaxResolution',
+    KMap.ArcGISQueryLayer.prototype.getMaxResolution);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'setMaxResolution',
+    KMap.ArcGISQueryLayer.prototype.setMaxResolution);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'getMinResolution',
+    KMap.ArcGISQueryLayer.prototype.getMinResolution);
+
+goog.exportProperty(
+    KMap.ArcGISQueryLayer.prototype,
+    'setMinResolution',
+    KMap.ArcGISQueryLayer.prototype.setMinResolution);
 
 goog.exportProperty(
     KMap.ArcGISRestLayer.prototype,
@@ -88119,179 +89073,89 @@ goog.exportProperty(
     KMap.BaiduLayer.prototype.setMinResolution);
 
 goog.exportProperty(
-    KMap.GraphicsLayer.prototype,
-    'getId',
-    KMap.GraphicsLayer.prototype.getId);
-
-goog.exportProperty(
-    KMap.GraphicsLayer.prototype,
-    'setId',
-    KMap.GraphicsLayer.prototype.setId);
-
-goog.exportProperty(
-    KMap.GraphicsLayer.prototype,
-    'getLayer',
-    KMap.GraphicsLayer.prototype.getLayer);
-
-goog.exportProperty(
-    KMap.GraphicsLayer.prototype,
-    'setLayer',
-    KMap.GraphicsLayer.prototype.setLayer);
-
-goog.exportProperty(
-    KMap.GraphicsLayer.prototype,
-    'getVisible',
-    KMap.GraphicsLayer.prototype.getVisible);
-
-goog.exportProperty(
-    KMap.GraphicsLayer.prototype,
-    'setVisible',
-    KMap.GraphicsLayer.prototype.setVisible);
-
-goog.exportProperty(
-    KMap.GraphicsLayer.prototype,
-    'setExtent',
-    KMap.GraphicsLayer.prototype.setExtent);
-
-goog.exportProperty(
-    KMap.GraphicsLayer.prototype,
-    'getMaxResolution',
-    KMap.GraphicsLayer.prototype.getMaxResolution);
-
-goog.exportProperty(
-    KMap.GraphicsLayer.prototype,
-    'setMaxResolution',
-    KMap.GraphicsLayer.prototype.setMaxResolution);
-
-goog.exportProperty(
-    KMap.GraphicsLayer.prototype,
-    'getMinResolution',
-    KMap.GraphicsLayer.prototype.getMinResolution);
-
-goog.exportProperty(
-    KMap.GraphicsLayer.prototype,
-    'setMinResolution',
-    KMap.GraphicsLayer.prototype.setMinResolution);
-
-goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'getSource',
-    KMap.FeatureLayer.prototype.getSource);
+    KMap.ClusterLayer.prototype.getSource);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'getExtent',
-    KMap.FeatureLayer.prototype.getExtent);
+    KMap.ClusterLayer.prototype.getExtent);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
-    'add',
-    KMap.FeatureLayer.prototype.add);
-
-goog.exportProperty(
-    KMap.FeatureLayer.prototype,
-    'remove',
-    KMap.FeatureLayer.prototype.remove);
-
-goog.exportProperty(
-    KMap.FeatureLayer.prototype,
-    'clear',
-    KMap.FeatureLayer.prototype.clear);
-
-goog.exportProperty(
-    KMap.FeatureLayer.prototype,
-    'addAll',
-    KMap.FeatureLayer.prototype.addAll);
-
-goog.exportProperty(
-    KMap.FeatureLayer.prototype,
-    'get',
-    KMap.FeatureLayer.prototype.get);
-
-goog.exportProperty(
-    KMap.FeatureLayer.prototype,
-    'getLength',
-    KMap.FeatureLayer.prototype.getLength);
-
-goog.exportProperty(
-    KMap.FeatureLayer.prototype,
-    'forEach',
-    KMap.FeatureLayer.prototype.forEach);
-
-goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'setRenderer',
-    KMap.FeatureLayer.prototype.setRenderer);
+    KMap.ClusterLayer.prototype.setRenderer);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'getRenderer',
-    KMap.FeatureLayer.prototype.getRenderer);
+    KMap.ClusterLayer.prototype.getRenderer);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'setInfoTemplate',
-    KMap.FeatureLayer.prototype.setInfoTemplate);
+    KMap.ClusterLayer.prototype.setInfoTemplate);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'getInfoTemplate',
-    KMap.FeatureLayer.prototype.getInfoTemplate);
+    KMap.ClusterLayer.prototype.getInfoTemplate);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'getId',
-    KMap.FeatureLayer.prototype.getId);
+    KMap.ClusterLayer.prototype.getId);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'setId',
-    KMap.FeatureLayer.prototype.setId);
+    KMap.ClusterLayer.prototype.setId);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'getLayer',
-    KMap.FeatureLayer.prototype.getLayer);
+    KMap.ClusterLayer.prototype.getLayer);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'setLayer',
-    KMap.FeatureLayer.prototype.setLayer);
+    KMap.ClusterLayer.prototype.setLayer);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'getVisible',
-    KMap.FeatureLayer.prototype.getVisible);
+    KMap.ClusterLayer.prototype.getVisible);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'setVisible',
-    KMap.FeatureLayer.prototype.setVisible);
+    KMap.ClusterLayer.prototype.setVisible);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'setExtent',
-    KMap.FeatureLayer.prototype.setExtent);
+    KMap.ClusterLayer.prototype.setExtent);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'getMaxResolution',
-    KMap.FeatureLayer.prototype.getMaxResolution);
+    KMap.ClusterLayer.prototype.getMaxResolution);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'setMaxResolution',
-    KMap.FeatureLayer.prototype.setMaxResolution);
+    KMap.ClusterLayer.prototype.setMaxResolution);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'getMinResolution',
-    KMap.FeatureLayer.prototype.getMinResolution);
+    KMap.ClusterLayer.prototype.getMinResolution);
 
 goog.exportProperty(
-    KMap.FeatureLayer.prototype,
+    KMap.ClusterLayer.prototype,
     'setMinResolution',
-    KMap.FeatureLayer.prototype.setMinResolution);
+    KMap.ClusterLayer.prototype.setMinResolution);
 
 goog.exportProperty(
     KMap.GroupLayer.prototype,
@@ -88604,6 +89468,11 @@ goog.exportProperty(
     KMap.Popup.prototype.setElement);
 
 goog.exportProperty(
+    KMap.MultiSymbol.prototype,
+    'getStyle',
+    KMap.MultiSymbol.prototype.getStyle);
+
+goog.exportProperty(
     KMap.PictureMarkerSymbol.prototype,
     'getStyle',
     KMap.PictureMarkerSymbol.prototype.getStyle);
@@ -88627,7 +89496,7 @@ goog.exportProperty(
     KMap.SimpleTextSymbol.prototype,
     'getStyle',
     KMap.SimpleTextSymbol.prototype.getStyle);
-ol.VERSION = '0.1-19-gfd2f95a';
+ol.VERSION = '0.1-32-gfdc8217';
 OPENLAYERS.ol = ol;
 
   return OPENLAYERS;

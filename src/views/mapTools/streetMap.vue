@@ -58,7 +58,7 @@ export default {
       this.layer.add(graphic);
       map.setCenter(coordinate);
       // 坐标转换显示街景
-      const [x, y] = coordinate;
+      const [x, y] = fromMap(coordinate);
       query.project2wgs(x, y).then(function(result) {
         var point = [result.lon, result.lat];
         var truemapObj = document.getElementById("trueMap");
@@ -80,7 +80,7 @@ export default {
     });
     eventBus.$on("streetView/moveCar", (lon, lat, yaw) => {
       query.project2map(lon, lat).then(result => {
-        const coord = [result.x, result.y];
+        const coord = toMap([result.x, result.y]);
         let graphic = getGraphicsByName(
           "streetView",
           "resultID",

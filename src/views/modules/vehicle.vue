@@ -159,7 +159,7 @@ export default {
         this.$store.commit("addLegend", { label, icon: sIcon });
         // 车辆
         const { graphic } = newGraphic({
-          coord: [longitude, latitude],
+          coord: toMap([longitude, latitude]),
           visible: false,
           symbol: new KMap.PictureMarkerSymbol({
             src: icon
@@ -171,7 +171,7 @@ export default {
         });
         // 车牌号
         const { graphic: txtGraphic } = newGraphic({
-          coord: [longitude, latitude],
+          coord: toMap([longitude, latitude]),
           visible: false,
           symbol: new KMap.SimpleTextSymbol({
             text: gpsName,

@@ -13,7 +13,7 @@ function parseUrlConfig(xml) {
     gpsUrl = "",
     geoUrl = "",
     picUrl;
-  $(cases).each(function(index, item) {
+  $(cases).each(function (index, item) {
     var configIP = item.attributes[0].textContent || item.attributes[0].text;
     if (configIP === location.hostname) {
       matchItem = item;
@@ -90,6 +90,7 @@ async function initMap(configData) {
       zoom: configData.zoom
     };
     global.mapConfig = config;
+    initPorj();
     // 初始化地图对象和底图
     const map = new KMap.Map('mapTarget', config);
     map.setFullExtent(configData.extent);
@@ -103,6 +104,10 @@ async function initMap(configData) {
     global.map = map;
     resolve(map);
   });
+}
+// 初始化坐标系
+function initPorj() {
+  KMap.Projection.initBDMCProj();
 }
 //初始化地图对话框
 function initMapEvent(map) {
@@ -147,11 +152,14 @@ function onMapSingleClick(e) {
   const map = this;
   const pixel = e.pixel;
   map.infoWindow.hide();
-  map.forEachFeatureAtPixel(pixel, function(graphic, layer) {
+  map.forEachFeatureAtPixel(pixel, function (graphic, layer) {
     if (graphic.getVisible() && layer) {
       centerShow({ graphic, layer, center: false });
     }
   });
+
+  console.log(fromMap(e.coordinate));
+
   eventBus.$emit('singleClick', e);
 }
 // 配置项请求，地图初始化

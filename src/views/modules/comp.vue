@@ -21,6 +21,8 @@ const markSymbol = new KMap.SimpleMarkerSymbol({
   width: 1
 });
 
+const compProj = configData.dataProjection;
+
 export default {
   moduleName: "comp",
   layerId: "comp",
@@ -43,7 +45,10 @@ export default {
       if (total == 0) {
         this.$Message.info("没有查询到任何结果");
       } else {
-        const geometry = KMap.Geometry.fromWKT(items[0].geo);
+        const geometry = KMap.Geometry.fromWKT(items[0].geo, {
+          dataProjection: compProj,
+          featureProjection: configData.projection
+        });
         const g = new KMap.Graphic();
         g.setGeometry(geometry);
         g.setAttributes(items[0].attrs);
@@ -83,8 +88,9 @@ export default {
     },
     // 单击地图查询元素事件
     async clickHandler({ coordinate }) {
-      var resolution = map.getResolution();
-      var projection = configData.projection;
+      coordinate = fromMap(coordinate);
+      var resolution = null;
+      var projection = compProj;
       var params = { INFO_FORMAT: "application/json" };
       var url = this.wmsLayer.getFeatureInfoUrl(
         coordinate,
@@ -95,10 +101,14 @@ export default {
       const { data } = await axios.get(url);
       const graphics = KMap.Graphics.fromGeoJSON(data);
       if (graphics.length) {
+        const { graphic } = newGraphic({
+          coord: toMap(coordinate),
+          attr: graphics[0].getAttributes()
+        });
         centerShow({
           layer: this.layer,
           center: false,
-          graphic: graphics[0]
+          graphic
         });
       }
     }
@@ -109,9 +119,9 @@ export default {
     this.wmsLayer = new KMap.WMSLayer("comp", {
       format: "image/png",
       layers: "",
-      url: configData.geoServerUrl + "/" + mapInfo.compmap + "/wms",
-      srs: configData.projection,
-      projection: configData.projection
+      url: mapInfo.compmap + "/wms",
+      srs: compProj,
+      projection: compProj
     });
     this.wmsLayer.setVisible(false);
     map.addDynamicLayer(this.wmsLayer);
@@ -133,5 +143,4 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 </style>

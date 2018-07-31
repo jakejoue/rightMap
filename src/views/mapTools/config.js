@@ -22,7 +22,7 @@ const config = [{
   select: true,
   img: resolve('Measure_Distance16'),
   handler({ type, target }) {
-    map.setAction(type ? new KMap.Action.MeasureLength({ actionName: 'measurelength', geodesic: true }) : undefined);
+    map.setAction(type ? new KMap.Action.MeasureLength({ actionName: 'measurelength', geodesic: configData.geodesic }) : undefined);
   }
 },
 {
@@ -31,7 +31,7 @@ const config = [{
   select: true,
   img: resolve('Measure_Area16'),
   handler({ type, target }) {
-    map.setAction(type ? new KMap.Action.MeasureArea({ actionName: 'measurearea', geodesic: true }) : undefined);
+    map.setAction(type ? new KMap.Action.MeasureArea({ actionName: 'measurearea', geodesic: configData.geodesic }) : undefined);
   }
 },
 {

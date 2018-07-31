@@ -57,7 +57,7 @@ global.interface = new Vue({
             return eventInfo;
           });
           const { graphic } = newGraphic({
-            coord: [results.abs_x, results.abs_y],
+            coord: toMap([results.abs_x, results.abs_y]),
             symbol: new KMap.PictureMarkerSymbol({
               anchor: [0.5, 1],
               src: "./static/img/caseSymbol_1.png"
@@ -132,7 +132,7 @@ global.interface = new Vue({
             }),
             fill: [0, 0, 0, 0.2]
           })
-        });
+        }, configData.dataProjection, configData.projection);
         map.getGraphics().add(graphic);
         map.zoomByExtent(polygon.getExtent());
       } catch (ex) {

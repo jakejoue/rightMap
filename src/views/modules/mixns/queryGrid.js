@@ -38,7 +38,10 @@ function addZoneToMap(results) {
     let graphics = [];
     for (var i = 0; i < results.items.length; i++) {
       result = results.items[i];
-      geometry = KMap.Geometry.fromWKT(result.geo);
+      geometry = KMap.Geometry.fromWKT(result.geo, {
+        dataProjection: configData.dataProjection,
+        featureProjection: configData.projection
+      });
       graphic = new KMap.Graphic();
       graphic.setId("extent" + i);
       graphic.setGeometry(geometry);
