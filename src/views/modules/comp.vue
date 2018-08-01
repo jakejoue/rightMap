@@ -89,7 +89,7 @@ export default {
     // 单击地图查询元素事件
     async clickHandler({ coordinate }) {
       coordinate = fromMap(coordinate);
-      var resolution = null;
+      var resolution = map.getResolution();
       var projection = compProj;
       var params = { INFO_FORMAT: "application/json" };
       var url = this.wmsLayer.getFeatureInfoUrl(
