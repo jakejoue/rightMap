@@ -31,8 +31,8 @@ async function queryGrid(type, value) {
 }
 
 // 将查询结果添加到地图上（区域查询结果专用）
-function addZoneToMap(results) {
-  clearGraphicsByName('extent');
+function addZoneToMap(results, name = "extent", symbol = MULTIPOLYGON) {
+  clearGraphicsByName(name);
   if (results && results.items && results.items.length > 0) {
     let graphic, geometry, result;
     let graphics = [];
@@ -43,14 +43,14 @@ function addZoneToMap(results) {
         featureProjection: configData.projection
       });
       graphic = new KMap.Graphic();
-      graphic.setId("extent" + i);
+      graphic.setId(name + i);
       graphic.setGeometry(geometry);
       graphic.setAttributes({
-        Name: "extent",
+        Name: name,
         Code: result.code,
         Type: result.type
       });
-      graphic.setSymbol(MULTIPOLYGON);
+      graphic.setSymbol(symbol);
       graphics.push(graphic);
     }
     map.getGraphics().addAll(graphics);

@@ -60,6 +60,9 @@ const defaultModules = [
 export default () => {
   const configStr = location.search.slice(1).toLowerCase();
   const configArr = configStr ? configStr.split(',') : defaultModules;
+
+  global.modules = configArr;
+
   const ret = [];
   configArr.forEach(e => {
     const item = modules.find(module => module.id == e);
@@ -67,8 +70,8 @@ export default () => {
   });
   return {
     modules: ret,
-    noHeader: configStr.includes("noheader"),
-    noFooter: configStr.includes("nofooter"),
-    noAside: configStr.includes("noaside")
+    noHeader: configArr.includes("noheader"),
+    noFooter: configArr.includes("nofooter"),
+    noAside: configArr.includes("noaside")
   };
 };

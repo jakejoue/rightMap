@@ -35,6 +35,16 @@ const MULTIPOLYGON = new KMap.SimpleFillSymbol({
 global.MULTILINESTRING = MULTILINESTRING;
 global.MULTIPOLYGON = MULTIPOLYGON;
 
+// 越界线绘制样式
+const DRAWSYMBOL = new KMap.SimpleFillSymbol({
+  stroke: new KMap.SimpleLineSymbol({
+    stroke: [255, 0, 0, 1],
+    width: 2
+  }),
+  fill: [0, 0, 0, 0.2]
+});
+global.DRAWSYMBOL = DRAWSYMBOL;
+
 /*****************************地图坐标转换*********************************** */
 
 function fromMap(coordinate, to = configData.dataProjection) {
@@ -198,7 +208,7 @@ function newGraphic({
 }, dataProjection, graphicProjection) {
   let graphic = new KMap.Graphic();
   let geometry;
-  switch (type) {
+  switch (type.toUpperCase()) {
     case 'POINT':
       geometry = new KMap.Point(coord);
       break;
@@ -207,6 +217,12 @@ function newGraphic({
       break;
     case 'POLYGON':
       geometry = new KMap.Polygon(coord);
+      break;
+    case 'MULTIPOINT':
+      geometry = new KMap.MultiPoint(coord);
+      break;
+    case 'MULTIPOLYGON':
+      geometry = new KMap.MultiPolygon(coord);
       break;
   }
   if (dataProjection && graphicProjection) {

@@ -17,7 +17,7 @@ export default {
     getResT(data) {
       return <p>{data.name}</p>;
     },
-    treeClick({ name: value, layerName: type }) {
+    treeClick({ code: value, layerName: type }) {
       clearGraphicsByName("extent");
       queryGrid(type, value)
         .then(addZoneToMap)

@@ -1,6 +1,6 @@
 // OpenLayers. See https://openlayers.org/
 // License: https://raw.githubusercontent.com/openlayers/openlayers/master/LICENSE.md
-// Version: 0.1-32-gfdc8217
+// Version: 0.1-34-gd367d22
 ;(function (root, factory) {
   if (typeof exports === "object") {
     module.exports = factory();
@@ -80936,7 +80936,7 @@ KMap.Geometry.prototype.getCoordinates = function () {
  * @api
  */
 KMap.Geometry.prototype.transform = function (source, destination) {
-    var geom = this.geometry_.transform(source, destination);
+    var geom = this.geometry_.clone().transform(source, destination);
     return KMap.Geometry.fromGeometry(geom);
 }
 
@@ -83868,15 +83868,15 @@ KMap.AMapLayer = function (id, options) {
 ol.inherits(KMap.AMapLayer, KMap.Layer);
 
 /**
- * @param {Object} options 
+ * @param {Object} options
  * @returns {ol.layer.Base}
  */
 KMap.AMapLayer.prototype.createLayer = function (options) {
-    var projection = ol.proj.get("EPSG:3857");
     var amap_source = new ol.source.XYZ({
         url: options["url"],
-        crossOrigin: "anonymous"
-    })
+        crossOrigin: "anonymous",
+        projection: ol.proj.get("EPSG:GCJ02MC") || "EPSG:3857"
+    });
 
     var amap_layer = new ol.layer.Tile({
         source: amap_source
@@ -83886,7 +83886,7 @@ KMap.AMapLayer.prototype.createLayer = function (options) {
 
 /**
  * @api
- * @param {ol.layer.Base} layer 
+ * @param {ol.layer.Base} layer
  * @returns {KMap.Layer}
  */
 KMap.AMapLayer.fromLayer = function (layer) {
@@ -85678,6 +85678,39 @@ KMap.Projection.initBDMCProj = function () {
         },
         function (coordinate) {
             coordinate = ol.proj.transform(coordinate, "EPSG:BDMC", "EPSG:4326");
+            return ol.proj.transform(coordinate, "EPSG:4326", "EPSG:3857");
+        }
+    );
+};
+
+/**
+ * @api
+ * 初始化gcj02坐标和坐标间转换
+ */
+KMap.Projection.initGCJ02MCProj = function () {
+    var transform = new KMap.Transform();
+
+    var porj_3857 = new KMap.Projection("EPSG:3857");
+    porj_3857.addEquivalentProjections(["EPSG:GCJ02MC"]);
+
+    ol.proj.addCoordinateTransforms("EPSG:4326", "EPSG:GCJ02MC",
+        function (coordinate) {
+            var ll = transform.gcj_encrypt(coordinate[1], coordinate[0]);
+            return ol.proj.transform([ll["lon"], ll["lat"]], "EPSG:4326", "EPSG:3857");
+        },
+        function (coordinate) {
+            coordinate = ol.proj.toLonLat(coordinate);
+            var ll = transform.gcj_decrypt(coordinate[1], coordinate[0]);
+            return [ll["lon"], ll["lat"]];
+        }
+    );
+    ol.proj.addCoordinateTransforms("EPSG:3857", "EPSG:GCJ02MC",
+        function (coordinate) {
+            coordinate = ol.proj.toLonLat(coordinate);
+            return ol.proj.transform(coordinate, "EPSG:4326", "EPSG:GCJ02MC");
+        },
+        function (coordinate) {
+            coordinate = ol.proj.transform(coordinate, "EPSG:GCJ02MC", "EPSG:4326");
             return ol.proj.transform(coordinate, "EPSG:4326", "EPSG:3857");
         }
     );
@@ -87893,6 +87926,11 @@ goog.exportSymbol(
     OPENLAYERS);
 
 goog.exportSymbol(
+    'KMap.Projection.initGCJ02MCProj',
+    KMap.Projection.initGCJ02MCProj,
+    OPENLAYERS);
+
+goog.exportSymbol(
     'KMap.Transform',
     KMap.Transform,
     OPENLAYERS);
@@ -89496,7 +89534,7 @@ goog.exportProperty(
     KMap.SimpleTextSymbol.prototype,
     'getStyle',
     KMap.SimpleTextSymbol.prototype.getStyle);
-ol.VERSION = '0.1-32-gfdc8217';
+ol.VERSION = '0.1-34-gd367d22';
 OPENLAYERS.ol = ol;
 
   return OPENLAYERS;

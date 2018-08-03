@@ -1,7 +1,7 @@
 import Vue from "vue";
 import store from "store";
 import { mapMutations, mapActions } from "vuex";
-import { isString } from "util";
+import { isString, isFunction } from "util";
 
 // 对外接口
 global.interface = new Vue({
@@ -122,22 +122,28 @@ global.interface = new Vue({
         const { graphic } = newGraphic({
           type: "POLYGON",
           coord: pathArray,
-          attr: {
-            "Name": "extent"
-          },
-          symbol: KMap.SimpleFillSymbol({
-            stroke: new KMap.SimpleLineSymbol({
-              stroke: [255, 0, 0, 1],
-              width: 2
-            }),
-            fill: [0, 0, 0, 0.2]
-          })
+          symbol: DRAWSYMBOL
         }, configData.dataProjection, configData.projection);
-        map.getGraphics().add(graphic);
-        map.zoomByExtent(polygon.getExtent());
+        eventBus.$emit("PoiDraw/addGraphic", graphic);
       } catch (ex) {
         console.log(ex);
       }
+    },
+    // 绘制区域报警
+    drawDistrictFence(value, callback) {
+      eventBus.$emit("PoiDraw/clear");
+      const { addZoneToMap } = require("../views/modules/mixns/queryGrid");
+      query.queryGrid(value, null, 0, 100).then(results => {
+        addZoneToMap(results, "drawFence", DRAWSYMBOL);
+        var gs = getGraphicsByName("drawFence");
+        if (isFunction(callback)) {
+          if (gs.length) {
+            callback(gs[0].getAttribute("Code"));
+          } else {
+            callback(null);
+          }
+        }
+      });
     }
   }
 })

@@ -21,7 +21,7 @@ function location(callback, failed) {
   mapTip.getLocation(({ coordinate }) => {
     const [x, y] = fromMap(coordinate);
     query.getCaseLocation(x, y, '').then(results => {
-      const markInfo = { x, y, location: results.address };
+      const markInfo = { x, y, location: results.address, ...results };
       if (!results["workgrid"]) {
         root.$Message.info("地图定位：没有定位到工作网格，请重新定位。");
         isFunction(failed) && failed();
