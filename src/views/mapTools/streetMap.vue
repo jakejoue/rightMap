@@ -8,7 +8,7 @@
         <Icon type="android-close"></Icon>
       </li>
     </ul>
-    <iframe id="trueMap" class="full" src="./static/TrueMap/TME.html" frameborder="0"></iframe>
+    <iframe ref="trueMap" id="trueMap" class="full" src="./static/TrueMap/TME.html" frameborder="0"></iframe>
   </div>
 </template>
 
@@ -59,16 +59,10 @@ export default {
       map.setCenter(coordinate);
       // 坐标转换显示街景
       const [x, y] = fromMap(coordinate);
-      query.project2wgs(x, y).then(function(result) {
+      query.project2wgs(x, y).then(result => {
         var point = [result.lon, result.lat];
-        var truemapObj = document.getElementById("trueMap");
-        if (
-          truemapObj !== undefined &&
-          truemapObj !== null &&
-          truemapObj.contentWindow.showVisionByLngLat !== undefined &&
-          truemapObj.contentWindow.showVisionByLngLat !== null &&
-          $.isFunction(truemapObj.contentWindow.showVisionByLngLat)
-        ) {
+        var truemapObj = this.$refs.trueMap || document.getElementById("trueMap");
+        if (truemapObj && truemapObj.contentWindow && $.isFunction(truemapObj.contentWindow.showVisionByLngLat)) {
           try {
             truemapObj.contentWindow.showVisionByLngLat(point[0], point[1]);
           } catch (e) {

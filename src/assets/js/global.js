@@ -3,26 +3,6 @@ import { isArray } from "util";
 // 弹出框事件
 global.tf = {}
 
-// 全局变量
-global.path = "http://" + location.host + "/" + location.pathname.split('/')[1];
-if (process.env.NODE_ENV == 'development') {
-  global.path = "/proxy";
-}
-
-global.user_id = (function getUserId() {
-  var cookie = document.cookie;
-  var params = cookie.split(";");
-  var itemArr, userId = "";
-  for (var i = 0; i < params.length; i++) {
-    itemArr = params[i].split("=");
-    if (itemArr[0].indexOf("user_id") > -1) {
-      userId = itemArr[1];
-      break;
-    }
-  }
-  return userId || "000000004d753da2014d756719870008";
-})();
-
 // 默认线和面样式
 const MULTILINESTRING = new KMap.SimpleLineSymbol({
   stroke: [160, 0, 66, 0.8],
@@ -49,7 +29,11 @@ global.DRAWSYMBOL = DRAWSYMBOL;
 
 function fromMap(coordinate, to = configData.dataProjection) {
   if (isArray(coordinate) && coordinate.length >= 2) {
-    return KMap.Projection.transform([+coordinate[0], +coordinate[1]], configData.projection, to);
+    const [x, y] = KMap.Projection.transform([+coordinate[0], +coordinate[1]], configData.projection, to);
+    if (isNaN(x) || isNaN(y)) {
+      return [0, 0];
+    }
+    return [x, y];
   } else {
     return [0, 0];
   }
@@ -57,7 +41,11 @@ function fromMap(coordinate, to = configData.dataProjection) {
 global.fromMap = fromMap;
 function toMap(coordinate, source = configData.dataProjection) {
   if (isArray(coordinate) && coordinate.length >= 2) {
-    return KMap.Projection.transform([+coordinate[0], +coordinate[1]], source, configData.projection);
+    const [x, y] = KMap.Projection.transform([+coordinate[0], +coordinate[1]], source, configData.projection);
+    if (isNaN(x) || isNaN(y)) {
+      return [0, 0];
+    }
+    return [x, y];
   } else {
     return [0, 0];
   }
@@ -73,28 +61,30 @@ function centerShow({
   graphic,
   graphics,
   layer,
-  zoom = 14,
+  zoom = configData.maxZoom,
   center = true,
   show = true
 }) {
   map.infoWindow.hide();
   let geom, extent;
-  if (graphics) {
+  if (isArray(graphics) && graphics.length) {
     graphics.forEach(g => {
-      geom = g.getGeometry();
-      const extent_ = geom.getExtent();
+      const extent_ = g.getGeometry().getExtent();
       if (!extent) extent = extent_;
       else {
-        extent[0] = extent[0] < extent_[0] ? extent[0] : extent_[0];
-        extent[1] = extent[1] < extent_[1] ? extent[1] : extent_[1];
-        extent[2] = extent[2] > extent_[2] ? extent[2] : extent_[2];
-        extent[3] = extent[3] > extent_[3] ? extent[3] : extent_[3];
+        extent[0] = Math.min(extent[0], extent_[0]);
+        extent[1] = Math.min(extent[1], extent_[1]);
+        extent[2] = Math.max(extent[2], extent_[2]);
+        extent[3] = Math.max(extent[3], extent_[3]);
       }
     });
     graphic = graphics[0];
-  } else {
+    geom = graphic.getGeometry();
+  } else if (graphic) {
     geom = graphic.getGeometry();
     extent = geom.getExtent();
+  } else {
+    return;
   }
   let centerPoint, config = {};
   if (geom.getType() == "point") {
@@ -164,7 +154,7 @@ function createLayer(layerProps) {
       return new KMap.ArcGISRestLayer(layerId, {
         projection: layerProps.projection,
         url: layerProps.url,
-        extent: layerProps.extent || mapConfig.extent,
+        extent: layerProps.extent || configData.extent,
         tile: layerProps.tile,
         ratio: layerProps.ratio
       });
@@ -185,13 +175,23 @@ function createLayer(layerProps) {
       return new KMap.ArcGISTileLayer(layerId, {
         projection: layerProps.projection,
         url: layerProps.url,
-        proxy: layerProps.proxy || mapConfig.proxyUrl + "?",
+        proxy: layerProps.proxy || configData.proxyUrl + "?",
         dataType: layerProps.dataType
       });
     case "BaiduLayer":
       return new KMap.BaiduLayer(layerId, {
         url: layerProps.url,
       });
+    case "GroupLayer":
+      {
+        const layerGroup = new KMap.GroupLayer(layerId);
+        for (var i = 0; i < layerProps.layers.length; i++) {
+          const layer = createLayer(layerProps.layers[i]);
+          layerGroup.push(layer)
+        }
+        layerGroup.setVisible(layerProps.visible);
+        return layerGroup;
+      }
   }
   throw "unknow layer type:" + layerProps.type;
 }

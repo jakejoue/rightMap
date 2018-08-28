@@ -20,20 +20,23 @@ import { Pagination } from 'element-ui'
 import '../less/iview.less'
 import '../less/animate.less'
 
+import { isString } from 'util'
 // 请求时带上cookies
 Axios.defaults.withCredentials = true
 // application/x-www-form-urlencoded和application/json格式数据的处理
-Axios.defaults.transformRequest = [function(data, headers) {
-  if ((!headers['Content-Type'] || headers['Content-Type'] == 'application/x-www-form-urlencoded') && typeof data == 'object') {
-    let ret = ''
+Axios.defaults.transformRequest = [function (data, headers) {
+  if ((!headers['Content-Type'] || headers['Content-Type'].includes('application/x-www-form-urlencoded')) && typeof data == 'object') {
+    let ret = '';
     for (let it in data) {
-      ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      let value = data[it];
+      if (!isString(value)) { value = JSON.stringify(value) }
+      ret += encodeURIComponent(it) + '=' + encodeURIComponent(value) + '&'
     }
     ret = ret.slice(0, -1);
     return ret
   }
-  if (headers['Content-Type'] == 'application/json' && (typeof data == 'object' || typeof data == 'array')) {
-    return JSON.stringify(data);
+  if (headers['Content-Type'] == 'application/json' && !isString(data)) {
+    return encodeURIComponent(JSON.stringify(data));
   }
   return data;
 }]
@@ -66,7 +69,7 @@ Vue.component('el-pagination', Pagination)
 
 
 // 全局loading模态框
-Vue.prototype.loading = function(flag = false, html = 'Loading') {
+Vue.prototype.loading = function (flag = false, html = 'Loading') {
   if (flag) {
     this.$Spin.show({
       render: (h) => {

@@ -90,6 +90,9 @@ export default {
     async clickHandler({ coordinate }) {
       coordinate = fromMap(coordinate);
       var resolution = map.getResolution();
+      resolution *=
+        KMap.Projection.get(configData.projection).getMetersPerUnit() /
+        KMap.Projection.get(compProj).getMetersPerUnit();
       var projection = compProj;
       var params = { INFO_FORMAT: "application/json" };
       var url = this.wmsLayer.getFeatureInfoUrl(

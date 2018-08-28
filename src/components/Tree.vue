@@ -54,7 +54,7 @@ export default {
       this.$emit("on-check-change", data, this.filter);
     },
     filter(param) {
-      return this.checkedData.filter(e => e[param]).map(e => e[param]);
+      return this.checkedData.filter(e => e.hasOwnProperty(param)).map(e => e[param]);
     }
   },
   watch: {

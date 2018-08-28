@@ -13,7 +13,8 @@ const config = [{
   handler({ target }) {
     target.active = -1;
     map.getGraphics().clear();
-    eventBus.$emit("clearAll")
+    map.infoWindow.hide();
+    eventBus.$emit("clearAll");
   }
 },
 {

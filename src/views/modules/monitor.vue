@@ -43,7 +43,11 @@ export default {
     const { list } = await umservice.getMonitorPage();
     const data = [];
     list.forEach(probe => {
-      const { type, x = 0, y = 0 } = probe;
+      const { belong, type, x = 0, y = 0 } = probe;
+
+      if (`${belong}` == "0") {
+        return;
+      }
 
       const icon = getNodeIcon(type);
       const sicon = getNodeIcon(type, true);
@@ -76,5 +80,4 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 </style>

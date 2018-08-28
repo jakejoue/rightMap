@@ -68,7 +68,7 @@
   overflow: auto;
   padding: 10px 0px;
   color: #333333;
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 
 /* 下方小尖尖样式 */
