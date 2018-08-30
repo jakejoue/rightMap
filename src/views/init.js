@@ -98,63 +98,6 @@ function initPorj() {
   KMap.Projection.initBDMCProj();
 }
 
-function initInfoWindow(map) {
-  const mapPopup = new KMap.Popup({
-    "offset": [0, 0],
-    "container": 'kmap-popup',
-    "closer": 'kmap-popup-closer',
-    "title": 'kmap-popup-title',
-    "content": 'kmap-popup-content'
-  });
-  mapPopup.on("show", (evt) => {
-    // 窗体切换事件
-    const tab = $('#kmap-popup-title div.titleBar [InfoTag]');
-    if (tab.length > 0) {
-      const items = $('#kmap-popup-content [InfoTag]');
-      if (items.length == tab.length) {
-        tab.each(e => {
-          $(tab[e]).click(() => {
-            items.hide();
-            $(items[e]).show()
-          })
-        });
-        tab[0].click();
-      }
-    }
-    // 设置窗体偏移
-    const graphic = evt.target.getSelectedFeature();
-    eventBus.$emit("infoWindow/show", graphic);
-    if (graphic.getGeometry().getType() == 'point') {
-      const id = graphic.getLayer().getId();
-      const offset = configData.infoTOffset[id] || graphic.getAttribute('offset');
-      offset && evt.target.setOffset(offset);
-    }
-  });
-  map.infoWindow = mapPopup;
-  map.addOverlay(mapPopup);
-}
-
-function initSingleClickEvent(map) {
-  //地图单击事件
-  function onMapSingleClick(e) {
-    const map = this;
-    const pixel = e.pixel;
-    map.infoWindow.hide();
-    let flag = false;
-    map.forEachFeatureAtPixel(pixel, function (graphic, layer) {
-      if (graphic.getVisible() && layer && !flag) {
-        centerShow({ graphic, layer, center: false });
-        flag = true;
-      }
-    });
-
-    console.log(fromMap(e.coordinate));
-
-    eventBus.$emit('singleClick', e);
-  }
-  map.on('singleclick', onMapSingleClick, map);
-}
-
 // 初始化地图
 function initMap(mapTarget) {
   const config = {
@@ -179,9 +122,6 @@ function initMap(mapTarget) {
   map.addBaseLayer(baseMap);
   map.addBaseLayer(imageMap);
 
-  initInfoWindow(map);
-  initSingleClickEvent(map);
-
   global.map = map;
 }
 
@@ -191,7 +131,18 @@ async function init(mapTarget) {
   initMap(mapTarget);
 }
 
+import getWidgetConfigs from "./modules/index";
+
 export default {
+  data() {
+    return {
+      noHeader: false,
+      noAside: false,
+      noFooter: false,
+      aIndex: -1,
+      modules: []
+    }
+  },
   computed: {
     map() {
       return this.$store.state.map;
@@ -199,9 +150,21 @@ export default {
   },
   mounted() {
     init("mapTarget").then(() => {
+      // init Modules
+      const { modules, noHeader, noFooter, noAside } = getWidgetConfigs(configData.defaultModules);
+      this.modules = modules;
+      this.noHeader = noHeader;
+      this.noFooter = noFooter;
+      this.noAside = noAside;
+      // set Map
       global.mapTip = new KMap.Interaction.MapTip();
       map.addInteraction(mapTip);
       this.$store.commit('setMap', map);
+      this.$nextTick(function() {
+        // 读取配置会造成mapsize改变，这里要更新map
+        map.updateSize();
+        this.mapReady = true;
+      });
     });
   }
 }

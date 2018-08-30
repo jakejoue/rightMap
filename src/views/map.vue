@@ -6,7 +6,7 @@
     <article :class="[noHeader?'noHeader':'',noAside?'noAside':'']">
       <!-- 左边模板图标 -->
       <aside v-if="!noAside">
-        <ul v-if="map">
+        <ul v-if="mapReady">
           <li v-for="(item, index) in modules" :key="index" :title="item.title" @click="aIndex = aIndex == index ? -1 : index" :class="[aIndex==index?'select':'']">
             <img :src="item.img" :alt="item.title">
           </li>
@@ -18,34 +18,13 @@
         <div id="mapTarget" :style="{'height':height+'%'}">
           <m-ctrl v-if="map" :class="aIndex==-1?'':'expand'"></m-ctrl>
           <m-tools v-if="map"></m-tools>
-          <!-- 地图信息弹窗 -->
-          <div id="kmap-popup" class="esriPopup">
-            <div class="esriPopupWrapper">
-              <div class="sizer">
-                <div class="titlePane" unselectable="on">
-                  <div id="kmap-popup-title" class="title" unselectable="on">
-                    <!-- 标题 -->
-                  </div>
-                  <div id="kmap-popup-closer" title="关闭" class="titleButton close" unselectable="on">
-                    <!-- 关闭按钮 -->
-                  </div>
-                </div>
-              </div>
-              <div class="sizer content">
-                <div id="kmap-popup-content" class="contentPane">
-                  <!-- 内容 -->
-                </div>
-              </div>
-              <div class="pointer bottom">
-              </div>
-            </div>
-          </div>
-          <c-track></c-track>
+          <m-Popup v-if="map"></m-Popup>
+          <c-track v-if="map"></c-track>
         </div>
       </main>
       <!-- form对话框 -->
       <transition name="fade">
-        <div id="mform" v-show="aIndex != -1" v-if="map&&!noAside" :class="[noHeader?'noHeader':'']">
+        <div id="mform" v-show="aIndex != -1" v-if="mapReady&&!noAside" :class="[noHeader?'noHeader':'']">
           <section v-for="(item, index) in modules" :key="index" v-show="aIndex == index">
             <h2 class="title">
               <big>{{item.title}}</big>
@@ -59,7 +38,7 @@
     <!-- 底部 -->
     <footer v-if="!noFooter">
       <div></div>
-      <p>业主单位：深圳市城市管理和行政执法局&nbsp;&nbsp;&nbsp;&nbsp;开发单位：深圳市金证科技股份有限公司</p>
+      <p>业主单位：柞水县城市管理指挥（应急）中心</p>
     </footer>
   </section>
 </template>
@@ -68,23 +47,19 @@
 const mTools = () => import("./mapTools/");
 const streetMap = () => import("./mapTools/streetMap");
 const mCtrl = () => import("./mapCtrl");
+const mPopup = () => import("./mapPopup");
 const cTrack = () => import("./track");
 
 import init from "./init";
-import getConfig from "./modules/";
 
 export default {
-  components: { mTools, mCtrl, streetMap, cTrack },
+  components: { mTools, mCtrl, streetMap, mPopup, cTrack },
   mixins: [init],
   data() {
-    const config = getConfig();
     return {
       height: 100,
-      noHeader: config.noHeader,
-      noAside: config.noAside,
-      noFooter: config.noFooter,
       aIndex: -1,
-      modules: config.modules
+      mapReady: false
     };
   },
   watch: {

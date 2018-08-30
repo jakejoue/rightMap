@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 
 import track from './track';
+import mapPopup from './mapPopup';
 
 const store = new Vuex.Store({
   state: {
@@ -43,7 +44,7 @@ const store = new Vuex.Store({
       });
     }
   },
-  modules: { track }
+  modules: { track, mapPopup }
 });
 
 export default store;

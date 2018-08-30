@@ -29,6 +29,7 @@
       "url": "http://online{0-3}.map.bdimg.com/tile/?qt=tile&x={x}&y={Y}&z={z}&styles=sl&udt=20180727"
     }
   ],
+  "defaultModules": ["search", "observer", "vehicle", "monitor", "comp"],
   "infoTOffset": {
     "search": [-1, -35],
     "observer": [-1, -35],
