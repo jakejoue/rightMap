@@ -7,18 +7,18 @@ import { Select, Option } from 'iview';
 /**
  * search 模块，包含search，reset方法，placeholder变量
  * 前后有formAppend(Height),formPrepend(Height)用于追加html，height用于计算结果集高度
- * 
+ *
  * select 模块，数据源typeList，结果绑定为type，有typeChange方法
  * 前面有typeLabel用于追加描述信息
- * 
+ *
  * tip 模块，有搜索结果时隐藏，没有时显示(用于搜索前提示，不计入高度)，推荐只需要进行搜索时候使用
- * 
+ *
  * splitLine 分割线
- * 
+ *
  * tree 模块，数据源treeData，判断条件hasTree（默认显示，data不为空时隐藏）
  * 属性：field（显示用字段名）treeCheckable（显示可选框）
  * 方法：treeClick（节点被选中）treeCheck（被选中节点有变）
- * 
+ *
  * result 模块，数据源data，判断条件hasResult（data为空默认不显示）
  * 属性：page（分页），showTotal（在上方显示总条数和总页数）
  * 方法：select（结果被选中），pageChange（分页时触发）
@@ -46,7 +46,9 @@ export default {
       placeholder: '',
 
       layer: null,
-      visible: true
+      visible: true,
+
+      timer: null
     }
   },
   computed: {
@@ -66,8 +68,8 @@ export default {
     type: {
       handler(value) {
         if (this.refresh && value) {
-          clearInterval(this.refresh);
-          setInterval(this.refresh, parseInt(value) * 1000);
+          clearInterval(this.timer);
+          this.timer = setInterval(this.refresh, parseInt(value) * 1000);
         }
       },
       immediate: true
@@ -127,7 +129,7 @@ export default {
           { this.formPrepend ? this.formPrepend : '' }
           <c-search ref="cSearch" size="large" onSearch={this.search_} onReset={this.reset_} placeholder={this.placeholder}></c-search>
           {
-            (this.typeList && this.typeList.length) ? 
+            (this.typeList && this.typeList.length) ?
             <div class="typeSelect">
                 { this.typeLabel ? <label>{this.typeLabel}：</label> : '' }
                 <Select v-model={this.type} onOn-change={this.typeChange} size="small" style="width:100px;">
@@ -155,7 +157,7 @@ export default {
                 </c-tree> : ''
             }
             {
-              this.hasResult ? 
+              this.hasResult ?
                 <c-result
                   ref="cResult"
                   className={this.resultClass}
